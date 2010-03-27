@@ -40,7 +40,7 @@ public class TestApplicationConfig {
 
     @Test
     public void testConfig() throws ParseException {
-        assertEquals(new Boolean(true), AnyApplicationConfig.ApplicationState.A_BOOLEAN.getValue());
+        assertEquals(new Boolean(true), AnyApplicationConfig.A_BOOLEAN.getValue());
         assertEquals("Hello", AnyApplicationConfig.ApplicationState.A_STRING.getValue());
         assertEquals(parseDate("2010-05-05"), AnyApplicationConfig.ApplicationState.A_DATE.getValue());
         assertEquals(new Integer(5), AnyApplicationConfig.ApplicationState.A_INTEGER.getValue());

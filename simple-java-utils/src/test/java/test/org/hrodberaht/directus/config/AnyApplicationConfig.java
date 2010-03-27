@@ -47,9 +47,10 @@ public class AnyApplicationConfig extends ConfigBase {
 
     }
 
+    public static ConfigItem<Boolean> A_BOOLEAN = new ConfigItem<Boolean>(Boolean.class, "anyapp.aboolean");
 
     public interface ApplicationState {
-        ConfigItem<Boolean> A_BOOLEAN = new ConfigItem<Boolean>(Boolean.class, "anyapp.aboolean");
+
         ConfigItem<String> A_STRING = new ConfigItem<String>(String.class, "anyapp.astring");
         ConfigItem<Date> A_DATE = new ConfigItem<Date>(Date.class, "anyapp.adate");
         ConfigItem<Integer> A_INTEGER = new ConfigItem<Integer>(Integer.class, "anyapp.ainteger");
