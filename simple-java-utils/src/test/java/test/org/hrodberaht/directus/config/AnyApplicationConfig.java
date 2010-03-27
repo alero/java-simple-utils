@@ -31,7 +31,7 @@ import java.util.Date;
  * @since 1.0
  */
 public class AnyApplicationConfig extends ConfigBase {
-    private static final String DEFAULT_CONFIG = "classpath:/test/org/hrodberaht/config/basicConfig.properties";
+    private static final String DEFAULT_CONFIG = "classpath:/test/org/hrodberaht/directus/config/basicConfig.properties";
 
     public static void initConfig() throws ParseException {
         initConfig(DEFAULT_CONFIG);
