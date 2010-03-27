@@ -10,11 +10,11 @@ import java.util.Date;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Robert
- * Date: 2010-mar-25
- * Time: 23:07:16
- * To change this template use File | Settings | File Templates.
+ * Simple Java Utils
+ *
+ * @author Robert Alexandersson
+ * @version 1.0
+ * @since 1.0
  */
 public class TestApplicationConfig {
 

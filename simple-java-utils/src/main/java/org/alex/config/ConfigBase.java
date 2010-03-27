@@ -1,6 +1,8 @@
 package org.alex.config;
 
 import org.alex.logging.SimpleLogger;
+import org.alex.util.NumberUtil;
+import org.alex.util.StringUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +11,11 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Simple Java Utilts - Config
@@ -20,11 +26,11 @@ import java.util.*;
  */
 public abstract class ConfigBase implements Config  {
 
-    protected SimpleLogger LOGGER = null;
-    protected String propertyPath = null;
-    protected String customPropertyPath = null;
+    private SimpleLogger LOGGER = SimpleLogger.getInstance(this.getClass());
+    private String propertyPath = null;
+    private String customPropertyPath = null;
 
-    protected Map<ConfigItem, ConfigItem> configurations = new HashMap();
+    private Map<ConfigItem, ConfigItem> configurations = new HashMap();
 
     private static final long RELOAD = 15000;
     private static long timestamp;
@@ -46,7 +52,7 @@ public abstract class ConfigBase implements Config  {
             if(config.requiresValidation()){
                 config.validate();                
             }
-            MasterConfig.registerConfig(config);
+            MasterConfig.registerConfig(config, property);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -82,9 +88,9 @@ public abstract class ConfigBase implements Config  {
             if (conf.type().isAssignableFrom(Boolean.class)) {
                 conf.setValue(Boolean.parseBoolean(value));
             } else if (conf.type().isAssignableFrom(Integer.class)) {
-                conf.setValue(Integer.parseInt(value));
+                conf.setValue(NumberUtil.parseInt(value));
             } else if (conf.type().isAssignableFrom(Long.class)) {
-                conf.setValue(Long.parseLong(value));
+                conf.setValue(NumberUtil.parseLong(value));
             } else if (conf.type().isAssignableFrom(String[].class)) {
                 conf.setValue(value.split(","));
             } else if (conf.type().isAssignableFrom(Date.class)) {
@@ -161,14 +167,11 @@ public abstract class ConfigBase implements Config  {
         }
     }
 
-    private static class StringUtil {
-        public static boolean isBlank(String value) {
-            return value == null || "".equals(value);  //To change body of created methods use File | Settings | File Templates.
-        }
-    }
-
     private static class DateUtil {
         public static Date parseSimpleDate(String value) throws ParseException {
+            if(value == null){
+                return null;
+            }
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return dateFormat.parse(value);
         }
@@ -207,11 +210,19 @@ public abstract class ConfigBase implements Config  {
         }
     }
 
+    @Override
+    public void setPropertyPath(String path) {
+        this.propertyPath = path;
+    }
+
+    @Override
+    public void setCustomPropertyPath(String path) {
+        this.customPropertyPath = path;
+    }
 
     public boolean requiresValidation() {
         return false;
     }
-
 
     public boolean validate() {
         return false;

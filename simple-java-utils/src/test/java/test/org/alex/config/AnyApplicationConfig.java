@@ -3,32 +3,35 @@ package test.org.alex.config;
 import org.alex.config.ConfigBase;
 import org.alex.config.ConfigItem;
 import org.alex.config.MasterConfig;
-import org.alex.logging.SimpleLogger;
+import org.alex.util.StringUtil;
 
 import java.text.ParseException;
 import java.util.Date;
 
 
 /**
- * Spring extensions
+ * Simple Java Utils
  *
  * @author Robert Alexandersson
  * @version 1.0
  * @since 1.0
  */
 public class AnyApplicationConfig extends ConfigBase {
-    private static final String DEFAULT_CONFIG = "classpath:/test/org/alex/org.alex.config/basicConfig.properties";
+    private static final String DEFAULT_CONFIG = "classpath:/test/org/alex/config/basicConfig.properties";
 
-    public AnyApplicationConfig() throws ParseException {
-        this(DEFAULT_CONFIG);   
+    public static void initConfig() throws ParseException {
+        initConfig(DEFAULT_CONFIG);
     }
 
-    public AnyApplicationConfig(String propertyPath) throws ParseException {
-        LOGGER = SimpleLogger.getInstance(AnyApplicationConfig.class);
-        this.propertyPath = propertyPath == null ? DEFAULT_CONFIG : propertyPath;
-        MasterConfig.registerConfig(this);
-    }
+    public static void initConfig(String resource) throws ParseException {
+        String externalConfig = System.getProperty("config.externalfile");
+        if(!StringUtil.isBlank(externalConfig)){
+            new AnyApplicationConfig(resource, externalConfig);
+        }else{
+            new AnyApplicationConfig(resource, null);
+        }
 
+    }
 
 
     public interface ApplicationState {
@@ -40,15 +43,9 @@ public class AnyApplicationConfig extends ConfigBase {
     }
 
 
-
-    public static void initConfig() throws ParseException {
-        new AnyApplicationConfig();
+    private AnyApplicationConfig(String propertyPath, String customPropertyPath) throws ParseException {
+        MasterConfig.registerConfig(this, propertyPath, customPropertyPath);
     }
-    public static void initConfig(String resource) throws ParseException {
-        new AnyApplicationConfig(resource);   
-    }
-
-
 
 
 }

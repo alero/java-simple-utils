@@ -11,7 +11,8 @@ import java.text.ParseException;
  */
 public interface Config {
 
-
+    void setPropertyPath(String path);
+    void setCustomPropertyPath(String path);
     boolean requiresValidation();
     boolean validate();
     void initiate() throws IllegalAccessException;

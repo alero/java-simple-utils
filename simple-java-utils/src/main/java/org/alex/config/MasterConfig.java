@@ -25,8 +25,9 @@ public class MasterConfig {
 
     private static MasterConfig config = null;
 
-    public static void registerConfig(Config config) {
-
+    public static void registerConfig(Config config, String propertyPath, String customPropertyPath) {
+        config.setPropertyPath(propertyPath);
+        config.setCustomPropertyPath(customPropertyPath);
         if (MasterConfig.config == null) {
             MasterConfig.config = new MasterConfig();
             Map<Class, Config> configurations = new HashMap<Class, Config>();
@@ -39,6 +40,10 @@ public class MasterConfig {
         MasterConfig.config.providedConfigurations.put(config.getClass(), config);
 
         MasterConfig.config.load();
+    }
+
+    public static void registerConfig(Config config, String property) {
+        registerConfig(config, property, null);    
     }
 
     public void load() {

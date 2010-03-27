@@ -8,19 +8,30 @@
     <artifactId>simple-java-utils</artifactId>
     <version>1.0</version>
 
-    	<description>Spring extensions</description>
-	<issueManagement>
-		<system>Google Code</system>
-		<url>http://code.google.com/p/java-simple-utils/issues/list</url>
-	</issueManagement>
-	<scm>
-		<tag>trunk</tag>
-		<url>https://java-simple-utils.googlecode.com/svn/trunk/</url>
-	</scm>
+    <description>Spring extensions</description>
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/java-simple-utils/issues/list</url>
+    </issueManagement>
+    <scm>
+        <tag>trunk</tag>
+        <url>https://java-simple-utils.googlecode.com/svn/trunk/</url>
+    </scm>
     <properties>
 
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.5.11</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -28,16 +39,16 @@
         </dependency>
     </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
