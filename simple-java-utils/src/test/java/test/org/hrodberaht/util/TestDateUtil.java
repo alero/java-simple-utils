@@ -12,10 +12,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.util;
+package test.org.hrodberaht.util;
 
-import org.hrodberaht.exception.MessageRuntimeException;
-import org.hrodberaht.util.DateUtil;
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+import org.hrodberaht.directus.util.DateUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

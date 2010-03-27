@@ -12,9 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.ioc;
-
-import java.util.Collection;
+package test.org.hrodberaht.util.formatter;
 
 /**
  * Simple Java Utils
@@ -23,9 +21,5 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public interface AnyService {
-
-    void doStuff();
-    Collection getStuff();
-
+public class TestFormatter {
 }

@@ -12,14 +12,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.util.formatter;
+package test.org.hrodberaht.util.locale;
 
 /**
- * Simple Java Utils
- *
- * @author Robert Alexandersson
- * @version 1.0
- * @since 1.0
+ * Created by IntelliJ IDEA.
+ * User: Robert
+ * Date: 2010-mar-27
+ * Time: 01:28:54
+ * To change this template use File | Settings | File Templates.
  */
-public class TestFormatter {
+public class TestLocale {
 }

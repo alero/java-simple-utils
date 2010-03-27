@@ -12,7 +12,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.rmi;
+package test.org.hrodberaht.ioc;
+
+import java.util.Collection;
 
 /**
  * Simple Java Utils
@@ -21,5 +23,9 @@ package test.org.alex.rmi;
  * @version 1.0
  * @since 1.0
  */
-public class TestRMILookUp {
+public interface AnyService {
+
+    void doStuff();
+    Collection getStuff();
+
 }

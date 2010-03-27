@@ -12,11 +12,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.ioc;
+package test.org.hrodberaht.ioc;
 
-import org.hrodberaht.exception.MessageRuntimeException;
-import org.hrodberaht.util.ioc.JavaContainerRegister;
-import org.hrodberaht.util.ioc.SimpleContainer;
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+import org.hrodberaht.directus.util.ioc.JavaContainerRegister;
+import org.hrodberaht.directus.util.ioc.SimpleContainer;
 import org.junit.Before;
 import org.junit.Test;
 

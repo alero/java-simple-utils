@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.logger;
+package test.org.hrodberaht.ioc;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Simple Java Utils
@@ -21,5 +24,17 @@ package test.org.alex.logger;
  * @version 1.0
  * @since 1.0
  */
-public class TestLogger {
+public class AnyServiceDoSomethingImpl implements AnyService{
+
+    private Collection<String> collection = new ArrayList<String>();  
+
+    @Override
+    public void doStuff() {
+        collection.add("Added something");
+    }
+
+    @Override
+    public Collection getStuff() {
+        return collection;
+    }
 }

@@ -12,11 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.ioc;
-
-import org.hrodberaht.exception.MessageRuntimeException;
-
-import java.util.Collection;
+package test.org.hrodberaht.rmi;
 
 /**
  * Simple Java Utils
@@ -25,17 +21,5 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public class AnyServiceDoNothingImpl implements AnyService{
-
-    @Override
-    public void doStuff() {
-        if(true){
-            throw MessageRuntimeException.createError("This service can't do stuff");
-        }
-    }
-
-    @Override
-    public Collection getStuff() {
-        return null;
-    }
+public class TestRMILookUp {
 }

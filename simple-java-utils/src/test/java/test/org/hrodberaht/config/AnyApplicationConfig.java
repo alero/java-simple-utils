@@ -12,12 +12,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.config;
+package test.org.hrodberaht.config;
 
-import org.hrodberaht.config.ConfigBase;
-import org.hrodberaht.config.ConfigItem;
-import org.hrodberaht.config.MasterConfig;
-import org.hrodberaht.util.StringUtil;
+import org.hrodberaht.directus.config.ConfigBase;
+import org.hrodberaht.directus.config.ConfigItem;
+import org.hrodberaht.directus.config.MasterConfig;
+import org.hrodberaht.directus.util.StringUtil;
 
 import java.text.ParseException;
 import java.util.Date;
