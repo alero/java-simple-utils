@@ -14,10 +14,10 @@
 
 package test.org.alex.config;
 
-import org.alex.config.ConfigBase;
-import org.alex.config.ConfigItem;
-import org.alex.config.MasterConfig;
-import org.alex.util.StringUtil;
+import org.hrodberaht.config.ConfigBase;
+import org.hrodberaht.config.ConfigItem;
+import org.hrodberaht.config.MasterConfig;
+import org.hrodberaht.util.StringUtil;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -31,7 +31,7 @@ import java.util.Date;
  * @since 1.0
  */
 public class AnyApplicationConfig extends ConfigBase {
-    private static final String DEFAULT_CONFIG = "classpath:/test/org/alex/config/basicConfig.properties";
+    private static final String DEFAULT_CONFIG = "classpath:/test/org/hrodberaht/config/basicConfig.properties";
 
     public static void initConfig() throws ParseException {
         initConfig(DEFAULT_CONFIG);

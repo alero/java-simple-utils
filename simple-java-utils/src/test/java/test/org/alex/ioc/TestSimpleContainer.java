@@ -14,9 +14,9 @@
 
 package test.org.alex.ioc;
 
-import org.alex.exception.MessageRuntimeException;
-import org.alex.util.ioc.JavaContainerRegister;
-import org.alex.util.ioc.SimpleContainer;
+import org.hrodberaht.exception.MessageRuntimeException;
+import org.hrodberaht.util.ioc.JavaContainerRegister;
+import org.hrodberaht.util.ioc.SimpleContainer;
 import org.junit.Before;
 import org.junit.Test;
 

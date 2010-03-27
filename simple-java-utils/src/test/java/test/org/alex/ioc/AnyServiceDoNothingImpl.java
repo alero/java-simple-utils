@@ -14,7 +14,7 @@
 
 package test.org.alex.ioc;
 
-import org.alex.exception.MessageRuntimeException;
+import org.hrodberaht.exception.MessageRuntimeException;
 
 import java.util.Collection;
 

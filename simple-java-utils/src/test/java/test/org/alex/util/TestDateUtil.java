@@ -14,8 +14,8 @@
 
 package test.org.alex.util;
 
-import org.alex.exception.MessageRuntimeException;
-import org.alex.util.DateUtil;
+import org.hrodberaht.exception.MessageRuntimeException;
+import org.hrodberaht.util.DateUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
