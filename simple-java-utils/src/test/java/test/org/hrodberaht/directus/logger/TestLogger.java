@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.util.formatter;
+package test.org.hrodberaht.directus.logger;
 
 /**
  * Simple Java Utils
@@ -21,5 +21,5 @@ package test.org.hrodberaht.util.formatter;
  * @version 1.0
  * @since 1.0
  */
-public class TestFormatter {
+public class TestLogger {
 }

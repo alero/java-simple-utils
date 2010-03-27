@@ -12,8 +12,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.ioc;
+package test.org.hrodberaht.directus.ioc;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -23,9 +24,17 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public interface AnyService {
+public class AnyServiceDoSomethingImpl implements AnyService{
 
-    void doStuff();
-    Collection getStuff();
+    private Collection<String> collection = new ArrayList<String>();  
 
+    @Override
+    public void doStuff() {
+        collection.add("Added something");
+    }
+
+    @Override
+    public Collection getStuff() {
+        return collection;
+    }
 }

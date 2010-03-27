@@ -12,9 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.ioc;
-
-import org.hrodberaht.directus.exception.MessageRuntimeException;
+package test.org.hrodberaht.directus.ioc;
 
 import java.util.Collection;
 
@@ -25,17 +23,9 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public class AnyServiceDoNothingImpl implements AnyService{
+public interface AnyService {
 
-    @Override
-    public void doStuff() {
-        if(true){
-            throw MessageRuntimeException.createError("This service can't do stuff");
-        }
-    }
+    void doStuff();
+    Collection getStuff();
 
-    @Override
-    public Collection getStuff() {
-        return null;
-    }
 }

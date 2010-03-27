@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.ioc;
+package test.org.hrodberaht.directus.ioc;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.directus.util.ioc.JavaContainerRegister;
