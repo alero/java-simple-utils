@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.alex.formatter;
+package org.alex.util.formatter;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;

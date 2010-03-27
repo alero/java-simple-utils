@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.alex.formatter;
+package org.alex.util.formatter;
 
 import java.util.Arrays;
 import java.util.List;

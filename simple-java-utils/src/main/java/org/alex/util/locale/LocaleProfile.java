@@ -1,4 +1,4 @@
-package org.alex.util;
+package org.alex.util.locale;
 
 import java.util.Locale;
 

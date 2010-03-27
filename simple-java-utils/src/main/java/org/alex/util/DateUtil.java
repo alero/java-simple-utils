@@ -1,5 +1,7 @@
 package org.alex.util;
 
+import org.alex.util.locale.LocaleProvider;
+
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,7 +19,7 @@ import java.util.TimeZone;
  */
 public final class DateUtil {
 
-    private static final Locale locale = LanguageProvider.getSystemLocale();
+    private static final Locale locale = LocaleProvider.getSystemLocale();
 
     private static final String LONG_DATE = "yyyy-MM-dd HH:mm:ss";
     private static final String SHORT_DATE = "yyyy-MM-dd";

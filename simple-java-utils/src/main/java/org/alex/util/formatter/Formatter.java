@@ -1,8 +1,8 @@
 
 
-package org.alex.formatter;
+package org.alex.util.formatter;
 
-import org.alex.util.LanguageProvider;
+import org.alex.util.locale.LocaleProvider;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import java.util.Set;
 public class Formatter
 {
 
-    protected Locale locale = LanguageProvider.getProfile().getLocale();
+    protected Locale locale = LocaleProvider.getProfile().getLocale();
 
     private static Map registry = Collections.synchronizedMap(new HashMap());
     protected Class propertyType;
