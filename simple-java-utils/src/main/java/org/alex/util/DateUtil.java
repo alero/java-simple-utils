@@ -1,5 +1,6 @@
 package org.alex.util;
 
+import org.alex.exception.MessageRuntimeException;
 import org.alex.util.locale.LocaleProvider;
 
 import java.text.Format;
@@ -87,12 +88,12 @@ public final class DateUtil {
         String pattern;
         if (date.length() == 0) {
             return null;
-        } else if (date.length() == 19) { // "yyyy-MM-dd HH:mm:ss"
+        } else if (date.length() == 19) {
             pattern = LONG_DATE;
-        } else if (date.length() == 10) { // "yyyy-MM-dd"
+        } else if (date.length() == 10) {
             pattern = SHORT_DATE;
         } else {
-            throw new RuntimeException("Unknown format " + date + " EVAL:" + date.length());
+            throw new MessageRuntimeException("Unknown format for {0} ", date);
         }
         Format format = cacheSimpleDateFormat(pattern);
         try {
