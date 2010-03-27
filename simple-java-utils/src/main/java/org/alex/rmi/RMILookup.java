@@ -19,15 +19,10 @@ public class RMILookup {
 
     private static final SimpleLogger LOGGER = SimpleLogger.getInstance(RMILookup.class);
     private static Hashtable<String, String> env = null;
-    private static String initialContextFactory = null;
 
     private static void init() {
         Hashtable<String, String> env = new Hashtable<String, String>();
-        if (initialContextFactory != null) {
-            env.put(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
-        } else {
-            env.put(Context.INITIAL_CONTEXT_FACTORY, RMILookUpConfig.CONNECTIONFACTORY.getValue());
-        }
+        env.put(Context.INITIAL_CONTEXT_FACTORY, RMILookUpConfig.CONNECTIONFACTORY.getValue());
         env.put(Context.PROVIDER_URL, RMILookUpConfig.LOCATION.getValue());
         env.put(Context.SECURITY_PRINCIPAL, RMILookUpConfig.USER.getValue());
         env.put(Context.SECURITY_CREDENTIALS, RMILookUpConfig.PASSWORD.getValue());
@@ -47,7 +42,7 @@ public class RMILookup {
         LOGGER.debug("looking up PROVIDER_URL {0}", RMILookUpConfig.LOCATION.getValue());
         LOGGER.debug("looking up CONNECTIONFACTORY {0}", RMILookUpConfig.CONNECTIONFACTORY.getValue());
         InitialContext ctx = new InitialContext(env);
-        LOGGER.debug("looking up {0}", theClass);
+        LOGGER.debug("looking up {0} using jndiName {1}", theClass, jndiName);
         
         Object anEJBHome = PortableRemoteObject.narrow(ctx.lookup(jndiName), theClass);
         return anEJBHome;

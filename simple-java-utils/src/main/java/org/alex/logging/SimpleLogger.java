@@ -32,7 +32,7 @@ public class SimpleLogger {
 
     public void debug(String message, Object... args) {
         if (logger.isDebugEnabled()) {
-            logger.debug(message, args);
+            logger.debug(MessageFormat.format(message,args));
         }
     }
 
@@ -48,7 +48,7 @@ public class SimpleLogger {
 
     public void info(String message, Object... args) {
         if (logger.isInfoEnabled()) {
-            logger.info(message, args);
+            logger.info(MessageFormat.format(message,args));
         }
     }
 

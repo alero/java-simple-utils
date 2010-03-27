@@ -33,7 +33,8 @@ public class MasterConfig {
             Map<Class, Config> configurations = new HashMap<Class, Config>();
             MasterConfig.config.setProvidedConfigurations(configurations);
             // TODO: make this useable
-            MasterConfig.config.setCustomConfigurations(null); // from local file
+            Map<Class, Config> customConfigurations = new HashMap<Class, Config>();
+            MasterConfig.config.setCustomConfigurations(customConfigurations); // from local file
             MasterConfig.config.setCustomConfigurationStrategy(MasterConfig.Strategy.INHERIT);
         }
 
