@@ -1,8 +1,23 @@
+/*
+ * Copyright (c) 2010.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package org.alex.util;
 
 import org.alex.exception.MessageRuntimeException;
 import org.alex.util.locale.LocaleProvider;
 
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,14 +35,33 @@ import java.util.TimeZone;
  */
 public final class DateUtil {
 
-    private static final Locale locale = LocaleProvider.getSystemLocale();
+    private static Locale locale = LocaleProvider.getSystemLocale();
 
-    private static final String LONG_DATE = "yyyy-MM-dd HH:mm:ss";
-    private static final String SHORT_DATE = "yyyy-MM-dd";
+    private static String LONG_DATE = null;
+    private static int LONG_DATE_LENGTH = -1;
+    private static String SHORT_DATE = null;
+    private static int SHORT_DATE_LENGTH = -1;
 
+    static{
+        updateFormatPatterns();
+    }
+
+    private static void updateFormatPatterns() {
+        SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, locale);
+        SHORT_DATE = dateFormat.toLocalizedPattern();
+        SHORT_DATE_LENGTH = SHORT_DATE.length();
+
+        SimpleDateFormat dateTimeFormat = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, locale);
+        LONG_DATE = dateTimeFormat.toLocalizedPattern();
+        LONG_DATE_LENGTH = LONG_DATE.length();
+    }
 
     private DateUtil() {
-        // DateFormat.getDateInstance(DateFormat.SHORT, DateFormat.MEDIUM, locale).
+    }
+
+    public static void setLocale(Locale locale){
+        DateUtil.locale = locale;
+        updateFormatPatterns();
     }
 
     public static boolean isInInterval(Date startDate, Date endDate, Date compare) {
@@ -86,20 +120,21 @@ public final class DateUtil {
 
     public static Date parseSimpleDate(String date) {
         String pattern;
-        if (date.length() == 0) {
+        int lenght = date.length();
+        if (lenght == 0) {
             return null;
-        } else if (date.length() == 19) {
+        } else if (lenght >= LONG_DATE_LENGTH) {
             pattern = LONG_DATE;
-        } else if (date.length() == 10) {
+        } else if (lenght >= SHORT_DATE_LENGTH) {
             pattern = SHORT_DATE;
         } else {
-            throw new MessageRuntimeException("Unknown format for {0} ", date);
+            throw MessageRuntimeException.createError("Unknown format for {0} ").args(date);
         }
         Format format = cacheSimpleDateFormat(pattern);
         try {
             return parseDate(date, format);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw MessageRuntimeException.createError("Could not parse {0}", e).args(date);
         }
 
     }

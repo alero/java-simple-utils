@@ -12,14 +12,29 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.alex.util.locale;
+package test.org.alex.ioc;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Robert
- * Date: 2010-mar-27
- * Time: 01:28:54
- * To change this template use File | Settings | File Templates.
+ * Simple Java Utils
+ *
+ * @author Robert Alexandersson
+ * @version 1.0
+ * @since 1.0
  */
-public class TestLocale {
+public class AnyServiceDoSomethingImpl implements AnyService{
+
+    private Collection<String> collection = new ArrayList<String>();  
+
+    @Override
+    public void doStuff() {
+        collection.add("Added something");
+    }
+
+    @Override
+    public Collection getStuff() {
+        return collection;
+    }
 }

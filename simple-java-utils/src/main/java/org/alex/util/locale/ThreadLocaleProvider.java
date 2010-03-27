@@ -14,9 +14,6 @@
 
 package org.alex.util.locale;
 
-import org.alex.util.ioc.JavaContainerRegister;
-import org.alex.util.ioc.SimpleContainer;
-
 import java.util.Locale;
 
 /**
@@ -26,17 +23,26 @@ import java.util.Locale;
  * @version 1.0
  * @since 1.0
  */
-public class LocaleProvider {
+public class ThreadLocaleProvider implements ProviderInterface{
 
-    static{
-        JavaContainerRegister.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
-    }
-
-    public static LocaleProfile getProfile(){
-        return SimpleContainer.get(ProviderInterface.class).getProfile();
-    }
     
-    public static Locale getSystemLocale(){
-        return SimpleContainer.get(ProviderInterface.class).getSystemLocale();
+    @Override
+    public LocaleProfile getProfile() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Locale getSystemLocale() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public StatefulProfile statefulProfileSupport() {
+        return StatefulProfile.THREAD;
+    }
+
+    @Override
+    public void setStatefulProfile(LocaleProfile localeProfile) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
