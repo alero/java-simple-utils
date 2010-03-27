@@ -89,26 +89,11 @@ public class Formatter
     }
     
 
-    
-    public String format(Object value) {
+    public String convertToString(Object value) {
         return value.toString();
     }
 
-    /**
-     * May be overridden by subclasses to provide special handling
-     * for <code>null</code> values when converting from presentation
-     * format to a bean property type. The default implementation simply
-     * returns <code>null</code>
-     */
-    protected Object getNullObjectValue() {
-        return null;
-    }
-    
-    /**
-     * May be orverridden by subclasses to customize its behavior.
-     * The default implementation simply trims and returns the provided string.
-     */
-    protected Object convertToObject(String string)
+    public Object convertToObject(String string)
     {
         return string == null ? null : string.trim();
     }

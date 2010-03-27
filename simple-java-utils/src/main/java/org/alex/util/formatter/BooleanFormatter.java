@@ -35,7 +35,7 @@ public class BooleanFormatter extends Formatter
     static final List FALSE_VALUES = Arrays.asList(new String[] {
             "no", "false", "off", "0", "disabled" });
     
-    protected Object convertToObject(String target)
+    public Object convertToObject(String target)
     {
         if (Formatter.isEmptyValue(target))
             return null;
@@ -48,7 +48,7 @@ public class BooleanFormatter extends Formatter
         throw new FormatException(CONVERT_MSG + stringValue);
     }
     
-    public String format(Object target)
+    public String convertToString(Object target)
     {
         if (target == null)
             return null;

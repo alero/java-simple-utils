@@ -34,7 +34,7 @@ public class CurrencyFormatter extends Formatter
     /** The key used to look up the currency error string */
 
 
-    protected Object convertToObject(String target)
+    public Object convertToObject(String target)
     {
         // Insert currency symbol if absent
         if (!hasSymbol(target)) {
@@ -70,7 +70,7 @@ public class CurrencyFormatter extends Formatter
      * Returns a string representation of its argument formatted as a
      * currency value.
      */
-    public String format(Object obj)
+    public String convertToString(Object obj)
     {
         if (obj == null)  return null;
         

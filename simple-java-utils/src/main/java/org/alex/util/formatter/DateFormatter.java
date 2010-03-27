@@ -36,7 +36,7 @@ public class DateFormatter extends Formatter {
      *
      * @return a java.util.Date intialized with the provided string
      */
-    protected Object convertToObject(String target) 
+    public Object convertToObject(String target)
     {
         DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         // formatter.setLenient(false);
@@ -54,7 +54,7 @@ public class DateFormatter extends Formatter {
      *
      * @return a formatted String
      */
-    public String format(Object value) {
+    public String convertToString(Object value) {
         if (value == null)
             return null;
 

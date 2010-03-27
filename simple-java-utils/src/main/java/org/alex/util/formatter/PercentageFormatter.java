@@ -35,30 +35,23 @@ public class PercentageFormatter extends Formatter {
     public final static int PERCENTAGE_SCALE = 2;
 
     /**
-     * The default format for percentage values
-     */
-    public final static String PERCENTAGE_FORMAT = "#,##0.00";
-
-    static final String PARSE_MSG = "Unable to parse a percentage value from ";
-
-    /**
      * Unformats its argument and returns a BigDecimal instance
      * initialized with the resulting string value
      *
      * @return a BigDecimal initialized with the provided string
      */
-    protected Object convertToObject(String target)
+    public Object convertToObject(String target)
     {
         try {
-            DecimalFormat formatter = new DecimalFormat(PERCENTAGE_FORMAT);
+            NumberFormat formatter = DecimalFormat.getPercentInstance(locale);
             Number parsedNumber = formatter.parse(target.trim());
             return new BigDecimal(parsedNumber.doubleValue());
         }
         catch (NumberFormatException e) {
-            throw new FormatException(PARSE_MSG, e);
+            throw new FormatException(e);
         }
         catch (ParseException e) {
-            throw new FormatException(PARSE_MSG, e);
+            throw new FormatException(e);
         }
     }
 
@@ -68,13 +61,19 @@ public class PercentageFormatter extends Formatter {
      *
      * @return a formatted String
      */
-    public String format(Object value) {
+    public String convertToString(Object value) {
         if (value == null)
             return "";
 
 
         try {
-            BigDecimal bigDecValue = (BigDecimal)value;
+            BigDecimal bigDecValue;
+            if(value instanceof Double){
+                bigDecValue = new BigDecimal((Double)value);
+            }else {
+                bigDecValue = (BigDecimal)value;
+            }
+
             bigDecValue = bigDecValue.setScale(PERCENTAGE_SCALE,
                                                BigDecimal.ROUND_HALF_UP);
             return NumberFormat.getPercentInstance(locale).

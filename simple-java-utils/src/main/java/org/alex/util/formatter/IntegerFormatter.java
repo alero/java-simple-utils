@@ -26,29 +26,23 @@ package org.alex.util.formatter;
  */
 public class IntegerFormatter extends Formatter
 {
-    public final static String INTEGER_ERROR_KEY = "error.integer";
-    static final String PARSE_MSG = "Unable to parse an integer value from ";
-//    static final String FORMAT_MSG = "Unable to format an integer value from ";
-
-    public String getErrorKey() { return INTEGER_ERROR_KEY; }
-    
-    /**
+     /**
      * Returns an object representation of its argument.
      */
-    protected Object convertToObject(String target)
+    public Object convertToObject(String target)
     {
         try {
             return new Integer(target);
         }
         catch (NumberFormatException e) {
-            throw new FormatException(PARSE_MSG + target, e);
+            throw new FormatException(e);
         }
     }
 
     /**
      * Returns a formatted version of its argument.
      */
-    public String format(Object obj) {
+    public String convertToString(Object obj) {
         return (obj == null ? null : obj.toString());
     }
 }
