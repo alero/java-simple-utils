@@ -14,6 +14,10 @@
 
 package test.org.hrodberaht.directus.rmi;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Simple Java Utils
  *
@@ -22,4 +26,8 @@ package test.org.hrodberaht.directus.rmi;
  * @since 1.0
  */
 public class TestRMILookUp {
+    @Test
+    public void dummyTest(){
+        assertEquals(1,1);
+    }
 }

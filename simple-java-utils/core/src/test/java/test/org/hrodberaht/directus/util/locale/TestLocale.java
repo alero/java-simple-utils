@@ -14,12 +14,20 @@
 
 package test.org.hrodberaht.directus.util.locale;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 /**
- * Created by IntelliJ IDEA.
- * User: Robert
- * Date: 2010-mar-27
- * Time: 01:28:54
- * To change this template use File | Settings | File Templates.
+ * Simple Java Utils
+ *
+ * @author Robert Alexandersson
+ * @version 1.0
+ * @since 1.0
  */
 public class TestLocale {
+    @Test
+    public void dummyTest(){
+        assertEquals(1,1);
+    }
 }

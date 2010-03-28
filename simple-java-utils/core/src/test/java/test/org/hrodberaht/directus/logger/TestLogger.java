@@ -14,6 +14,10 @@
 
 package test.org.hrodberaht.directus.logger;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Simple Java Utils
  *
@@ -22,4 +26,10 @@ package test.org.hrodberaht.directus.logger;
  * @since 1.0
  */
 public class TestLogger {
+
+    @Test
+    public void dummyTest(){
+        assertEquals(1,1);
+    }
+
 }
