@@ -21,6 +21,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Simple Java Utils
@@ -73,6 +76,26 @@ public class SocketCloser {
             try {
                 reader.close();
             } catch (IOException e) {
+                LOGGER.error(e);
+            }
+        }
+    }
+
+    public static void close(Statement statement) {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                LOGGER.error(e);
+            }
+        }
+    }
+
+    public static void close(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
                 LOGGER.error(e);
             }
         }
