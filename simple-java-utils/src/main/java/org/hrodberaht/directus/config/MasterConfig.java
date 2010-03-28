@@ -33,21 +33,21 @@ public class MasterConfig {
 
     private String name;
     private Strategy customConfigurationStrategy;
-    private Map<Class, Config> providedConfigurations = null;
-    private Map<Class, Config> customConfigurations = null;
+    private Map<Class, ConfigBase> providedConfigurations = null;
+    private Map<Class, ConfigBase> customConfigurations = null;
 
 
     private static MasterConfig config = null;
 
-    public static void registerConfig(Config config, String propertyPath, String customPropertyPath) {
+    public static void registerConfig(ConfigBase config, String propertyPath, String customPropertyPath) {
         config.setPropertyPath(propertyPath);
         config.setCustomPropertyPath(customPropertyPath);
         if (MasterConfig.config == null) {
             MasterConfig.config = new MasterConfig();
-            Map<Class, Config> configurations = new HashMap<Class, Config>();
+            Map<Class, ConfigBase> configurations = new HashMap<Class, ConfigBase>();
             MasterConfig.config.setProvidedConfigurations(configurations);
             // TODO: make this useable
-            Map<Class, Config> customConfigurations = new HashMap<Class, Config>();
+            Map<Class, ConfigBase> customConfigurations = new HashMap<Class, ConfigBase>();
             MasterConfig.config.setCustomConfigurations(customConfigurations); // from local file
             MasterConfig.config.setCustomConfigurationStrategy(MasterConfig.Strategy.INHERIT);
         }
@@ -57,21 +57,21 @@ public class MasterConfig {
         MasterConfig.config.load();
     }
 
-    public static void registerConfig(Config config, String property) {
+    public static void registerConfig(ConfigBase config, String property) {
         registerConfig(config, property, null);    
     }
 
-    public void load() {
+    protected void load() {
         initiate(providedConfigurations);
         initiate(customConfigurations);
         merge(providedConfigurations, customConfigurations);
     }
 
-    private void initiate(Map<Class, Config> configuration) {
+    private void initiate(Map<Class, ConfigBase> configuration) {
         if (configuration == null) {
             return;
         }
-        for (Config conf : configuration.values()) {
+        for (ConfigBase conf : configuration.values()) {
             try {
                 conf.initiate();
                 conf.loadProperties();
@@ -84,7 +84,7 @@ public class MasterConfig {
         }
     }
 
-    private void merge(Map<Class, Config> providedConfigurations, Map<Class, Config> customConfigurations) {
+    private void merge(Map<Class, ConfigBase> providedConfigurations, Map<Class, ConfigBase> customConfigurations) {
 
     }
 
@@ -96,15 +96,15 @@ public class MasterConfig {
         this.name = name;
     }
 
-    public void setProvidedConfigurations(Map<Class, Config> providedConfigurations) {
+    public void setProvidedConfigurations(Map<Class, ConfigBase> providedConfigurations) {
         this.providedConfigurations = providedConfigurations;
     }
 
-    public Map<Class, Config> getCustomConfigurations() {
+    public Map<Class, ConfigBase> getCustomConfigurations() {
         return customConfigurations;
     }
 
-    public void setCustomConfigurations(Map<Class, Config> customConfigurations) {
+    public void setCustomConfigurations(Map<Class, ConfigBase> customConfigurations) {
         this.customConfigurations = customConfigurations;
     }
 

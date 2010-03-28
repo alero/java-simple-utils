@@ -38,7 +38,7 @@ import java.util.Properties;
  * @version 1.0
  * @since 1.0
  */
-public abstract class ConfigBase implements Config  {
+public abstract class ConfigBase {
 
     private SimpleLogger LOGGER = SimpleLogger.getInstance(this.getClass());
     private String propertyPath = null;
@@ -62,7 +62,7 @@ public abstract class ConfigBase implements Config  {
         propertyPath = property;
         customPropertyPath = customProperty;
         try {
-            Config config = (Config) clazz.newInstance();
+            ConfigBase config = (ConfigBase) clazz.newInstance();
             if(config.requiresValidation()){
                 config.validate();                
             }
@@ -72,7 +72,7 @@ public abstract class ConfigBase implements Config  {
         }
     }
 
-    public void loadProperties() throws ParseException {
+    protected void loadProperties() throws ParseException {
         long elapsedTime = System.currentTimeMillis() - timestamp;
         if (origproperties == null) {
             reloadProperties();
@@ -191,13 +191,8 @@ public abstract class ConfigBase implements Config  {
         }
     }
 
-    public void initiate() throws IllegalAccessException {
-        // TODO: Create crazy reflection to autoload the properties
-
+    public void initiate() throws IllegalAccessException {        
         configurations.clear();
-
-        // TODO: redo this using reflection...
-
         checkForFields(this.getClass());
         Class[] interfaceses = this.getClass().getDeclaredClasses();
         checkInterfaces(interfaceses);
@@ -224,12 +219,10 @@ public abstract class ConfigBase implements Config  {
         }
     }
 
-    @Override
     public void setPropertyPath(String path) {
         this.propertyPath = path;
     }
 
-    @Override
     public void setCustomPropertyPath(String path) {
         this.customPropertyPath = path;
     }
