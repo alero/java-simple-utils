@@ -50,7 +50,7 @@ public abstract class ConfigBase {
     private String propertyPath = null;
     private String customPropertyPath = null;
 
-    private Map<ConfigItem, ConfigItem> configurations = new HashMap();
+    private Map<ConfigItem, ConfigItem> configurations = new HashMap<ConfigItem, ConfigItem>();
 
     private Properties properties = null;
 

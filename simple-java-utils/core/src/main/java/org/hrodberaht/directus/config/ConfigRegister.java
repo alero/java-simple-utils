@@ -31,7 +31,6 @@ public class ConfigRegister {
         INHERIT, REPLACE
     }
 
-    private String name;
     private Strategy customConfigurationStrategy;
     private Map<Class, ConfigBase> providedConfigurations = null;
     private Map<Class, ConfigBase> customConfigurations = null;
@@ -63,18 +62,17 @@ public class ConfigRegister {
 
     protected void load() {
         initiate(providedConfigurations);
-        initiate(customConfigurations);
-        merge(providedConfigurations, customConfigurations);
+        initiate(customConfigurations);        
     }
 
     private void initiate(Map<Class, ConfigBase> configuration) {
         if (configuration == null) {
             return;
         }
-        for (ConfigBase conf : configuration.values()) {
+        for (ConfigBase config : configuration.values()) {
             try {
-                conf.initiate();
-                conf.loadProperties();
+                config.initiate();
+                config.loadProperties();
             } catch (IllegalAccessException e) {
                 throw new ConfigException(e);
             } catch (ParseException e) {
@@ -82,18 +80,6 @@ public class ConfigRegister {
             }
 
         }
-    }
-
-    private void merge(Map<Class, ConfigBase> providedConfigurations, Map<Class, ConfigBase> customConfigurations) {
-
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setProvidedConfigurations(Map<Class, ConfigBase> providedConfigurations) {
