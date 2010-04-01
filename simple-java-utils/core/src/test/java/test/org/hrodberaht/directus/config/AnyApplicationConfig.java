@@ -16,7 +16,7 @@ package test.org.hrodberaht.directus.config;
 
 import org.hrodberaht.directus.config.ConfigBase;
 import org.hrodberaht.directus.config.ConfigItem;
-import org.hrodberaht.directus.config.MasterConfig;
+import org.hrodberaht.directus.config.ConfigRegister;
 import org.hrodberaht.directus.util.StringUtil;
 
 import java.text.ParseException;
@@ -59,7 +59,7 @@ public class AnyApplicationConfig extends ConfigBase {
 
 
     private AnyApplicationConfig(String propertyPath, String customPropertyPath) throws ParseException {
-        MasterConfig.registerConfig(this, propertyPath, customPropertyPath);
+        ConfigRegister.registerConfig(this, propertyPath, customPropertyPath);
     }
 
 
