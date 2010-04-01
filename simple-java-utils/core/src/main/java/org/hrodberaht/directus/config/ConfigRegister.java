@@ -25,7 +25,7 @@ import java.util.Map;
  * @version 1.0
  * @since 1.0
  */
-public class MasterConfig {
+public class ConfigRegister {
 
     public static enum Strategy {
         INHERIT, REPLACE
@@ -37,24 +37,24 @@ public class MasterConfig {
     private Map<Class, ConfigBase> customConfigurations = null;
 
 
-    private static MasterConfig config = null;
+    private static ConfigRegister config = null;
 
     public static void registerConfig(ConfigBase config, String propertyPath, String customPropertyPath) {
         config.setPropertyPath(propertyPath);
         config.setCustomPropertyPath(customPropertyPath);
-        if (MasterConfig.config == null) {
-            MasterConfig.config = new MasterConfig();
+        if (ConfigRegister.config == null) {
+            ConfigRegister.config = new ConfigRegister();
             Map<Class, ConfigBase> configurations = new HashMap<Class, ConfigBase>();
-            MasterConfig.config.setProvidedConfigurations(configurations);
+            ConfigRegister.config.setProvidedConfigurations(configurations);
             // TODO: make this useable
             Map<Class, ConfigBase> customConfigurations = new HashMap<Class, ConfigBase>();
-            MasterConfig.config.setCustomConfigurations(customConfigurations); // from local file
-            MasterConfig.config.setCustomConfigurationStrategy(MasterConfig.Strategy.INHERIT);
+            ConfigRegister.config.setCustomConfigurations(customConfigurations); // from local file
+            ConfigRegister.config.setCustomConfigurationStrategy(ConfigRegister.Strategy.INHERIT);
         }
 
-        MasterConfig.config.providedConfigurations.put(config.getClass(), config);
+        ConfigRegister.config.providedConfigurations.put(config.getClass(), config);
 
-        MasterConfig.config.load();
+        ConfigRegister.config.load();
     }
 
     public static void registerConfig(ConfigBase config, String property) {
