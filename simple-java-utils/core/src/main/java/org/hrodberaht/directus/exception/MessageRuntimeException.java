@@ -35,6 +35,10 @@ public class MessageRuntimeException extends RuntimeException {
         return new MessageRuntimeException(message);
     }
 
+    public static MessageRuntimeException createError(Throwable e){
+        return new MessageRuntimeException(e);
+    }
+
     public MessageRuntimeException args(Object... args){
         this.args = args;
         return this;
@@ -46,16 +50,17 @@ public class MessageRuntimeException extends RuntimeException {
 
     private MessageRuntimeException(String message, Throwable e) {
         super(message, e);
-
     }
 
-
-
+    private MessageRuntimeException(Throwable e) {
+        super(e);
+    }
 
     @Override
     public String toString() {
         if(args != null){
-            return MessageFormat.format(getMessage(), args);            
+            return MessageRuntimeException.class.getName()
+                    +": "+ MessageFormat.format(getMessage(), args);            
         }
         return super.toString();
     }
