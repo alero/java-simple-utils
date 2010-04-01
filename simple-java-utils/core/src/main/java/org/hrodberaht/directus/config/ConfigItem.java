@@ -30,7 +30,7 @@ public class ConfigItem<T> {
     protected ConfigItem() {        
     }
 
-    protected ConfigItem(Class clazz, String name) {
+    public ConfigItem(Class clazz, String name) {
         this.name = name;
         this.clazz = clazz;
     }
