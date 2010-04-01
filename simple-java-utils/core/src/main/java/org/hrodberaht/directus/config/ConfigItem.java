@@ -27,20 +27,16 @@ public class ConfigItem<T> {
     private T value;
     private Class clazz;
 
-    public ConfigItem() {        
+    protected ConfigItem() {        
     }
 
-    public ConfigItem(Class clazz, String s) {
-        this.name = s;
+    protected ConfigItem(Class clazz, String name) {
+        this.name = name;
         this.clazz = clazz;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public T getValue() {
@@ -52,7 +48,7 @@ public class ConfigItem<T> {
     }
 
 
-    public Class type() {
+    public Class getType() {
         return clazz;
     }
 }

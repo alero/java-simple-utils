@@ -14,8 +14,10 @@
 
 package org.hrodberaht.directus.config;
 
+import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.directus.logging.SimpleLogger;
 import org.hrodberaht.directus.util.NumberUtil;
+import org.hrodberaht.directus.util.SocketCloser;
 import org.hrodberaht.directus.util.StringUtil;
 
 import java.io.File;
@@ -40,18 +42,24 @@ import java.util.Properties;
  */
 public abstract class ConfigBase {
 
-    private SimpleLogger LOGGER = SimpleLogger.getInstance(this.getClass());
+    private static final long RELOAD_INTERVAL = 15000;
+    private static long TIME_STAMP;
+    private static boolean reloadEnabled = false;
+
+    private SimpleLogger LOGGER = null;
     private String propertyPath = null;
     private String customPropertyPath = null;
 
     private Map<ConfigItem, ConfigItem> configurations = new HashMap();
 
-    private static final long RELOAD = 15000;
-    private static long timestamp;
-
-    private Properties origproperties = null;
-    private Properties cproperties = null;
     private Properties properties = null;
+
+    static{
+        String value = System.getProperty("config.reload.enable");
+        if("true".equals(value)){
+            reloadEnabled = true;                
+        }
+    }
 
     protected void configure(Class clazz, String property) {
         configure(clazz, property, null);
@@ -66,99 +74,103 @@ public abstract class ConfigBase {
             if(config.requiresValidation()){
                 config.validate();                
             }
-            MasterConfig.registerConfig(config, property);
+            ConfigRegister.registerConfig(config, property);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     protected void loadProperties() throws ParseException {
-        long elapsedTime = System.currentTimeMillis() - timestamp;
-        if (origproperties == null) {
+        long elapsedTime = System.currentTimeMillis() - TIME_STAMP;
+        if (properties == null) {
             reloadProperties();
             logProperties();
-        } else if ((timestamp == 0 || (elapsedTime > RELOAD))) {
+        } else if (reloadEnabled && (TIME_STAMP == 0 || (elapsedTime > RELOAD_INTERVAL))) {
             reloadProperties();
-            timestamp = System.currentTimeMillis();
+            TIME_STAMP = System.currentTimeMillis();
         }
     }
 
     private void reloadProperties() throws ParseException {
-        origproperties = new Properties();
-        cproperties = new Properties();
-        loadProperties(origproperties, propertyPath);
-        loadProperties(cproperties, customPropertyPath);
-        mergeProperties();
-        setValues();
+        Properties origProperties = new Properties();
+        Properties customProperties = new Properties();
+        loadProperties(origProperties, propertyPath);
+        loadProperties(customProperties, customPropertyPath);
+        mergeProperties(origProperties, customProperties);
+        populateConfigurationValues();
 
     }
 
-    private void setValues() throws ParseException {
-        for (ConfigItem conf : configurations.keySet()) {
-            String value = System.getProperty(conf.getName());
+    private void populateConfigurationValues() throws ParseException {
+        for (ConfigItem config : configurations.keySet()) {
+            // Makes it possible to override values Using System.setProperty();
+            // {@link System#setProperty(String, String)}
+            String value = System.getProperty(config.getName());
             if(StringUtil.isBlank(value)){
-                value = properties.getProperty(conf.getName());                
+                value = properties.getProperty(config.getName());
             }
-            if (conf.type().isAssignableFrom(Boolean.class)) {
-                conf.setValue(Boolean.parseBoolean(value));
-            } else if (conf.type().isAssignableFrom(Integer.class)) {
-                conf.setValue(NumberUtil.parseInt(value));
-            } else if (conf.type().isAssignableFrom(Long.class)) {
-                conf.setValue(NumberUtil.parseLong(value));
-            } else if (conf.type().isAssignableFrom(String[].class)) {
-                conf.setValue(value.split(","));
-            } else if (conf.type().isAssignableFrom(Date.class)) {
-                conf.setValue(DateUtil.parseSimpleDate(value));
+
+            if (config.getType().isAssignableFrom(Boolean.class)) {
+                config.setValue(Boolean.parseBoolean(value));
+            } else if (config.getType().isAssignableFrom(Integer.class)) {
+                config.setValue(NumberUtil.parseInt(value));
+            } else if (config.getType().isAssignableFrom(Long.class)) {
+                config.setValue(NumberUtil.parseLong(value));
+            } else if (config.getType().isAssignableFrom(String[].class)) {
+                config.setValue(value.split(","));
+            } else if (config.getType().isAssignableFrom(Date.class)) {
+                config.setValue(DateUtil.parseSimpleDate(value));
             } else {
-                conf.setValue(value);
+                config.setValue(value);
             }
-            // conf.setValue(value);
         }
     }
 
-    private void loadProperties(Properties props, String stream) {
+    private void loadProperties(Properties props, String configPath) {
         InputStream data = null;
         try {
 
-            if (stream == null) {
-                LOGGER.info("Property file not defined");
-                return;
+            if (configPath == null) {
+                throw new RuntimeException("Property path not defined");
             }
 
-            if (stream.startsWith("classpath:")) {
-                String path = stream.replaceFirst("classpath:", "");
+            if (configPath.startsWith("classpath:")) {
+                String path = configPath.replaceFirst("classpath:", "");
                 data = ConfigBase.class.getResourceAsStream(path);
-            } else if (stream.startsWith("file:")) {
-                File file = new File(stream.replaceFirst("file:", ""));
+            } else if (configPath.startsWith("file:")) {
+                File file = new File(configPath.replaceFirst("file:", ""));
                 data = new FileInputStream(file);
             }
             if (data != null) {
                 props.load(data);
             } else {
-                LOGGER.info("Property file not found {0}", stream);
+                throw MessageRuntimeException
+                        .createError("Using property path {0} could not find a file")
+                        .args(configPath);
             }
         } catch (IOException e) {
             LOGGER.error(e);             
         } finally {
-            close(data);
+            SocketCloser.close(data);
         }
     }
 
 
-    private void mergeProperties() {
-        properties = origproperties;
-        if (cproperties != null) {
-            Enumeration data = cproperties.keys();
+    private void mergeProperties(Properties origProperties, Properties customProperties) {
+        properties = origProperties;
+        if (customProperties != null) {
+            Enumeration data = customProperties.keys();
             while (data.hasMoreElements()) {
                 String key = (String) data.nextElement();
-                String value = cproperties.getProperty(key);                
-                properties.put(key, value);
+                String value = customProperties.getProperty(key);
+                properties.remove(key);
+                properties.put(key, value);                
             }
         }
     }
 
     private void logProperties() {
-        LOGGER.info("Loading properties...");
+        LOGGER.info("Loggging properties ...");
         Enumeration keys = properties.keys();
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();            
@@ -168,18 +180,9 @@ public abstract class ConfigBase {
             }
             LOGGER.info("Property key: {0}, value: {1}", key, value);
         }
-        LOGGER.info("Properties loaded");
+        LOGGER.info("All properties logged");
     }
 
-    private static void close(InputStream data) {
-        try {
-            if (data != null) {
-                data.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static class DateUtil {
         public static Date parseSimpleDate(String value) throws ParseException {
