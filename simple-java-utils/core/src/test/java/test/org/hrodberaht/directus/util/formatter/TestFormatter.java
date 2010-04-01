@@ -14,7 +14,17 @@
 
 package test.org.hrodberaht.directus.util.formatter;
 
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+import org.hrodberaht.directus.util.formatter.DateFormatter;
+import org.hrodberaht.directus.util.formatter.FormatException;
+import org.hrodberaht.directus.util.formatter.Formatter;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,8 +36,64 @@ import static org.junit.Assert.assertEquals;
  * @since 1.0
  */
 public class TestFormatter {
+
+    @BeforeClass
+    public static void staticInit(){
+        System.setProperty("localeprovide.locale", "sv_SE");
+    }
+
+    @AfterClass
+    public static void staticDestroy(){
+        System.clearProperty("localeprovide.locale");
+    }
+
     @Test
-    public void dummyTest(){
-        assertEquals(1,1);
+    public void simpleDateParseFormat(){
+        String testDate = "2010-01-01";
+        Formatter<Date> formatter = Formatter.getFormatter(Date.class);
+        Date aDate = formatter.convertToObject(testDate);
+        String aStringDate = formatter.convertToString(aDate);
+        assertEquals(testDate, aStringDate);
+    }
+
+    @Test(expected = FormatException.class)
+    public void simpleBadDateParseFormat(){
+        String testDate = "2010-01-01&";
+        Formatter<Date> formatter = Formatter.getFormatter(Date.class);
+        Date aDate = formatter.convertToObject(testDate);
+        String aStringDate = formatter.convertToString(aDate);
+        assertEquals(testDate, aStringDate);
+    }
+
+    @Test
+    public void simpleDateTimeParse(){
+        String testDate = "2010-01-01 00:00";
+        Formatter<Date> formatter = Formatter.getFormatter(Date.class);
+        Date aDate = formatter.convertToObject(testDate);
+        assertEquals(testDateTime("2010-01-01 00:00"), aDate);
+    }
+
+    @Test
+    public void simpleDateTimeFormat(){
+        String testDate = "2010-01-01 00:00";
+        Formatter<Date> formatter = Formatter.getFormatter(Date.class, DateFormatter.DateConvert.DateTime);
+        String aDate = formatter.convertToString(testDateTime("2010-01-01 00:00"));
+        assertEquals(testDate, aDate);
+    }
+
+    private Date testDate(String aDate){
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(aDate);
+        } catch (ParseException e) {
+            throw MessageRuntimeException.createError("Could not format date {0}").args(aDate);
+        }
+    }
+
+    private Date testDateTime(String aDate){
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(aDate);
+        } catch (ParseException e) {
+            throw MessageRuntimeException.createError("Could not format datetime {0}").args(aDate);
+        }
     }
 }

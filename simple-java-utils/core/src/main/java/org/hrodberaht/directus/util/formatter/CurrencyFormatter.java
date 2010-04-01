@@ -14,6 +14,8 @@
 
 package org.hrodberaht.directus.util.formatter;
 
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -29,8 +31,6 @@ public class CurrencyFormatter extends Formatter
 {
     /** The default scale for currency values */
     public final static int SCALE = 2;
-    /** The key used to look up the currency error string */
-
 
     public Object convertToObject(String target)
     {
@@ -40,20 +40,16 @@ public class CurrencyFormatter extends Formatter
         }
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        BigDecimal value;
+
         try {
             Number parsedNumber = formatter.parse(target.trim());
-            value = new BigDecimal(parsedNumber.toString());
+            BigDecimal value;value = new BigDecimal(parsedNumber.toString());
             value.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
-        }
-        catch (NumberFormatException e) {
-            throw new FormatException(target, e);
+            return value;
         }
         catch (ParseException e) {
-            throw new FormatException(target, e);
+            throw MessageRuntimeException.createError(target, e);
         }
-
-        return value;
     }
 
     private String interpolateSymbol(String target) {
@@ -81,10 +77,7 @@ public class CurrencyFormatter extends Formatter
             return formatter.format(number.doubleValue());
         }
         catch (IllegalArgumentException e) {
-            throw new FormatException(e);
-        }
-        catch (ClassCastException e) {
-            throw new FormatException(e);
+            throw MessageRuntimeException.createError(e);
         }
 
     }

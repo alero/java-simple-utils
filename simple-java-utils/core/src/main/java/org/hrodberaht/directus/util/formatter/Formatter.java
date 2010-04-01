@@ -1,33 +1,29 @@
-
-
 /*
- * Copyright (c) 2010.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- */
+* Copyright (c) 2010.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and limitations under the License.
+*/
 
 package org.hrodberaht.directus.util.formatter;
 
-import org.hrodberaht.directus.util.ioc.SimpleContainer;
+import org.hrodberaht.directus.util.formatter.types.CurrencyData;
+import org.hrodberaht.directus.util.formatter.types.MeasureData;
+import org.hrodberaht.directus.util.formatter.types.PercentData;
 import org.hrodberaht.directus.util.locale.LocaleProvider;
 
-import java.math.BigDecimal;
-import java.util.Collections;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Simple Java Utils
@@ -36,84 +32,90 @@ import java.util.Set;
  * @version 1.0
  * @since 1.0
  */
-public class Formatter
-{
+public class Formatter<T> {
 
-    protected Locale locale = SimpleContainer.get(LocaleProvider.class).getProfile().getLocale();
+    protected Locale locale = LocaleProvider.getProfile().getLocale();
 
-    private static Map registry = Collections.synchronizedMap(new HashMap());
-    protected Class propertyType;
-    
-    static {
-        registerFormatter(String.class, Formatter.class);
-        registerFormatter(BigDecimal.class, CurrencyFormatter.class);
-        registerFormatter(Date.class, DateFormatter.class);
-        registerFormatter(Integer.class, IntegerFormatter.class);
-        registerFormatter(int.class, IntegerFormatter.class);
-        registerFormatter(Boolean.class, BooleanFormatter.class);
-        registerFormatter(Boolean.TYPE, BooleanFormatter.class);
-    }
-    
-    public static Formatter getFormatter(Class aType) {
-        return null;
-    }
-    
+    protected Class valueType;
 
-    
-    /**
-     * Binds the provided value type to a Formatter type. Note that a single
-     * Formatter class can be associated with more than one type.
-     * @param type a value type
-     * @param formatterType a Formatter type
-     */
-    public static void registerFormatter(Class type, Class formatterType) {
-        registry.put(type, formatterType);
-    }
-    
-    /**
-     * Returns <code>true</code> if the provided class is an array type,
-     * implements either the {@link List} or {@link Set} interfaces, or is
-     * one of the Formatter classes currently registered.
-     * @see #registerFormatter(Class, Class)
-     */
-    public static boolean isSupportedType(Class type)
-    {
-        if (List.class.isAssignableFrom(type)) return true;
-        if (Set.class.isAssignableFrom(type))  return true;
-        
-        return findFormatter(type) != null;
-    }
-    
 
-    
-    public static Class findFormatter(Class type)
-    {
-        if (type == null) return null;
-        
-        Iterator typeIter = registry.keySet().iterator();
-        while (typeIter.hasNext())
-        {
-            Class currType = (Class) typeIter.next();
-            if (currType.isAssignableFrom(type))
-            {
-                return (Class) registry.get(currType);
-            }
+    public static <T> Formatter<T> getFormatter(Class<T> aType) {
+        return getFormatter(aType, null);
+    }
+
+    public static <T> Formatter<T> getFormatter(Class<T> aType, DateFormatter.DateConvert dateConvert) {
+        if (String.class.isAssignableFrom(aType)) {
+            return new Formatter<T>();
+        } else if (CurrencyData.class.isAssignableFrom(aType)) {
+            return new CurrencyFormatter();
+        } else if (MeasureData.class.isAssignableFrom(aType)) {
+            return new MeasureFormatter();
+        } else if (PercentData.class.isAssignableFrom(aType)) {
+            return new PercentageFormatter();
+        } else if (Date.class.isAssignableFrom(aType)) {
+            return dateConvert != null ? new DateFormatter(dateConvert) : new DateFormatter();
+        } else if (Integer.class.isAssignableFrom(aType)) {
+            return new IntegerFormatter();
+        } else if (int.class.isAssignableFrom(aType)) {
+            return new IntegerFormatter();
+        } else if (Long.class.isAssignableFrom(aType)) {
+            return new LongFormatter();
+        } else if (long.class.isAssignableFrom(aType)) {
+            return new LongFormatter();
+        } else if (Boolean.class.isAssignableFrom(aType)) {
+            return new BooleanFormatter();
+        } else if (Boolean.TYPE.isAssignableFrom(aType)) {
+            return new BooleanFormatter();
         }
-        
+
         return null;
     }
-    
 
-    public String convertToString(Object value) {
+
+    /**
+     * Returns <code>true</code> if the provided class is an array getType,
+     * implements one of the Formatter classes currently supported.
+     *
+     * @see #getFormatter(Class)
+     */
+    public static boolean isSupportedType(Class type) {
+        return getFormatter(type) != null;
+    }
+
+    public String convertToString(T value) {
         return value.toString();
     }
 
-    public Object convertToObject(String string)
-    {
-        return string == null ? null : string.trim();
+    public T convertToObject(String string) {
+        return string == null ? null : (T) string.trim();
     }
 
-    public static boolean isEmptyValue(String target) {
-        return false;
+    protected Number parseAndErrorhandleNumber(String target, NumberFormat formatter) {
+        ParsePosition parsePosition = new ParsePosition(0);
+        Number parsedNumber = formatter.parse(target.trim(), parsePosition);
+        checkParsePositionForErrors(target, parsePosition);
+        return parsedNumber;
     }
+
+    protected Date parseAndErrorhandleDate(String target, DateFormat formatter) {
+        ParsePosition parsePosition = new ParsePosition(0);
+        Date parsedDate = formatter.parse(target.trim(), parsePosition);
+        checkParsePositionForErrors(target, parsePosition);
+        return parsedDate;
+    }
+
+    private void checkParsePositionForErrors(String target, ParsePosition parsePosition) {
+        if (parsePosition.getIndex() != target.length()) {
+            throw new FormatException("Parsing stopped for char {0} at position {1}"
+                    , target.charAt(parsePosition.getIndex()), parsePosition.getIndex()
+            );
+        }
+        if (parsePosition.getErrorIndex() != -1) {
+            throw new FormatException("Parsing failed on char {0} at position {1}"
+                    , target.charAt(parsePosition.getErrorIndex()), parsePosition.getErrorIndex()
+            );
+        }
+    }
+
+
 }

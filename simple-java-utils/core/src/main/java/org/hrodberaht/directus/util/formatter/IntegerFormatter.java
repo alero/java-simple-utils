@@ -14,6 +14,8 @@
 
 package org.hrodberaht.directus.util.formatter;
 
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+
 
 /**
  * Simple Java Utils
@@ -33,7 +35,7 @@ public class IntegerFormatter extends Formatter
             return new Integer(target);
         }
         catch (NumberFormatException e) {
-            throw new FormatException(e);
+            throw MessageRuntimeException.createError(e);
         }
     }
 

@@ -14,10 +14,13 @@
 
 package org.hrodberaht.directus.util.formatter;
 
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+import org.hrodberaht.directus.util.formatter.types.PercentData;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
+import java.text.ParsePosition;
 
 /**
  * Simple Java Utils
@@ -38,20 +41,18 @@ public class PercentageFormatter extends Formatter {
      *
      * @return a BigDecimal initialized with the provided string
      */
-    public Object convertToObject(String target)
-    {
+    public Object convertToObject(String target) {
         try {
             NumberFormat formatter = DecimalFormat.getPercentInstance(locale);
-            Number parsedNumber = formatter.parse(target.trim());
-            return new BigDecimal(parsedNumber.doubleValue());
+            Number parsedNumber = parseAndErrorhandleNumber(target, formatter);
+            return new PercentData(parsedNumber.doubleValue());
         }
         catch (NumberFormatException e) {
-            throw new FormatException(e);
-        }
-        catch (ParseException e) {
-            throw new FormatException(e);
+            throw MessageRuntimeException.createError(e);
         }
     }
+
+
 
     /**
      * Returns a string representation of its argument, formatted as a
@@ -60,27 +61,37 @@ public class PercentageFormatter extends Formatter {
      * @return a formatted String
      */
     public String convertToString(Object value) {
-        if (value == null)
+        if (value == null) {
             return "";
-
+        }
 
         try {
-            BigDecimal bigDecValue;
-            if(value instanceof Double){
-                bigDecValue = new BigDecimal((Double)value);
-            }else {
-                bigDecValue = (BigDecimal)value;
-            }
-
-            bigDecValue = bigDecValue.setScale(PERCENTAGE_SCALE,
-                                               BigDecimal.ROUND_HALF_UP);
-            return NumberFormat.getPercentInstance(locale).
-                format(bigDecValue.doubleValue());
+            BigDecimal bigDecValue = getBigDecimal(value);
+            NumberFormat format = NumberFormat.getPercentInstance(locale);
+            handleFormattingJVMTweaks(format);
+            return format.format(bigDecValue.doubleValue());
         }
         catch (IllegalArgumentException iae) {
             throw new FormatException("Unable to format {0} as a percentage value", iae, value);
         }
-        
 
+
+    }
+
+    private void handleFormattingJVMTweaks(NumberFormat format) {
+
+    }
+
+    private BigDecimal getBigDecimal(Object value) {
+        BigDecimal bigDecValue;
+        if (value instanceof Double) {
+            bigDecValue = new BigDecimal((Double) value);
+        } else {
+            bigDecValue = (BigDecimal) value;
+        }
+
+        bigDecValue = bigDecValue.setScale(PERCENTAGE_SCALE,
+                BigDecimal.ROUND_HALF_UP);
+        return bigDecValue;
     }
 }

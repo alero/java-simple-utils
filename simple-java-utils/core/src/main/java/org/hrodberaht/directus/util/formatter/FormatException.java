@@ -37,20 +37,11 @@ public class FormatException extends RuntimeException
         this.args = args;
     }
 
-    public FormatException(String message, Throwable cause, Object... args) {
-        super(message, cause);
-        this.args = args;
-    }
-
-    public FormatException(Throwable cause) {
-        super(cause);
-    }
-
 
     @Override
     public String toString() {
         if(args != null){
-            return MessageFormat.format(getMessage(), args);
+            return FormatException.class.getName() +": "+ MessageFormat.format(getMessage(), args);
         }
         return super.toString();
     }

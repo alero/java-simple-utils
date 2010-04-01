@@ -14,6 +14,8 @@
 
 package org.hrodberaht.directus.util.formatter;
 
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import java.util.List;
 public class BooleanFormatter extends Formatter
 {
 
-    static final String CONVERT_MSG = "Unable to create Boolean object from ";
+    static final String CONVERT_MSG = "Unable to create Boolean object from {0}";
     static final List TRUE_VALUES = Arrays.asList(new String[]  {
             "yes", "true", "on", "1", "enabled" });
     static final List FALSE_VALUES = Arrays.asList(new String[] {
@@ -35,15 +37,13 @@ public class BooleanFormatter extends Formatter
     
     public Object convertToObject(String target)
     {
-        if (Formatter.isEmptyValue(target))
-            return null;
-        
+
         String stringValue = target.trim().toLowerCase();
         
         if (TRUE_VALUES.contains(stringValue))  return Boolean.TRUE;
         if (FALSE_VALUES.contains(stringValue)) return Boolean.FALSE;
 
-        throw new FormatException(CONVERT_MSG + stringValue);
+        throw MessageRuntimeException.createError(CONVERT_MSG).args(stringValue);
     }
     
     public String convertToString(Object target)
@@ -51,7 +51,7 @@ public class BooleanFormatter extends Formatter
         if (target == null)
             return null;
         
-        boolean isTrue = ((Boolean) target).booleanValue();
+        boolean isTrue = ((Boolean)target);
         
         return isTrue ? "Yes" : "No";
     }
