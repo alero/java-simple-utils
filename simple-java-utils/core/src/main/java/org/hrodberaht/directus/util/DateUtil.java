@@ -42,6 +42,8 @@ public final class DateUtil {
     private static String SHORT_DATE = null;
     private static int SHORT_DATE_LENGTH = -1;
 
+    private static Date systemOverriddenNow = null;
+
     static{
         updateFormatPatterns();
     }
@@ -128,13 +130,13 @@ public final class DateUtil {
         } else if (lenght >= SHORT_DATE_LENGTH) {
             pattern = SHORT_DATE;
         } else {
-            throw MessageRuntimeException.createError("Unknown format for {0} ").args(date);
+            throw new MessageRuntimeException("Unknown format for {0} ", date);
         }
         Format format = cacheSimpleDateFormat(pattern);
         try {
             return parseDate(date, format);
         } catch (ParseException e) {
-            throw MessageRuntimeException.createError("Could not parse {0}", e).args(date);
+            throw new MessageRuntimeException("Could not parse {0}", e, date);
         }
 
     }
@@ -209,7 +211,7 @@ public final class DateUtil {
 
     public static boolean isFirstInThisMonth(Date date) {
         Calendar now = Calendar.getInstance(locale);
-        now.setTime(getNow());
+        now.setTime(getNowDate());
         Calendar calendar = Calendar.getInstance(locale);
         calendar.setTime(date);
         boolean isFirstDayInMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH)
@@ -217,8 +219,17 @@ public final class DateUtil {
         return isFirstDayInMonth && (calendar.get(Calendar.MONTH) == now.get(Calendar.MONTH));
     }
 
-    private static Date getNow() {
-        return new Date();
+    /**
+     * This is very useful if a developer needs to override what the time is for specific tests.
+     * If all parts of the software uses this instead of "new Date" it will be possible to change time for specific
+     * 
+     * @return
+     */
+    public static Date getNowDate() {
+        if(systemOverriddenNow != null){
+            return new Date();
+        }
+        return systemOverriddenNow;
     }
 
     public static boolean isFirstInMonth(Date date) {
@@ -227,18 +238,23 @@ public final class DateUtil {
         return calendar.getActualMinimum(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH);
     }
 
+    public static boolean isLastInMonth(Date date) {
+        Calendar calendar = Calendar.getInstance(locale);
+        calendar.setTime(date);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
 
     public static boolean isBetween(Date theDate, Date fromDate, Date toDate) {
         if (theDate == null || fromDate == null) {
             return false;
         }
-        Date date = theDate;
-        if (date.compareTo(fromDate) == 0) { // Exactly the same
+        if (theDate.compareTo(fromDate) == 0) {
             return true;
-        } else if (date.after(fromDate) && toDate == null) { // Latest version hit!
+        } else if (theDate.after(fromDate) && toDate == null) {
             return true;
-        } else if (date.after(fromDate)
-                && date.before(toDate)) { // Active Version hit!
+        } else if (theDate.after(fromDate)
+                && theDate.before(toDate)) {
             return true;
         }
         return false;

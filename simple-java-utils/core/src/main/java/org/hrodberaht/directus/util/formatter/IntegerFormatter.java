@@ -35,7 +35,7 @@ public class IntegerFormatter extends Formatter
             return new Integer(target);
         }
         catch (NumberFormatException e) {
-            throw MessageRuntimeException.createError(e);
+            throw new MessageRuntimeException(e);
         }
     }
 

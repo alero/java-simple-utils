@@ -93,10 +93,13 @@ public class SimpleContainer {
                 registeredServices.remove(anInterface);
                 return;
             }
-            throw MessageRuntimeException.createError("Service {0} is already registered, to override register please use the override method").args(anInterface);
+            throw new MessageRuntimeException(
+                    "Service {0} is already registered, to override register please use the override method"
+                    , anInterface);
         }
         if(serviceRegister.registerType == RegisterType.FINAL){
-            throw MessageRuntimeException.createError("A FINAL Service for {0} is already registered, can not reRegister").args(anInterface);
+            throw new MessageRuntimeException(
+                    "A FINAL Service for {0} is already registered, can not reRegister", anInterface);
         }
 
     }
@@ -104,7 +107,7 @@ public class SimpleContainer {
     @SuppressWarnings(value = "unchecked")
     private static <T> T getService(Class<T> service, Scope forcedScope) {
         if (!registeredServices.containsKey(service)) {
-            throw MessageRuntimeException.createError("Service {0} not registered in SimpleContainer").args(service);
+            throw new MessageRuntimeException("Service {0} not registered in SimpleContainer", service);
         }
         ServiceRegister serviceRegister = registeredServices.get(service);
         if (forcedScope == null && serviceRegister.scope == Scope.NEW) {
@@ -121,9 +124,9 @@ public class SimpleContainer {
         try {
             return service.newInstance();
         } catch (InstantiationException e) {
-            throw MessageRuntimeException.createError("Could not create an instance of {0}", e).args(service);
+            throw new MessageRuntimeException("Could not create an instance of {0}", e, service);
         } catch (IllegalAccessException e) {
-            throw MessageRuntimeException.createError("Could not create an instance of {0}", e).args(service);
+            throw new MessageRuntimeException("Could not create an instance of {0}", e, service);
         }
     }
 

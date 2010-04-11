@@ -46,7 +46,7 @@ public abstract class ConfigBase {
     private static long TIME_STAMP;
     private static boolean reloadEnabled = false;
 
-    private SimpleLogger LOGGER = null;
+    private SimpleLogger LOGGER = SimpleLogger.getInstance(ConfigBase.class);
     private String propertyPath = null;
     private String customPropertyPath = null;
 
@@ -95,7 +95,9 @@ public abstract class ConfigBase {
         Properties origProperties = new Properties();
         Properties customProperties = new Properties();
         loadProperties(origProperties, propertyPath);
-        loadProperties(customProperties, customPropertyPath);
+        if(customPropertyPath != null){
+            loadProperties(customProperties, customPropertyPath);
+        }
         mergeProperties(origProperties, customProperties);
         populateConfigurationValues();
 
@@ -144,9 +146,8 @@ public abstract class ConfigBase {
             if (data != null) {
                 props.load(data);
             } else {
-                throw MessageRuntimeException
-                        .createError("Using property path {0} could not find a file")
-                        .args(configPath);
+                throw new MessageRuntimeException(
+                        "Using property path {0} could not find a file", configPath);
             }
         } catch (IOException e) {
             LOGGER.error(e);             

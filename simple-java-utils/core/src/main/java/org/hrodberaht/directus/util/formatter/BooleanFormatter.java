@@ -43,7 +43,7 @@ public class BooleanFormatter extends Formatter
         if (TRUE_VALUES.contains(stringValue))  return Boolean.TRUE;
         if (FALSE_VALUES.contains(stringValue)) return Boolean.FALSE;
 
-        throw MessageRuntimeException.createError(CONVERT_MSG).args(stringValue);
+        throw new MessageRuntimeException(CONVERT_MSG, stringValue);
     }
     
     public String convertToString(Object target)

@@ -85,7 +85,7 @@ public class TestFormatter {
         try {
             return new SimpleDateFormat("yyyy-MM-dd").parse(aDate);
         } catch (ParseException e) {
-            throw MessageRuntimeException.createError("Could not format date {0}").args(aDate);
+            throw new MessageRuntimeException("Could not format date {0}", aDate);
         }
     }
 
@@ -93,7 +93,7 @@ public class TestFormatter {
         try {
             return new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(aDate);
         } catch (ParseException e) {
-            throw MessageRuntimeException.createError("Could not format datetime {0}").args(aDate);
+            throw new MessageRuntimeException("Could not format datetime {0}", aDate);
         }
     }
 }

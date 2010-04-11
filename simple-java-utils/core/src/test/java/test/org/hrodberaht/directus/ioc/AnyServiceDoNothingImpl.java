@@ -30,7 +30,7 @@ public class AnyServiceDoNothingImpl implements AnyService{
     @Override
     public void doStuff() {
         if(true){
-            throw MessageRuntimeException.createError("This service can't do stuff");
+            throw new MessageRuntimeException("This service can't do stuff");
         }
     }
 

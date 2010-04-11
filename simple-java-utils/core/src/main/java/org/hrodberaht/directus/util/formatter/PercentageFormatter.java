@@ -20,7 +20,6 @@ import org.hrodberaht.directus.util.formatter.types.PercentData;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParsePosition;
 
 /**
  * Simple Java Utils
@@ -48,7 +47,7 @@ public class PercentageFormatter extends Formatter {
             return new PercentData(parsedNumber.doubleValue());
         }
         catch (NumberFormatException e) {
-            throw MessageRuntimeException.createError(e);
+            throw new MessageRuntimeException(e);
         }
     }
 

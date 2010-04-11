@@ -27,41 +27,48 @@ public class MessageRuntimeException extends RuntimeException {
 
     private Object[] args = null;
 
-    public static MessageRuntimeException createError(String message, Throwable e){
-        return new MessageRuntimeException(message, e);
-    }
 
-    public static MessageRuntimeException createError(String message){
-        return new MessageRuntimeException(message);
-    }
-
-    public static MessageRuntimeException createError(Throwable e){
-        return new MessageRuntimeException(e);
-    }
-
-    public MessageRuntimeException args(Object... args){
-        this.args = args;
-        return this;
-    }
-
-    private MessageRuntimeException(String message) {
+    public MessageRuntimeException(String message) {
         super(message);
     }
 
-    private MessageRuntimeException(String message, Throwable e) {
+    public MessageRuntimeException(String message, Throwable e) {
         super(message, e);
     }
 
-    private MessageRuntimeException(Throwable e) {
+    public MessageRuntimeException(Throwable e) {
         super(e);
+    }
+
+    public MessageRuntimeException(String message, Object... args) {
+        super(message);
+        this.args = args;
+    }
+
+    public MessageRuntimeException(String message, Throwable e, Object... args) {
+        super(message, e);
+        this.args = args;
+    }
+
+    public MessageRuntimeException(Throwable e, Object... args) {
+        super(e);
+        this.args = args;
     }
 
     @Override
     public String toString() {
         if(args != null){
             return MessageRuntimeException.class.getName()
-                    +": "+ MessageFormat.format(getMessage(), args);            
+                    +": "+ MessageFormat.format(super.getMessage(), args);            
         }
         return super.toString();
+    }
+
+    @Override
+    public String getMessage() {
+        if(args != null){
+            return MessageFormat.format(super.getMessage(), args);            
+        }
+        return super.getMessage();
     }
 }

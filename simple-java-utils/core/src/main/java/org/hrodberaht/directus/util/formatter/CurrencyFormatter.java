@@ -48,7 +48,7 @@ public class CurrencyFormatter extends Formatter
             return value;
         }
         catch (ParseException e) {
-            throw MessageRuntimeException.createError(target, e);
+            throw new MessageRuntimeException(target, e);
         }
     }
 
@@ -77,7 +77,7 @@ public class CurrencyFormatter extends Formatter
             return formatter.format(number.doubleValue());
         }
         catch (IllegalArgumentException e) {
-            throw MessageRuntimeException.createError(e);
+            throw new MessageRuntimeException(e);
         }
 
     }

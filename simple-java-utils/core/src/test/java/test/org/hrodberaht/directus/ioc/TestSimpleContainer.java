@@ -102,4 +102,20 @@ public class TestSimpleContainer {
 
     }
 
+    @Test
+    public void testNormalRegisterFail(){
+
+        try{
+            JavaContainerRegister.register(AnyService.class, AnyServiceDoNothingImpl.class);
+            JavaContainerRegister.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+            assertEquals("Not suppose to execute this", "So fail");
+        }catch (MessageRuntimeException e){
+            assertEquals(
+                    "Service interface test.org.hrodberaht.directus.ioc.AnyService is already registered, to override register please use the override method"
+                    , e.getMessage());
+        }
+
+
+    }
+
 }

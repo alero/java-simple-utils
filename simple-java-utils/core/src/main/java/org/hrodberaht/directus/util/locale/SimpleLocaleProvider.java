@@ -54,6 +54,6 @@ public class SimpleLocaleProvider implements ProviderInterface{
 
     @Override
     public void setStatefulProfile(LocaleProfile localeProfile) {
-        throw MessageRuntimeException.createError("SimpleLocaleProvider does not have Stateful profile support");
+        throw new MessageRuntimeException("SimpleLocaleProvider does not have Stateful profile support");
     }
 }
