@@ -40,7 +40,7 @@ public class SimpleContainer {
     private static HashMap<Object, ServiceRegister> registeredServices = new HashMap<Object, ServiceRegister>();
 
     /**
-     * Will retrieve a service as it has been registered, scope's supported today are SINGLETON and NEW
+     * Will retrieve a service as it has been registered, scope's supported today are {@link Scope#SINGLETON} and {@link Scope#NEW}
      *
      * @param service the interface service intended for creation 
      * @param <T> the typed service intended for creation
@@ -50,11 +50,23 @@ public class SimpleContainer {
         return getService(service, null);
     }
 
-
+    /**
+     * Will retrieve a service and force the scope to {@link Scope#NEW}
+     *
+     * @param service the interface service intended for creation
+     * @param <T> the typed service intended for creation
+     * @return an instance of the interface requested will be created/fetched and returned from the internal register
+     */
     public static <T> T getNew(Class<T> service) {
         return getService(service, Scope.NEW);
     }
-
+    /**
+     * Will retrieve a service and force the scope to {@link Scope#SINGLETON}
+     *
+     * @param service the interface service intended for creation
+     * @param <T> the typed service intended for creation
+     * @return an instance of the interface requested will be created/fetched and returned from the internal register
+     */
     public static <T> T getSingleton(Class<T> service) {
         return getService(service, Scope.SINGLETON);
     }
@@ -142,10 +154,5 @@ public class SimpleContainer {
             this.scope = scope;
             this.registerType = registerType;
         }
-
-
-
-
-
     }
 }
