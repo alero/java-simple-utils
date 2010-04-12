@@ -50,10 +50,10 @@ public class FileUtil {
             File fileOut)
             throws IOException {
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-        int n = 0;
+        int n;
         InputStream input = new FileInputStream(fileIn);
         OutputStream output = new FileOutputStream(fileOut);
-        while (-1 != (n = input.read(buffer))) {
+        while ((n = input.read(buffer)) != -1) {
             output.write(buffer, 0, n);
         }
         output.flush();
