@@ -124,6 +124,15 @@ public class SimpleContainer {
 
     @SuppressWarnings(value = "unchecked")
     private static <T> T getService(Class<T> service, Scope forcedScope) {
+
+        if(simpleContainerInstanceCreator != null){
+            if(forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()){
+                throw new MessageRuntimeException("Can not use forced scope for service {0}", service);
+            }
+            if(simpleContainerInstanceCreator.supportServiceCreation(service)){
+                return (T) simpleContainerInstanceCreator.getService(service);
+            }
+        }
         if (!registeredServices.containsKey(service)) {
             throw new MessageRuntimeException("Service {0} not registered in SimpleContainer", service);
         }
@@ -140,9 +149,6 @@ public class SimpleContainer {
 
     private static Object createInstance(Class<Object> service) {
         try {
-            if(simpleContainerInstanceCreator != null){
-                return simpleContainerInstanceCreator.createInstance();                
-            }
             return service.newInstance();
         } catch (InstantiationException e) {
             throw new MessageRuntimeException("Could not create an instance of {0}", e, service);
