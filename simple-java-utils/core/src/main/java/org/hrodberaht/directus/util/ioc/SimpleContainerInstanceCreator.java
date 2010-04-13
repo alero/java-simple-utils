@@ -15,7 +15,7 @@ public interface SimpleContainerInstanceCreator {
      * @param service a service interface
      * @return a service that is created using a instance creator          
      */
-    Object getService(Class service);
+    <T> T getService(Class<T> service);
 
     boolean supportServiceCreation(Class service);
 
