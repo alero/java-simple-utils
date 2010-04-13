@@ -39,6 +39,8 @@ public class SimpleContainer {
 
     private static HashMap<Object, ServiceRegister> registeredServices = new HashMap<Object, ServiceRegister>();
 
+    private static SimpleContainerInstanceCreator simpleContainerInstanceCreator = null;
+
     /**
      * Will retrieve a service as it has been registered, scope's supported today are {@link Scope#SINGLETON} and {@link Scope#NEW}
      *
@@ -83,6 +85,10 @@ public class SimpleContainer {
 
         registeredServices.put(anInterface, new ServiceRegister(service, createInstance(service), scope, normalizeType(type)));
 
+    }
+
+    protected synchronized static void registerInstanceCreator(SimpleContainerInstanceCreator simpleContainerInstanceCreator) {
+        SimpleContainer.simpleContainerInstanceCreator = simpleContainerInstanceCreator;
     }
 
     private static RegisterType normalizeType(RegisterType type) {
@@ -134,6 +140,9 @@ public class SimpleContainer {
 
     private static Object createInstance(Class<Object> service) {
         try {
+            if(simpleContainerInstanceCreator != null){
+                return simpleContainerInstanceCreator.createInstance();                
+            }
             return service.newInstance();
         } catch (InstantiationException e) {
             throw new MessageRuntimeException("Could not create an instance of {0}", e, service);

@@ -23,7 +23,9 @@ package org.hrodberaht.directus.util.ioc;
  */
 public class JavaContainerRegister {
 
-
+    public static void registerInstanceCreator(SimpleContainerInstanceCreator instanceCreator){
+        SimpleContainer.registerInstanceCreator(instanceCreator);
+    }
 
     public static void finalRegister(Class anInterface, Class service, SimpleContainer.Scope scope){
         SimpleContainer.register(anInterface, service, scope, SimpleContainer.RegisterType.FINAL);    

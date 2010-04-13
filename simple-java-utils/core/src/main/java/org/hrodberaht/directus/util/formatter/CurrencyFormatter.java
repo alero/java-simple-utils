@@ -29,34 +29,41 @@ import java.text.ParseException;
  */
 public class CurrencyFormatter extends Formatter
 {
-    /** The default scale for currency values */
     public final static int SCALE = 2;
 
     public Object convertToObject(String target)
     {
-        // Insert currency symbol if absent
-        if (!hasSymbol(target)) {
-            target = interpolateSymbol(target);
+        if (target == null)  {
+            return null;
         }
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        // Insert currency symbol if absent
+        String symbol = formatter.getCurrency().getSymbol();
+        if (!hasSymbol(target, symbol)) {
+            target = interpolateSymbol(target, symbol);
+        }
 
         try {
             Number parsedNumber = formatter.parse(target.trim());
-            BigDecimal value;value = new BigDecimal(parsedNumber.toString());
+            BigDecimal value = new BigDecimal(parsedNumber.doubleValue());
             value.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
-            return value;
+            return value.doubleValue();
         }
         catch (ParseException e) {
             throw new MessageRuntimeException(target, e);
         }
     }
 
-    private String interpolateSymbol(String target) {
+    private String interpolateSymbol(String target, String symbol) {
+        // TODO, how to insert symbol at correct place, example Swedish kr after and dollars before. 
         return target;
     }
 
-    private boolean hasSymbol(String target) {
+    private boolean hasSymbol(String target, String symbol) {
+        if(target.indexOf(symbol) != -1){
+            return true;
+        }
         return false;
     }
 
@@ -66,11 +73,11 @@ public class CurrencyFormatter extends Formatter
      */
     public String convertToString(Object obj)
     {
-        if (obj == null)  return null;
+        if (obj == null)  {
+            return null;
+        }
         
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        String string = null;
-        
         try {
             BigDecimal number = (BigDecimal) obj;
             number = number.setScale(SCALE, BigDecimal.ROUND_HALF_UP);

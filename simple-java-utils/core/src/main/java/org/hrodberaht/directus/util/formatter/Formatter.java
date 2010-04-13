@@ -36,9 +36,6 @@ public class Formatter<T> {
 
     protected Locale locale = LocaleProvider.getProfile().getLocale();
 
-    protected Class valueType;
-
-
     public static <T> Formatter<T> getFormatter(Class<T> aType) {
         return getFormatter(aType, null);
     }
