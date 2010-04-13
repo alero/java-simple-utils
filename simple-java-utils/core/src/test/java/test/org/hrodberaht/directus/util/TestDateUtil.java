@@ -16,6 +16,9 @@ package test.org.hrodberaht.directus.util;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.directus.util.DateUtil;
+import org.hrodberaht.directus.util.ioc.JavaContainerRegister;
+import org.hrodberaht.directus.util.locale.ProviderInterface;
+import org.hrodberaht.directus.util.locale.SimpleLocaleProvider;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +46,8 @@ public class TestDateUtil {
     @BeforeClass
     public static void initStatic(){
         setTestLocale();
+        JavaContainerRegister.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
+
     }
 
     @Before
