@@ -130,7 +130,7 @@ public class SimpleContainer {
                 throw new MessageRuntimeException("Can not use forced scope for service {0}", service);
             }
             if(simpleContainerInstanceCreator.supportServiceCreation(service)){
-                return (T) simpleContainerInstanceCreator.getService(service);
+                return simpleContainerInstanceCreator.getService(service);
             }
         }
         if (!registeredServices.containsKey(service)) {
