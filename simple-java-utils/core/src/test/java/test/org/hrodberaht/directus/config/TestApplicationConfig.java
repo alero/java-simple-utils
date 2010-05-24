@@ -48,6 +48,23 @@ public class TestApplicationConfig {
 
     }
 
+    @Test
+    public void testCustomConfig() throws ParseException {
+        /**
+         * For information: The way this registration is done using System parameters is in no means mandatory,
+         * it is just a simple way to prove how to support the custom configuration. Use any means needed to support this.
+         */
+        System.setProperty("config.externalfile", "classpath:/test/org/hrodberaht/directus/config/customConfig.properties");
+        AnyApplicationConfig.initConfig();
+
+        assertEquals(new Boolean(false), AnyApplicationConfig.A_BOOLEAN.getValue());
+        assertEquals("Hello there", AnyApplicationConfig.ApplicationState.A_STRING.getValue());
+        assertEquals(parseDate("2010-05-05"), AnyApplicationConfig.ApplicationState.A_DATE.getValue());
+        assertEquals(new Integer(6), AnyApplicationConfig.ApplicationState.A_INTEGER.getValue());
+        assertEquals(new Long(6060606066606000L), AnyApplicationConfig.ApplicationState.A_LONG.getValue());
+
+    }
+
     private Date parseDate(String s) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.parse(s);

@@ -44,10 +44,9 @@ public class ConfigRegister {
         if (ConfigRegister.config == null) {
             ConfigRegister.config = new ConfigRegister();
             Map<Class, ConfigBase> configurations = new HashMap<Class, ConfigBase>();
-            ConfigRegister.config.setProvidedConfigurations(configurations);
-            // TODO: make this useable
+            ConfigRegister.config.setProvidedConfigurations(configurations);            
             Map<Class, ConfigBase> customConfigurations = new HashMap<Class, ConfigBase>();
-            ConfigRegister.config.setCustomConfigurations(customConfigurations); // from local file
+            ConfigRegister.config.setCustomConfigurations(customConfigurations);
             ConfigRegister.config.setCustomConfigurationStrategy(ConfigRegister.Strategy.INHERIT);
         }
 

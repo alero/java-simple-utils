@@ -37,6 +37,19 @@ public class TestSimpleContainer {
     }
 
     @Test
+    public void testNothingRegistered(){
+
+        try{
+            AnyService anyService = SimpleContainer.get(AnyService.class);
+            assertEquals(null, "Should not be called");
+        }catch (MessageRuntimeException e){
+            assertEquals(
+                    "Service interface test.org.hrodberaht.directus.ioc.AnyService not registered in SimpleContainer"
+                    , e.getMessage());
+        }
+    }
+
+    @Test
     public void testNothingServiceWrapping(){
         JavaContainerRegister.register(AnyService.class, AnyServiceDoNothingImpl.class);
 
@@ -68,6 +81,21 @@ public class TestSimpleContainer {
         assertEquals(1, anyServiceSingleton.getStuff().size());
 
         AnyService anyServiceNew = SimpleContainer.getNew(AnyService.class);        
+        assertEquals(0, anyServiceNew.getStuff().size());
+    }
+
+    @Test
+    public void testSomethingServiceSingletonObjectSupport(){
+        JavaContainerRegister.register(AnyService.class, AnyServiceDoSomethingImpl.class, SimpleContainer.Scope.NEW);
+
+        AnyService anyService = SimpleContainer.getSingleton(AnyService.class);
+        anyService.doStuff();
+        assertEquals(1, anyService.getStuff().size());
+
+        AnyService anyServiceSingleton = SimpleContainer.getSingleton(AnyService.class);
+        assertEquals(1, anyServiceSingleton.getStuff().size());
+
+        AnyService anyServiceNew = SimpleContainer.get(AnyService.class);
         assertEquals(0, anyServiceNew.getStuff().size());
     }
 

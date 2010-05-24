@@ -28,7 +28,7 @@ public class RMILookUpConfig {
     public static final ConfigItem<String> CONNECTIONFACTORY = new ConfigItem<String>(String.class, "rmi.connectionfactory");
     public static final ConfigItem<String> LOCATION = new ConfigItem<String>(String.class, "rmi.location");
     public static final ConfigItem<String> USER = new ConfigItem<String>(String.class, "rmi.username");
-    public static final ConfigItem<String> PASSWORD = new ConfigItem<String>(String.class, "rmi.passwork");
+    public static final ConfigItem<String> PASSWORD = new ConfigItem<String>(String.class, "rmi.password");
 
 
 }

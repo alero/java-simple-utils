@@ -12,6 +12,7 @@
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
+    <name>Simple Utils Core</name>
     <description>The core project for simpler java development</description>
     
 
@@ -30,4 +31,8 @@
         </dependency>
     </dependencies>
 
+
+    <reporting>
+        <outputDirectory>../target/site/core</outputDirectory>
+    </reporting>
 </project>

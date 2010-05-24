@@ -12,6 +12,7 @@
     <artifactId>ejb2x</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
+    <name>Simple Utils ejb2x</name>
     <description>The core project for simpler java development</description>
 
 
@@ -33,5 +34,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    
+    <reporting>
+        <outputDirectory>../target/site/ejb2x</outputDirectory>
+    </reporting>
 </project>

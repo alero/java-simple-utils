@@ -15,6 +15,7 @@
 package test.org.hrodberaht.directus.util;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
+import org.hrodberaht.directus.tdd.TestUtilDateUtil;
 import org.hrodberaht.directus.util.DateUtil;
 import org.hrodberaht.directus.util.ioc.JavaContainerRegister;
 import org.hrodberaht.directus.util.locale.ProviderInterface;
@@ -72,10 +73,29 @@ public class TestDateUtil {
     }
 
     @Test
+    public void testDateEquals_False(){
+        Date aDate = testDate("2010-01-01");
+        Timestamp aTimestamp = new Timestamp(aDate.getTime()+1);
+        assertTrue(! DateUtil.equals(aDate, aTimestamp) );
+    }
+
+    @Test
     public void testDateParseSimple(){
         Date aDate = DateUtil.parseSimpleDate("2010-01-01");
         assertEquals(testDate("2010-01-01"), aDate);
     }
+
+    @Test
+    public void testDateParseSimple_PatternFail(){
+
+        try {
+            Date aDate = DateUtil.parseSimpleDate("10-01-01");
+            assertEquals("Dont get here", null);
+        } catch (MessageRuntimeException e) {
+            assertEquals("Unknown format for 10-01-01 ", e.getMessage());
+        }
+    }
+
 
     @Test
     public void testDateFormatDefault(){
@@ -91,6 +111,13 @@ public class TestDateUtil {
         assertEquals(testDate("2010-01-01"), aDate);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testParseDateError(){
+        DateUtil.setLocale(new Locale("en","US"));
+        Date aDate = DateUtil.parseDate("01/01/2010", "yyyy-mmm.dd");
+        
+    }
+
     @Test
     public void testDateRollDays(){
         Date aDate = DateUtil.rollDays(testDate("2010-01-01"), 1);
@@ -101,6 +128,12 @@ public class TestDateUtil {
     public void testDateRollMonth(){
         Date aDate = DateUtil.rollMonth(testDate("2010-01-01"), 1);
         assertEquals(testDate("2010-02-01"), aDate);
+    }
+
+    @Test
+    public void testDateRollHours(){
+        Date aDate = DateUtil.rollHours(testDateTime("2010-01-01 14:00:00"), 1);
+        assertEquals(testDateTime("2010-01-01 15:00:00"), aDate);
     }
 
     @Test
@@ -122,13 +155,19 @@ public class TestDateUtil {
     }
 
     @Test
-    public void testDateFormatTimeZone(){
-        TimeZone zone = DateFormat.getDateInstance(DateFormat.SHORT, getTestLocale()).getTimeZone();
+    public void testDateTimeFormat(){
+        String aDate = DateUtil.formatDateTime(testDateTime("2010-01-01 12:00:00"));
+        assertEquals("2010-01-01 12:00:00", aDate);
+    }
 
-        String vinterTime = DateUtil.formatTimeZone(zone, testDateTime("2010-01-01 12:00:00"));
+    @Test
+    public void testDateFormatTimeZone(){
+
+
+        String vinterTime = DateUtil.formatTimeZone(testDateTime("2010-01-01 12:00:00"));
         assertEquals("+0100", vinterTime);
 
-        String summerTime = DateUtil.formatTimeZone(zone, testDateTime("2010-06-01 12:00:00"));
+        String summerTime = DateUtil.formatTimeZone(testDateTime("2010-06-01 12:00:00"));
         assertEquals("+0200", summerTime);
     }
 
@@ -141,12 +180,165 @@ public class TestDateUtil {
 
     @Test
     public void testDateIsBetween(){
+        Date compareDate = testDateTime("2010-01-01 13:00:00");
+        Date date1 = testDateTime("2010-01-01 12:00:00");
+        Date date2 = testDateTime("2010-01-01 14:00:00");
+        assertTrue(DateUtil.isBetween(compareDate, date1, date2));
+    }
+
+    @Test
+    public void testDateIsBetween_SameAsStart(){
+        Date compareDate = testDateTime("2010-01-01 12:00:00");
+        Date date1 = testDateTime("2010-01-01 12:00:00");
+        Date date2 = testDateTime("2010-01-01 14:00:00");
+        assertTrue(DateUtil.isBetween(compareDate, date1, date2));
+    }
+
+    @Test
+    public void testDateIsBetween_SameAsEnd(){
+        Date compareDate = testDateTime("2010-01-01 14:00:00");
+        Date date1 = testDateTime("2010-01-01 12:00:00");
+        Date date2 = testDateTime("2010-01-01 14:00:00");
+        assertTrue(DateUtil.isBetween(compareDate, date1, date2));
+    }
+
+    @Test
+    public void testDateIsLessOrEqual_Less(){
         Date date1 = testDateTime("2010-01-01 12:00:00");
         Date date2 = testDateTime("2010-01-01 13:00:00");
-        Date date3 = testDateTime("2010-01-01 14:00:00");
-        assertTrue(DateUtil.isBetween(date2, date1, date3));
-
+        assertTrue(DateUtil.isLessOrEqual(date1, date2));
     }
+    @Test
+    public void testDateIsLessOrEqual_Equals(){
+        Date date1 = testDateTime("2010-01-01 12:00:00");
+        Date date2 = testDateTime("2010-01-01 12:00:00");
+        assertTrue(DateUtil.isLessOrEqual(date1, date2));
+    }
+
+    @Test
+    public void testDateIsLessOrEqual_More(){
+        Date date1 = testDateTime("2010-01-01 13:00:00");
+        Date date2 = testDateTime("2010-01-01 12:00:00");
+        assertTrue(!DateUtil.isLessOrEqual(date1, date2));
+    }
+
+    @Test
+    public void testDateIsLessOrEqual_Null(){
+        try {
+            Date date1 = testDateTime("2010-01-01 13:00:00");
+            DateUtil.isLessOrEqual(date1, null);
+        } catch (IllegalAccessError e) {
+            assertEquals("Dates can not be null", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDateIsMoreOrEqual_More(){
+        Date date1 = testDateTime("2010-01-01 13:00:00");
+        Date date2 = testDateTime("2010-01-01 12:00:00");
+        assertTrue(DateUtil.isMoreOrEqual(date1, date2));
+    }
+    @Test
+    public void testDateIsMoreOrEqual_Equals(){
+        Date date1 = testDateTime("2010-01-01 12:00:00");
+        Date date2 = testDateTime("2010-01-01 12:00:00");
+        assertTrue(DateUtil.isMoreOrEqual(date1, date2));
+    }
+    @Test
+    public void testDateIsMoreOrEqual_Less(){
+        Date date1 = testDateTime("2010-01-01 12:00:00");
+        Date date2 = testDateTime("2010-01-01 13:00:00");
+        assertTrue(!DateUtil.isMoreOrEqual(date1, date2));
+    }
+
+    @Test
+    public void testDateIsMoreOrEqual_Null(){
+        try {
+            Date date1 = testDateTime("2010-01-01 13:00:00");
+            DateUtil.isMoreOrEqual(date1, null);
+        } catch (IllegalAccessError e) {
+            assertEquals("Dates can not be null", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDateUtilNow(){
+        Date testNowDate = testDateTime("2010-01-01 12:00:00");
+        TestUtilDateUtil.setNowDate(testNowDate);
+        assertEquals(testNowDate, DateUtil.getNow());
+
+        TestUtilDateUtil.clearNowDate();
+        // verify the reset of system date now
+        assertTrue(!DateUtil.equals(testNowDate, DateUtil.getNow()));
+    }
+
+    @Test
+    public void testTimeToMinimum(){
+        Date aDate = testDateTime("2010-01-01 12:00:00");
+        aDate = DateUtil.setTimeToActualMinimum(aDate);
+        assertEquals(testDateTime("2010-01-01 00:00:00"), aDate);
+    }
+
+    @Test
+    public void testTimeToMaximum(){
+        Date aDate = testDateTime("2010-01-01 12:00:00");
+        aDate = DateUtil.setTimeToActualMaximum(aDate);
+        assertEquals(testDateTimeMillis("2010-01-01 23:59:59:999"), aDate);
+    }
+
+    @Test
+    public void testIsFirstInThisMonth(){
+        TestUtilDateUtil.setNowDate(testDateTime("2010-01-01 12:00:00"));
+
+        Date aDate = testDateTime("2010-01-01 12:00:00");
+        assertTrue(DateUtil.isFirstInThisMonth(aDate));
+
+        TestUtilDateUtil.clearNowDate();
+    }
+
+    @Test
+    public void testIsFirstInThisMonth_False(){
+        TestUtilDateUtil.setNowDate(testDateTime("2010-03-01 12:00:00"));
+
+        Date aDate = testDateTime("2010-01-01 12:00:00");
+        assertTrue(!DateUtil.isFirstInThisMonth(aDate));
+
+        TestUtilDateUtil.clearNowDate();
+    }
+
+    @Test
+    public void testIsLastInThisMonth(){
+        Date aDate = testDateTime("2010-01-31 12:00:00");
+        assertTrue(DateUtil.isLastInMonth(aDate));
+    }
+
+    @Test
+    public void testIsLastInThisMonth_False(){
+        Date aDate = testDateTime("2010-01-30 12:00:00");
+        assertTrue(!DateUtil.isLastInMonth(aDate));
+    }
+
+    @Test
+    public void testIsFirstMonth(){
+        Date aDate = testDateTime("2010-01-01 12:00:00");
+        assertTrue(DateUtil.isFirstInMonth(aDate));
+    }
+
+    @Test
+    public void testIsFirstMonth_False(){
+        Date aDate = testDateTime("2010-01-02 12:00:00");
+        assertTrue(!DateUtil.isFirstInMonth(aDate));
+    }
+
+    private Date testDateTimeMillis(String aDate){
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").parse(aDate);
+        } catch (ParseException e) {
+            throw new MessageRuntimeException("Could not format datetime {0}", aDate);
+        }
+    }
+
+
 
 
     private Date testDate(String aDate){
@@ -159,7 +351,7 @@ public class TestDateUtil {
 
     private Date testDateTime(String aDate){
         try {
-            return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(aDate);
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(aDate);
         } catch (ParseException e) {
             throw new MessageRuntimeException("Could not format datetime {0}", aDate);
         }
