@@ -1,6 +1,5 @@
 package test.org.hrodberaht.inject.tck;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
 import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
@@ -14,8 +13,6 @@ import org.atinject.tck.auto.accessories.Cupholder;
 import org.atinject.tck.auto.accessories.RoundThing;
 import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.SimpleInjection;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 
 /**
@@ -28,7 +25,7 @@ import org.junit.runners.JUnit4;
  */
 
 
-public class Jsr330TckTestSuite extends TestCase {
+public class TestSuiteJsr330Tck extends TestCase {
 
 
     public static junit.framework.Test suite() {        
