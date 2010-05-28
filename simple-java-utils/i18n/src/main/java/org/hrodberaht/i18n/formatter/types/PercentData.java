@@ -1,4 +1,4 @@
-package org.hrodberaht.directus.util.formatter.types;
+package org.hrodberaht.i18n.formatter.types;
 
 import java.math.BigDecimal;
 

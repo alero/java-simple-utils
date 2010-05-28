@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.hrodberaht.directus.util.locale;
+package org.hrodberaht.i18n.locale;
+
+import org.hrodberaht.inject.InjectionRegisterJava;
+import org.hrodberaht.inject.SimpleInjection;
 
 import java.util.Locale;
 
@@ -26,14 +29,14 @@ import java.util.Locale;
 public class LocaleProvider {
 
     static{
-        JavaContainerRegister.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
+        InjectionRegisterJava.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
     }
 
     public static LocaleProfile getProfile(){
-        return SimpleContainer.get(ProviderInterface.class).getProfile();
+        return SimpleInjection.get(ProviderInterface.class).getProfile();
     }
     
     public static Locale getSystemLocale(){
-        return SimpleContainer.get(ProviderInterface.class).getSystemLocale();
+        return SimpleInjection.get(ProviderInterface.class).getSystemLocale();
     }
 }

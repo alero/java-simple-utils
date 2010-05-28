@@ -20,6 +20,11 @@
             <artifactId>core</artifactId>
             <version>${currentVersion}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hrodberaht.directus</groupId>
+            <artifactId>inject</artifactId>
+            <version>${currentVersion}</version>
+        </dependency>
    </dependencies>
     
 </project>

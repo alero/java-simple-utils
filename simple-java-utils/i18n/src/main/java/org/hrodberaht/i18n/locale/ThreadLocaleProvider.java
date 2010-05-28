@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.hrodberaht.directus.util.locale;
+package org.hrodberaht.i18n.locale;
 
 import java.util.Locale;
 

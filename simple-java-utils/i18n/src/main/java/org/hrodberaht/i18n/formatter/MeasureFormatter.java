@@ -1,4 +1,4 @@
-package org.hrodberaht.directus.util.formatter;
+package org.hrodberaht.i18n.formatter;
 
 /**
  * Simple Java Utils

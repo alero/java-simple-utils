@@ -12,9 +12,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.directus.util.formatter;
+package test.org.hrodberaht.i18n.formatter;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
+import org.hrodberaht.i18n.formatter.DateFormatter;
+import org.hrodberaht.i18n.formatter.FormatException;
+import org.hrodberaht.i18n.formatter.Formatter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

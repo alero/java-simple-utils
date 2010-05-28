@@ -1,7 +1,7 @@
 package org.hrodberaht.directus.tdd;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
-import org.hrodberaht.directus.util.DateUtil;
+import org.hrodberaht.i18n.DateUtil;
 
 import java.lang.reflect.Field;
 import java.util.Date;

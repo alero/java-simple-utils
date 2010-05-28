@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.directus.util.locale;
+package test.org.hrodberaht.i18n.locale;
 
 import org.junit.Test;
 

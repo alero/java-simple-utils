@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.hrodberaht.directus.util.formatter;
+package org.hrodberaht.i18n.formatter;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 

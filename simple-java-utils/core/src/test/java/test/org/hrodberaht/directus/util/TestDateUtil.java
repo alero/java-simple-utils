@@ -12,11 +12,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.directus.util;
+package test.org.hrodberaht.i18n;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.directus.tdd.TestUtilDateUtil;
-import org.hrodberaht.directus.util.DateUtil;
+import org.hrodberaht.i18n.DateUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,8 +41,7 @@ public class TestDateUtil {
 
     @BeforeClass
     public static void initStatic(){
-        setTestLocale();
-        JavaContainerRegister.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
+        setTestLocale();        
 
     }
 
