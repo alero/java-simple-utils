@@ -37,6 +37,7 @@
     <modules>
         <module>core</module>
         <module>ejb2x</module>
+        <module>inject</module>
     </modules>
 
     <dependencies>

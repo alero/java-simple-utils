@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.hrodberaht.directus</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0</version>
+    </parent>
+    <groupId>org.hrodberaht.directus</groupId>
+    <artifactId>inject</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+    <name>Simple Utils ejb2x</name>
+    <description>The core project for simpler java development</description>
+
+    <repositories>
+        <repository>
+            <id>usikkert.repo</id>
+            <name>usikkert.net Repository</name>
+            <url>http://repo.usikkert.net/maven2</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject-tck</artifactId>
+            <version>1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>
