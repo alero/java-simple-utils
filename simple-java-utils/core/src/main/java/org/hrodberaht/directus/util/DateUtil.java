@@ -15,7 +15,6 @@
 package org.hrodberaht.directus.util;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
-import org.hrodberaht.directus.util.locale.LocaleProvider;
 
 import java.text.DateFormat;
 import java.text.Format;
@@ -35,7 +34,7 @@ import java.util.TimeZone;
  */
 public final class DateUtil {
 
-    private static Locale locale = LocaleProvider.getSystemLocale();
+    private static Locale locale = Locale.getDefault();
 
     private static String LONG_DATE = null;
     private static int LONG_DATE_LENGTH = -1;

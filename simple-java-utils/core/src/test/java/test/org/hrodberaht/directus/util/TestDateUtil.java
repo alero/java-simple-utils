@@ -17,20 +17,15 @@ package test.org.hrodberaht.directus.util;
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.directus.tdd.TestUtilDateUtil;
 import org.hrodberaht.directus.util.DateUtil;
-import org.hrodberaht.directus.util.ioc.JavaContainerRegister;
-import org.hrodberaht.directus.util.locale.ProviderInterface;
-import org.hrodberaht.directus.util.locale.SimpleLocaleProvider;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;

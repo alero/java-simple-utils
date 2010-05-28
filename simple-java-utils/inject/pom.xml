@@ -6,15 +6,15 @@
 
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0</version>
+        <artifactId>parent-pom</artifactId>
+        <version>${currentVersion}</version>
     </parent>
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>inject</artifactId>
     <packaging>jar</packaging>
-    <version>1.0</version>
-    <name>Simple Utils ejb2x</name>
-    <description>The core project for simpler java development</description>
+    <version>${currentVersion}</version>
+    <name>Simple Utils Injection</name>
+    <description>The Injection project for simpler java development</description>
 
     <repositories>
         <repository>

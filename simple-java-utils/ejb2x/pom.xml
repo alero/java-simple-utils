@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0</version>
+        <artifactId>parent-pom</artifactId>
+        <version>${currentVersion}</version>
     </parent>
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>ejb2x</artifactId>
     <packaging>jar</packaging>
-    <version>1.0</version>
+    <version>${currentVersion}</version>
     <name>Simple Utils ejb2x</name>
     <description>The core project for simpler java development</description>
 
