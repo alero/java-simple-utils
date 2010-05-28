@@ -12,6 +12,8 @@
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>i18n</artifactId>
     <version>${currentVersion}</version>
+    <name>Simple Utils i18n</name>
+    <description></description>
 
     
    <dependencies>
