@@ -1,4 +1,4 @@
-package org.hrodberaht.inject.internal;
+package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
 
@@ -15,13 +15,11 @@ import javax.inject.Provider;
 public class InjectionProvider implements Provider {
 
     private Class serviceClass;
-    private String qualifierName;
-    private AnnotationInjection annotationInjection;
+    private String qualifierName;    
 
-    public InjectionProvider(Class serviceClass, String qualifierName, AnnotationInjection annotationInjection) {
+    public InjectionProvider(Class serviceClass, String qualifierName) {
         this.serviceClass = serviceClass;
         this.qualifierName = qualifierName;
-        this.annotationInjection = annotationInjection;
     }
 
     @Override

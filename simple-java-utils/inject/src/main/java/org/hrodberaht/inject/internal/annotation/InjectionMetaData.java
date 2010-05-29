@@ -1,4 +1,4 @@
-package org.hrodberaht.inject.internal;
+package org.hrodberaht.inject.internal.annotation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

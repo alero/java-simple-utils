@@ -1,4 +1,4 @@
-package org.hrodberaht.inject.internal;
+package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SPIRuntimeException;
 

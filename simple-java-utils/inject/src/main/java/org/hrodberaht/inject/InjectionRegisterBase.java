@@ -11,11 +11,11 @@ package org.hrodberaht.inject;
 public abstract class InjectionRegisterBase {
 
     public static void activateJavaXInjectCompliance() {
-        SimpleInjection.setInjectAnnotationCompliantMode(true);
+        SimpleInjection.setContainerInjectAnnotationCompliantMode();
     }
 
-    public static void cleanRegister() {
-        SimpleInjection.cleanRegister();
+    public static void resetContainerToDefault() {
+        SimpleInjection.resetContainerToDefault();
     }
 
 }

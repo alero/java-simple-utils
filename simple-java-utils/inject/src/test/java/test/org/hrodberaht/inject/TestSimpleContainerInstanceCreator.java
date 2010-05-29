@@ -21,7 +21,7 @@ public class TestSimpleContainerInstanceCreator {
 
     @Before
     public void init(){
-        InjectionRegisterJava.cleanRegister();
+        InjectionRegisterJava.resetContainerToDefault();
         InjectionRegisterJava.registerInstanceCreator(new SimpleContainerInstanceCreatorImpl());
     }
 

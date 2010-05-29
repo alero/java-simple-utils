@@ -1,4 +1,4 @@
-package test.org.hrodberaht.inject.tck;
+package test.org.hrodberaht.inject;
 
 import junit.framework.TestCase;
 import org.atinject.tck.Tck;
@@ -24,11 +24,9 @@ import org.hrodberaht.inject.SimpleInjection;
  * @since 1.0
  */
 
-
 public class TestSuiteJsr330Tck extends TestCase {
 
-
-    public static junit.framework.Test suite() {        
+    public static junit.framework.Test suite() {
 
         InjectionRegisterJava.activateJavaXInjectCompliance();
 

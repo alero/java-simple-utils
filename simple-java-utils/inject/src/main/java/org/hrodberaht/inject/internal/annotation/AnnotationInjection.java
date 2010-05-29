@@ -1,4 +1,6 @@
-package org.hrodberaht.inject.internal;
+package org.hrodberaht.inject.internal.annotation;
+
+import org.hrodberaht.inject.internal.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -84,7 +86,7 @@ public class AnnotationInjection {
 
     private Object innerCreateInstance(final InjectionMetaData dependency) {
         if (dependency.isProvider()) {            
-            return new InjectionProvider(dependency.getServiceClass(), dependency.getQualifierName(), this);
+            return new InjectionProvider(dependency.getServiceClass(), dependency.getQualifierName());
         }
 
         return createInstance(dependency.getServiceClass(), dependency.getQualifierName());
