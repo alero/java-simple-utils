@@ -12,11 +12,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.i18n;
+package test.org.hrodberaht.directus.util;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.directus.tdd.TestUtilDateUtil;
-import org.hrodberaht.i18n.DateUtil;
+import org.hrodberaht.directus.util.DateUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -1,7 +1,5 @@
 package test.org.hrodberaht.inject;
 
-import junit.framework.TestCase;
-import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
 import org.atinject.tck.auto.Convertible;
 import org.atinject.tck.auto.DriversSeat;
@@ -10,41 +8,29 @@ import org.atinject.tck.auto.FuelTank;
 import org.atinject.tck.auto.Seat;
 import org.atinject.tck.auto.V8Engine;
 import org.atinject.tck.auto.accessories.Cupholder;
-import org.atinject.tck.auto.accessories.RoundThing;
+import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SimpleInjection;
-
 
 /**
- * Simple Java Utils - Injection
+ * Simple Java Utils
  *
  * @author Robert Alexandersson
- *         2010-maj-28 19:27:43
+ *         2010-maj-29 15:39:51
  * @version 1.0
  * @since 1.0
  */
+public class AnnotationContinerUtil {
 
-public class TestSuiteJsr330Tck extends TestCase {
-
-    public static junit.framework.Test suite() {
-
+    public static void prepareRegister() {
         InjectionRegisterJava.activateJavaXInjectCompliance();
 
         InjectionRegisterJava.register(Car.class, Convertible.class);
         InjectionRegisterJava.register(Engine.class, V8Engine.class);
         InjectionRegisterJava.register(Cupholder.class);
-        InjectionRegisterJava.register(RoundThing.class, "spare");
+        InjectionRegisterJava.register(SpareTire.class, "spare");
         InjectionRegisterJava.register(FuelTank.class);
         InjectionRegisterJava.register(Seat.class);
+        // hmm should be support for Qualifier annotation instead
         InjectionRegisterJava.register(DriversSeat.class, "Drivers");
-
-
-        final Car car = SimpleInjection.get(Car.class);
-        final boolean supportsStatic = false;
-        final boolean supportsPrivate = true;
-
-        return Tck.testsFor(car, supportsStatic, supportsPrivate);
-
     }
-
 }

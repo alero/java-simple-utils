@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.hrodberaht.directus</groupId>
             <artifactId>core</artifactId>
-            <version>1.0</version>
+            <version>${currentVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

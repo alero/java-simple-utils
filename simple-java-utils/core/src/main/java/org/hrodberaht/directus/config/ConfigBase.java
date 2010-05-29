@@ -16,9 +16,9 @@ package org.hrodberaht.directus.config;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.directus.logging.SimpleLogger;
-import org.hrodberaht.i18n.NumberUtil;
-import org.hrodberaht.i18n.SocketCloser;
-import org.hrodberaht.i18n.StringUtil;
+import org.hrodberaht.directus.util.NumberUtil;
+import org.hrodberaht.directus.util.SocketCloser;
+import org.hrodberaht.directus.util.StringUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

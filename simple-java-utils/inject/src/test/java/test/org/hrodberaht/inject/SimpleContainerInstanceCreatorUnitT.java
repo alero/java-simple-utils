@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
  * @version 1.0
  * @since 1.0
  */
-public class TestSimpleContainerInstanceCreator {
+public class SimpleContainerInstanceCreatorUnitT {
 
     @Before
     public void init(){

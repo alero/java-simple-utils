@@ -13,10 +13,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    TestSuiteJsr330Tck.class,
-    TestSimpleContainer.class,
-    TestSimpleContainerInstanceCreator.class
-    })
-
+    SuiteJsr330TckUnitT.class,
+    SimpleContainerUnitT.class,
+    SimpleContainerInstanceCreatorUnitT.class,
+    AnnotationContinerPerformanceUnitT.class
+})
 public class TestSuite {
 }

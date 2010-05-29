@@ -4,6 +4,8 @@ import org.hrodberaht.inject.SPIRuntimeException;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Scope;
+import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
@@ -23,12 +25,13 @@ public class InjectionUtils {
     
     public static final Class<Inject> INJECT = Inject.class;
 
+    private static final Class<Scope> SCOPE = Scope.class;
+
     public static Class<Object> getClassFromProvider(final Object serviceClass, final Type serviceType) {
         if (serviceType instanceof ParameterizedType) {
-            final ParameterizedType parameterizedType = (ParameterizedType) serviceType;
-            final Type[] typeArguments = parameterizedType.getActualTypeArguments();
-            final Class<Object> beanClassFromProvider = (Class<Object>) typeArguments[0];
-
+            ParameterizedType parameterizedType = (ParameterizedType) serviceType;
+            Type[] typeArguments = parameterizedType.getActualTypeArguments();
+            Class<Object> beanClassFromProvider = (Class<Object>) typeArguments[0];
             return beanClassFromProvider;
         }
 
@@ -94,7 +97,7 @@ public class InjectionUtils {
 
         else if (annotatedConstructors.size() > 1) {
             throw new SPIRuntimeException(
-                    "Several annotated constructors found for autowiring " + beanClass + " " + annotatedConstructors);
+                    "Several annotated constructors found for autowire {0} {1}", beanClass, annotatedConstructors);
         }
 
         return annotatedConstructors.get(0);
@@ -107,5 +110,35 @@ public class InjectionUtils {
 
     public static boolean isProvider(Class<Object> service) {
         return Provider.class.isAssignableFrom(service);
+    }
+
+    public static boolean isSingleton(final Class<?> beanClass) {
+        Annotation scope = getScope(beanClass);
+        if (scope instanceof Singleton) {
+            return true;
+        }
+        if (scope == null) {
+            return false;
+        }
+        throw new SPIRuntimeException("Unknown scope on {0} {1}", beanClass , scope);
+    }
+
+    private static Annotation getScope(final Class<?> beanClass) {
+        List<Annotation> scopeAnnotations = new ArrayList<Annotation>();
+        Annotation[] annotations = beanClass.getAnnotations();
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().isAnnotationPresent(SCOPE)) {
+                scopeAnnotations.add(annotation);
+            }
+        }
+
+        if (scopeAnnotations.size() == 0) {
+            return null;
+        } else if (scopeAnnotations.size() > 1) {
+            throw new SPIRuntimeException(
+                    "More than one scope annotations found on {0} {1}", beanClass, scopeAnnotations);
+        }
+
+        return scopeAnnotations.get(0);
     }
 }

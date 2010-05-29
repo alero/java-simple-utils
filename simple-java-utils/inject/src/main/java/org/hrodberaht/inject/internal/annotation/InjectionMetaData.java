@@ -19,6 +19,11 @@ public class InjectionMetaData {
     private Class serviceClass;
     private boolean provider = false;
 
+    private boolean isSingleton = false;
+    private Object singleton = null;
+
+    private boolean preDefined = false;
+
     private Constructor constructor;
     private List<InjectionMetaData> constructorDependencies;
     private List<InjectionPoint> injectionPoints;
@@ -33,7 +38,17 @@ public class InjectionMetaData {
         this.constructor = constructor;
     }
 
+    public Constructor getConstructor() {
+        return constructor;
+    }
 
+    public void setSingleton(boolean singleton) {
+        isSingleton = singleton;
+    }
+
+    public boolean isSingleton() {
+        return isSingleton;
+    }
 
     public List<InjectionMetaData> getConstructorDependencies() {
         return constructorDependencies;
@@ -60,6 +75,13 @@ public class InjectionMetaData {
         return provider;
     }
 
+    public boolean isPreDefined() {
+        return preDefined;
+    }
+
+    public void setPreDefined(boolean preDefined) {
+        this.preDefined = preDefined;
+    }
 
     public Class getServiceClass() {
         return serviceClass;
@@ -71,7 +93,13 @@ public class InjectionMetaData {
         constructor.setAccessible(true);
 
         try {
+            if(isSingleton && singleton != null){
+                return singleton;
+            }
             final Object newInstance = constructor.newInstance(parameters);
+            if(isSingleton){
+                singleton = newInstance;   
+            }
             return newInstance;
         }
 
@@ -118,6 +146,11 @@ public class InjectionMetaData {
         return false;
     }
 
+    public Object getSingleton() {
+        return singleton;
+    }
 
-
+    public void setSingleton(Object singleton) {
+        this.singleton = singleton;
+    }
 }

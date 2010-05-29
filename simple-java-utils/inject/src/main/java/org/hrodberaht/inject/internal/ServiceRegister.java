@@ -35,4 +35,8 @@ public class ServiceRegister {
     public SimpleInjection.RegisterType getRegisterType() {
         return registerType;
     }
+
+    public void setSingleton(Object singleton) {
+        this.singleton = singleton;
+    }
 }

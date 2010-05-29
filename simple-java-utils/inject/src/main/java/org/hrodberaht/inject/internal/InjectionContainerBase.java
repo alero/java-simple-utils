@@ -29,7 +29,9 @@ public abstract class InjectionContainerBase {
         } else if (SimpleInjection.Scope.NEW == forcedScope) {
             return (T) createInstance(serviceRegister);
         }
-
+        if(serviceRegister.getSingleton() == null){
+            serviceRegister.setSingleton(createInstance(serviceRegister));               
+        }
         return (T) serviceRegister.getSingleton();
     }
 

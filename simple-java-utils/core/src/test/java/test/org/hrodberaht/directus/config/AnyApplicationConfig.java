@@ -17,7 +17,7 @@ package test.org.hrodberaht.directus.config;
 import org.hrodberaht.directus.config.ConfigBase;
 import org.hrodberaht.directus.config.ConfigItem;
 import org.hrodberaht.directus.config.ConfigRegister;
-import org.hrodberaht.i18n.StringUtil;
+import org.hrodberaht.directus.util.StringUtil;
 
 import java.text.ParseException;
 import java.util.Date;

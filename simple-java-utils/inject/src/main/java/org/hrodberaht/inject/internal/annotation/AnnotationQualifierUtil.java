@@ -39,13 +39,11 @@ public class AnnotationQualifierUtil {
 
     private static String getQualifier(final Object owner, final Annotation annotation) {
         if (annotation instanceof Named) {
-            final Named named = (Named) annotation;
-            final String value = named.value();
-
+            Named named = (Named) annotation;
+            String value = named.value();
             if (isEmpty(value)) {
-                throw new SPIRuntimeException("Named qualifier annotation used without a value on " + owner);
+                throw new SPIRuntimeException("Named qualifier annotation used without a value " + owner);
             }
-
             return value;
         } else {
             return annotation.annotationType().getSimpleName();
