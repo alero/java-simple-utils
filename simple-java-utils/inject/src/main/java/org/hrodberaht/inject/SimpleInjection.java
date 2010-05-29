@@ -15,6 +15,7 @@
 package org.hrodberaht.inject;
 
 import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
+import org.hrodberaht.inject.internal.AnnotationInjection;
 
 
 import java.util.HashMap;
@@ -31,6 +32,13 @@ public class SimpleInjection {
 
     private static boolean injectAnnotationCompliantMode = false;
 
+    private static HashMap<Object, ServiceRegister> registeredServices = new HashMap<Object, ServiceRegister>();
+    private static HashMap<String, ServiceRegister> registeredNamedServices = new HashMap<String, ServiceRegister>();
+
+    // Perhaps a SimpleInjection basic singleton value instead of static fot these variables ...
+    private static SimpleContainerInstanceCreator simpleContainerInstanceCreator = null;
+
+
     public enum Scope {
         SINGLETON, NEW
     }
@@ -40,10 +48,6 @@ public class SimpleInjection {
         WEAK, NORMAL, OVERRIDE_NORMAL, FINAL
     }
 
-    private static HashMap<Object, ServiceRegister> registeredServices = new HashMap<Object, ServiceRegister>();
-    private static HashMap<String, ServiceRegister> registeredNamedServices = new HashMap<String, ServiceRegister>();
-
-    private static SimpleContainerInstanceCreator simpleContainerInstanceCreator = null;
 
     /**
      * Will retrieve a service as it has been registered, scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
@@ -54,6 +58,20 @@ public class SimpleInjection {
      */
     public static <T> T get(Class<T> service) {
         return getService(service, null);
+    }
+
+    /**
+     * Will retrieve a service as it has been registered, scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
+     *
+     * @param service the interface service intended for creation
+     * @param qualifier the named service intended for creation
+     * @return an instance of the interface requested will be created/fetched and returned from the internal register
+     */
+    public static <T> T get(Class<T> service, String qualifier) {
+        if(qualifier == null || "".equals(qualifier)){
+            return getService(service, null);                        
+        }
+        return getService(service, null, qualifier);
     }
 
     /**
@@ -77,6 +95,9 @@ public class SimpleInjection {
         return getService(service, Scope.SINGLETON);
     }
 
+    protected synchronized static void setInjectAnnotationCompliantMode(boolean mode){
+        injectAnnotationCompliantMode = mode;           
+    }
 
     protected synchronized static void cleanRegister(){
         registeredServices.clear();
@@ -165,10 +186,17 @@ public class SimpleInjection {
                 return simpleContainerInstanceCreator.getService(service);
             }
         }
-        if (!registeredServices.containsKey(service)) {
+        if (!injectAnnotationCompliantMode && !registeredServices.containsKey(service)) {
             throw new SPIRuntimeException("Service {0} not registered in SimpleInjection", service);
         }
         ServiceRegister serviceRegister = registeredServices.get(service);
+        return instansiateService(service, forcedScope, serviceRegister);
+    }
+
+    private static <T> T instansiateService(Class<T> service, Scope forcedScope, ServiceRegister serviceRegister) {
+        if(injectAnnotationCompliantMode && serviceRegister == null){
+            return (T) createInstance((Class<Object>) service);
+        }
         if (forcedScope == null && serviceRegister.scope == Scope.NEW) {
             return (T) createInstance(serviceRegister.service);
         } else if (Scope.NEW == forcedScope) {
@@ -178,14 +206,33 @@ public class SimpleInjection {
         return (T) serviceRegister.singleton;
     }
 
+    private static <T> T getService(Class<T> service, Scope forcedScope, String qualifier) {
+        if(simpleContainerInstanceCreator != null){
+            if(forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()){
+                throw new SPIRuntimeException("Can not use forced scope for service {0}", service);
+            }
+            if(simpleContainerInstanceCreator.supportServiceCreation(service)){
+                return simpleContainerInstanceCreator.getService(service);
+            }
+        }
+        if (!injectAnnotationCompliantMode && !registeredNamedServices.containsKey(service)) {
+            throw new SPIRuntimeException("Service {0} not registered in SimpleInjection", service);
+        }
+        ServiceRegister serviceRegister = registeredNamedServices.get(service);
+        return instansiateService(service, forcedScope, serviceRegister);
+    }
+
+
+
 
     private static Object createInstance(Class<Object> service) {
         try {
-            if(isProvider(service)){
-                return service;                    
-            }
+
             if(injectAnnotationCompliantMode){
-                return AnnotationInjection.createInstance(service);
+                if(isProvider(service)){
+                    return service;
+                }
+                return new AnnotationInjection().createInstance(service);
             }
 
             return service.newInstance(); // uses empty constructor
@@ -197,12 +244,8 @@ public class SimpleInjection {
         }
     }
 
-    private static boolean isProvider(Class<Object> service) {
-        if(injectAnnotationCompliantMode){
-
-            return AnnotationInjection.isProvider(service);
-        }
-        return false;
+    private static boolean isProvider(Class<Object> service) {        
+        return AnnotationInjection.isProvider(service);
     }
 
     private static class ServiceRegister {

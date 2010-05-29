@@ -21,5 +21,5 @@ package org.hrodberaht.inject;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionRegisterProperty {
+public class InjectionRegisterProperty extends InjectionRegisterBase{
 }

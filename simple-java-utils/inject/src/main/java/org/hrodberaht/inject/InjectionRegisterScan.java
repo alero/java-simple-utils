@@ -14,8 +14,6 @@
 
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
-
 /**
  * Simple Java Utils
  *
@@ -23,7 +21,7 @@ import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionRegisterScan {
+public class InjectionRegisterScan extends InjectionRegisterBase {
 
     public static void registerBasePackageScan(String packagename){
 
@@ -33,10 +31,4 @@ public class InjectionRegisterScan {
 
     }
 
-
-
-
-    public static void cleanRegister() {
-        SimpleInjection.cleanRegister();
-    }
 }

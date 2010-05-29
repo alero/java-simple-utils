@@ -5,8 +5,8 @@ import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
 import org.atinject.tck.auto.Convertible;
 import org.atinject.tck.auto.DriversSeat;
+import org.atinject.tck.auto.Engine;
 import org.atinject.tck.auto.FuelTank;
-import org.atinject.tck.auto.GasEngine;
 import org.atinject.tck.auto.Seat;
 import org.atinject.tck.auto.V8Engine;
 import org.atinject.tck.auto.accessories.Cupholder;
@@ -30,8 +30,10 @@ public class TestSuiteJsr330Tck extends TestCase {
 
     public static junit.framework.Test suite() {        
 
+        InjectionRegisterJava.activateJavaXInjectCompliance();
+
         InjectionRegisterJava.register(Car.class, Convertible.class);
-        InjectionRegisterJava.register(GasEngine.class, V8Engine.class);
+        InjectionRegisterJava.register(Engine.class, V8Engine.class);
         InjectionRegisterJava.register(Cupholder.class);
         InjectionRegisterJava.register(RoundThing.class, "spare");
         InjectionRegisterJava.register(FuelTank.class);
