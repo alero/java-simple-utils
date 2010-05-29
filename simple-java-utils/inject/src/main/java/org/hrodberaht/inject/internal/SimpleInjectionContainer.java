@@ -30,10 +30,10 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
                 return simpleContainerInstanceCreator.getService(service);
             }
         }
-        if (!registeredNamedServices.containsKey(service)) {
+        if (!registeredNamedServices.containsKey(qualifier)) {
             throw new InjectRuntimeException("Service {0} not registered in SimpleInjection", service);
         }
-        ServiceRegister serviceRegister = registeredNamedServices.get(service);
+        ServiceRegister serviceRegister = registeredNamedServices.get(qualifier);
         return instantiateService(service, forcedScope, serviceRegister);
     }
 

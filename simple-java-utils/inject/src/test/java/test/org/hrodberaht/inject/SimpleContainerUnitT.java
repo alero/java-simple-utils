@@ -63,6 +63,15 @@ public class SimpleContainerUnitT {
     }
 
     @Test
+    public void testNamedNothingServiceWrapping() {
+        InjectionRegisterJava.register("myAnyService", AnyServiceDoNothingImpl.class);
+
+        AnyService anyService = SimpleInjection.get(AnyService.class, "myAnyService");
+
+        assertEquals(null, anyService.getStuff());
+    }
+
+    @Test
     public void testSomethingServiceWrapping() {
         InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
 

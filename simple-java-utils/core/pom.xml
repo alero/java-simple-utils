@@ -7,14 +7,14 @@
         <groupId>org.hrodberaht.directus</groupId>
         <artifactId>parent-pom</artifactId>
         <version>${currentVersion}</version>
+        <relativePath>../</relativePath>       
     </parent>
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
     <version>${currentVersion}</version>
     <name>Simple Utils Core</name>
-    <description>The core project for simpler java development</description>
-    
+    <description>The core project for simpler java development</description>    
 
 
     <dependencies>
@@ -32,7 +32,7 @@
     </dependencies>
 
 
-    <reporting>
+    <reporting>        
         <outputDirectory>../target/site/${artifactId}</outputDirectory>
     </reporting>
 </project>

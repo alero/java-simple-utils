@@ -41,7 +41,7 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
         SimpleInjection.register(anInterface, service, scope, SimpleInjection.RegisterType.NORMAL);
     }
 
-    public static void register(Class service, String namedService, SimpleInjection.Scope scope){
+    public static void register(String namedService, Class service, SimpleInjection.Scope scope){
         SimpleInjection.register(namedService, service, scope, SimpleInjection.RegisterType.NORMAL);
     }
 
@@ -57,8 +57,8 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
         register(service, service, SimpleInjection.Scope.NEW);
     }
 
-    public static void register(Class service, String namedService) {
-        register(service, namedService, SimpleInjection.Scope.NEW);
+    public static void register(String namedService, Class service) {
+        register(namedService, service, SimpleInjection.Scope.NEW);
     }
 
     public static void registerDefault(Class anInterface, Class service){

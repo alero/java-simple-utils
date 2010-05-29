@@ -27,10 +27,10 @@ public class AnnotationContainerUtil {
         InjectionRegisterJava.register(Car.class, Convertible.class);
         InjectionRegisterJava.register(Engine.class, V8Engine.class);
         InjectionRegisterJava.register(Cupholder.class);
-        InjectionRegisterJava.register(SpareTire.class, "spare");
+        InjectionRegisterJava.register("spare", SpareTire.class);
         InjectionRegisterJava.register(FuelTank.class);
         InjectionRegisterJava.register(Seat.class);
         // hmm should be support for Qualifier annotation instead
-        InjectionRegisterJava.register(DriversSeat.class, "Drivers");
+        InjectionRegisterJava.register("Drivers", DriversSeat.class);
     }
 }

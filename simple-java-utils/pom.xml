@@ -31,8 +31,22 @@
     </issueManagement>
     <scm>
         <tag>trunk</tag>
-        <url>https://java-simple-utils.googlecode.com/svn/trunk/</url>
+        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</url>
+        <connection>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</connection>
+        <developerConnection>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils
+        </developerConnection>
     </scm>
+
+    <developers>
+        <developer>
+            <id>robert.alexandersson</id>
+            <name>Robert Alexandersson</name>
+            <email>robert.alexandersson@gmail.com</email>
+            <roles>
+                <role>Code monkey</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <currentVersion>1.0-SNAPSHOT</currentVersion>
@@ -64,14 +78,66 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
     <reporting>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>javancss-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <minimumTokens>100</minimumTokens>
+                    <linkXRef>true</linkXRef>
+                    <targetJdk>1.6</targetJdk>
+                    <aggregate>true</aggregate>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>

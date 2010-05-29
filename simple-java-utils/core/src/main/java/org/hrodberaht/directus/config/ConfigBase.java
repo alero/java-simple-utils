@@ -61,25 +61,6 @@ public abstract class ConfigBase {
         }
     }
 
-    protected void configure(Class clazz, String property) {
-        configure(clazz, property, null);
-    }
-
-    protected void configure(Class clazz, String property, String customProperty) {
-        LOGGER = SimpleLogger.getInstance(clazz);
-        propertyPath = property;
-        customPropertyPath = customProperty;
-        try {
-            ConfigBase config = (ConfigBase) clazz.newInstance();
-            if(config.requiresValidation()){
-                config.validate();                
-            }
-            ConfigRegister.registerConfig(config, property);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     protected void loadProperties() throws ParseException {
         long elapsedTime = System.currentTimeMillis() - TIME_STAMP;
         if (properties == null) {
