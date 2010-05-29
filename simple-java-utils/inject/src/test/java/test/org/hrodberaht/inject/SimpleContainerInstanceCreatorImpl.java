@@ -1,6 +1,8 @@
 package test.org.hrodberaht.inject;
 
 import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
+import test.org.hrodberaht.inject.testservices.AnyService;
+import test.org.hrodberaht.inject.testservices.AnyServiceDoSomethingImpl;
 
 
 /**

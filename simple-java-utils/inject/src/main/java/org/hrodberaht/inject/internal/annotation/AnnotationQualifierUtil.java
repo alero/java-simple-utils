@@ -1,6 +1,6 @@
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.SPIRuntimeException;
+import org.hrodberaht.inject.InjectRuntimeException;
 
 import javax.inject.Named;
 import javax.inject.Qualifier;
@@ -31,7 +31,7 @@ public class AnnotationQualifierUtil {
         if (qualifierAnnotations.size() == 0) {
             return null;
         } else if (qualifierAnnotations.size() > 1) {
-            throw new SPIRuntimeException("Several qualifier annotations found on " + owner + " " + qualifierAnnotations);
+            throw new InjectRuntimeException("Several qualifier annotations found on " + owner + " " + qualifierAnnotations);
         }
 
         return qualifierAnnotations.get(0);
@@ -42,7 +42,7 @@ public class AnnotationQualifierUtil {
             Named named = (Named) annotation;
             String value = named.value();
             if (isEmpty(value)) {
-                throw new SPIRuntimeException("Named qualifier annotation used without a value " + owner);
+                throw new InjectRuntimeException("Named qualifier annotation used without a value " + owner);
             }
             return value;
         } else {

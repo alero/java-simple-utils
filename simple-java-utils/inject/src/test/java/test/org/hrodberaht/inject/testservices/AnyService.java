@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.inject;
+package test.org.hrodberaht.inject.testservices;
 
 import java.util.Collection;
 

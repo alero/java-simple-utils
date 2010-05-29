@@ -28,5 +28,9 @@
             <version>${currentVersion}</version>
         </dependency>
    </dependencies>
-    
+
+
+    <reporting>
+        <outputDirectory>../target/site/${artifactId}</outputDirectory>
+    </reporting>
 </project>

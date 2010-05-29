@@ -33,6 +33,6 @@
 
 
     <reporting>
-        <outputDirectory>../target/site/core</outputDirectory>
+        <outputDirectory>../target/site/${artifactId}</outputDirectory>
     </reporting>
 </project>

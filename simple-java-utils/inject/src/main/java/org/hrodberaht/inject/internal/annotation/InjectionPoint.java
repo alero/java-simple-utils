@@ -1,6 +1,6 @@
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.SPIRuntimeException;
+import org.hrodberaht.inject.InjectRuntimeException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -83,7 +83,7 @@ public class InjectionPoint {
         }
 
         catch (final IllegalAccessException e) {
-            throw new SPIRuntimeException(e);
+            throw new InjectRuntimeException(e);
         }
 
         finally {

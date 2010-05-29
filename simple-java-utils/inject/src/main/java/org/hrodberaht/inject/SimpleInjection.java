@@ -109,6 +109,11 @@ public class SimpleInjection {
         if(injectionContainer instanceof SimpleInjectionContainer){
             SimpleInjectionContainer simpleInjectionContainer = (SimpleInjectionContainer)injectionContainer;
             simpleInjectionContainer.setSimpleContainerInstanceCreator(simpleContainerInstanceCreator);
+        }else{
+            throw new InjectRuntimeException(
+                    "could not register {0} as there the current InjectionContainer is not SimpleInjectionContainer"
+                    ,simpleContainerInstanceCreator
+            );
         }
     }
 

@@ -14,11 +14,14 @@
 
 package test.org.hrodberaht.inject;
 
+import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SPIRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
 import org.junit.Before;
 import org.junit.Test;
+import test.org.hrodberaht.inject.testservices.AnyService;
+import test.org.hrodberaht.inject.testservices.AnyServiceDoNothingImpl;
+import test.org.hrodberaht.inject.testservices.AnyServiceDoSomethingImpl;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,7 +45,7 @@ public class SimpleContainerUnitT {
         try {
             AnyService anyService = SimpleInjection.get(AnyService.class);
             assertEquals(null, "Should not be called");
-        } catch (SPIRuntimeException e) {
+        } catch (InjectRuntimeException e) {
             assertEquals(
                     "Service interface " + AnyService.class.getName() +
                             " not registered in SimpleInjection"
@@ -72,7 +75,7 @@ public class SimpleContainerUnitT {
 
     @Test
     public void testSomethingServiceNewObjectSupport() {
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class, SimpleInjection.Scope.SINGLETON);
 
         AnyService anyService = SimpleInjection.get(AnyService.class);
         anyService.doStuff();
@@ -87,7 +90,7 @@ public class SimpleContainerUnitT {
 
     @Test
     public void testSomethingServiceSingletonObjectSupport() {
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class, SimpleInjection.Scope.NEW);
+        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
 
         AnyService anyService = SimpleInjection.getSingleton(AnyService.class);
         anyService.doStuff();
@@ -123,7 +126,7 @@ public class SimpleContainerUnitT {
 
     }
 
-    @Test(expected = SPIRuntimeException.class)
+    @Test(expected = InjectRuntimeException.class)
     public void testFinalRegisterSupport() {
 
         InjectionRegisterJava.finalRegister(AnyService.class, AnyServiceDoNothingImpl.class);
@@ -138,7 +141,7 @@ public class SimpleContainerUnitT {
             InjectionRegisterJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
             InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
             assertEquals("Not suppose to execute this", "So fail");
-        } catch (SPIRuntimeException e) {
+        } catch (InjectRuntimeException e) {
             assertEquals(
                     "Service interface " + AnyService.class.getName() +
                             " is already registered, to override register please use the override method"

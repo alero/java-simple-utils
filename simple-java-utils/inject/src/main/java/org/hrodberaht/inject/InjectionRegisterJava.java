@@ -50,27 +50,27 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
     }
 
     public static void register(Class anInterface, Class service){
-        register(anInterface, service, SimpleInjection.Scope.SINGLETON);
+        register(anInterface, service, SimpleInjection.Scope.NEW);
     }
 
     public static void register(Class service) {
-        register(service, service, SimpleInjection.Scope.SINGLETON);        
+        register(service, service, SimpleInjection.Scope.NEW);
     }
 
     public static void register(Class service, String namedService) {
-        register(service, namedService, SimpleInjection.Scope.SINGLETON);
+        register(service, namedService, SimpleInjection.Scope.NEW);
     }
 
     public static void registerDefault(Class anInterface, Class service){
-        registerDefault(anInterface, service, SimpleInjection.Scope.SINGLETON);
+        registerDefault(anInterface, service, SimpleInjection.Scope.NEW);
     }
 
     public static void reRegister(Class anInterface, Class service){
-        reRegister(anInterface, service, SimpleInjection.Scope.SINGLETON);
+        reRegister(anInterface, service, SimpleInjection.Scope.NEW);
     }
 
     public static void finalRegister(Class anInterface, Class service){
-        finalRegister(anInterface, service, SimpleInjection.Scope.SINGLETON);
+        finalRegister(anInterface, service, SimpleInjection.Scope.NEW);
     }
 
     

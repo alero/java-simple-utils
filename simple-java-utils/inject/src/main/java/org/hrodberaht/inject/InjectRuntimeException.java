@@ -10,33 +10,33 @@ import java.text.MessageFormat;
  * @version 1.0
  * @since 1.0
  */
-public class SPIRuntimeException extends RuntimeException{
+public class InjectRuntimeException extends RuntimeException{
     private Object[] args = null;
 
 
-    public SPIRuntimeException(String message) {
+    public InjectRuntimeException(String message) {
         super(message);
     }
 
-    public SPIRuntimeException(String message, Throwable e) {
+    public InjectRuntimeException(String message, Throwable e) {
         super(message, e);
     }
 
-    public SPIRuntimeException(Throwable e) {
+    public InjectRuntimeException(Throwable e) {
         super(e);
     }
 
-    public SPIRuntimeException(String message, Object... args) {
+    public InjectRuntimeException(String message, Object... args) {
         super(message);
         this.args = args;
     }
 
-    public SPIRuntimeException(String message, Throwable e, Object... args) {
+    public InjectRuntimeException(String message, Throwable e, Object... args) {
         super(message, e);
         this.args = args;
     }
 
-    public SPIRuntimeException(Throwable e, Object... args) {
+    public InjectRuntimeException(Throwable e, Object... args) {
         super(e);
         this.args = args;
     }
@@ -44,7 +44,7 @@ public class SPIRuntimeException extends RuntimeException{
     @Override
     public String toString() {
         if(args != null){
-            return SPIRuntimeException.class.getName()
+            return InjectRuntimeException.class.getName()
                     +": "+ MessageFormat.format(super.getMessage(), args);
         }
         return super.toString();

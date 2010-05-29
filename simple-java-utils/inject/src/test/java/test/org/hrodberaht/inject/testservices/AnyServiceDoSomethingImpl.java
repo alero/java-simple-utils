@@ -12,8 +12,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.inject;
+package test.org.hrodberaht.inject.testservices;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -23,17 +24,17 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public class AnyServiceDoNothingImpl implements AnyService{
+public class AnyServiceDoSomethingImpl implements AnyService{
+
+    private Collection<String> collection = new ArrayList<String>();  
 
     @Override
     public void doStuff() {
-        if(true){
-            throw new RuntimeException("This service can't do stuff");
-        }
+        collection.add("Added something");
     }
 
     @Override
     public Collection getStuff() {
-        return null;
+        return collection;
     }
 }

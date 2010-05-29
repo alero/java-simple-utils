@@ -1,6 +1,6 @@
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.SPIRuntimeException;
+import org.hrodberaht.inject.InjectRuntimeException;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -91,12 +91,12 @@ public class InjectionUtils {
             }
 
             catch (NoSuchMethodException e) {
-                throw new SPIRuntimeException(e);
+                throw new InjectRuntimeException(e);
             }
         }
 
         else if (annotatedConstructors.size() > 1) {
-            throw new SPIRuntimeException(
+            throw new InjectRuntimeException(
                     "Several annotated constructors found for autowire {0} {1}", beanClass, annotatedConstructors);
         }
 
@@ -120,7 +120,7 @@ public class InjectionUtils {
         if (scope == null) {
             return false;
         }
-        throw new SPIRuntimeException("Unknown scope on {0} {1}", beanClass , scope);
+        throw new InjectRuntimeException("Unknown scope on {0} {1}", beanClass , scope);
     }
 
     private static Annotation getScope(final Class<?> beanClass) {
@@ -135,7 +135,7 @@ public class InjectionUtils {
         if (scopeAnnotations.size() == 0) {
             return null;
         } else if (scopeAnnotations.size() > 1) {
-            throw new SPIRuntimeException(
+            throw new InjectRuntimeException(
                     "More than one scope annotations found on {0} {1}", beanClass, scopeAnnotations);
         }
 

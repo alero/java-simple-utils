@@ -1,6 +1,6 @@
 package org.hrodberaht.inject.internal;
 
-import org.hrodberaht.inject.SPIRuntimeException;
+import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
 
@@ -22,64 +22,62 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
     }
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
-        if(simpleContainerInstanceCreator != null){
-            if(forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()){
-                throw new SPIRuntimeException("Can not use forced scope for service {0}", service);
+        if (simpleContainerInstanceCreator != null) {
+            if (forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()) {
+                throw new InjectRuntimeException("Can not use forced scope for service {0}", service);
             }
-            if(simpleContainerInstanceCreator.supportServiceCreation(service)){
+            if (simpleContainerInstanceCreator.supportServiceCreation(service)) {
                 return simpleContainerInstanceCreator.getService(service);
             }
         }
         if (!registeredNamedServices.containsKey(service)) {
-            throw new SPIRuntimeException("Service {0} not registered in SimpleInjection", service);
+            throw new InjectRuntimeException("Service {0} not registered in SimpleInjection", service);
         }
         ServiceRegister serviceRegister = registeredNamedServices.get(service);
         return instantiateService(service, forcedScope, serviceRegister);
     }
 
     private void reRegisterSupport(Class anInterface, SimpleInjection.RegisterType type) {
-
         ServiceRegister serviceRegister = registeredServices.get(anInterface);
-        if(serviceRegister.getRegisterType() == SimpleInjection.RegisterType.WEAK){
+        if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.WEAK) {
             registeredServices.remove(anInterface);
             return;
         }
 
-        if(serviceRegister.getRegisterType() == SimpleInjection.RegisterType.NORMAL){
-            if(type == SimpleInjection.RegisterType.OVERRIDE_NORMAL){
+        if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.NORMAL) {
+            if (type == SimpleInjection.RegisterType.OVERRIDE_NORMAL) {
                 registeredServices.remove(anInterface);
                 return;
             }
-            throw new SPIRuntimeException(
+            throw new InjectRuntimeException(
                     "Service {0} is already registered, to override register please use the override method"
                     , anInterface);
         }
-        if(serviceRegister.getRegisterType() == SimpleInjection.RegisterType.FINAL){
-            throw new SPIRuntimeException(
+        if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.FINAL) {
+            throw new InjectRuntimeException(
                     "A FINAL Service for {0} is already registered, can not reRegister", anInterface);
         }
 
     }
 
     private void reRegisterSupport(String namedInstance, SimpleInjection.RegisterType type) {
-
-         ServiceRegister serviceRegister = registeredNamedServices.get(namedInstance);
-        if(serviceRegister.getRegisterType() == SimpleInjection.RegisterType.WEAK){
+        ServiceRegister serviceRegister = registeredNamedServices.get(namedInstance);
+        if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.WEAK) {
             registeredNamedServices.remove(namedInstance);
             return;
         }
 
-        if(serviceRegister.getRegisterType() == SimpleInjection.RegisterType.NORMAL){
-            if(type == SimpleInjection.RegisterType.OVERRIDE_NORMAL){
+        if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.NORMAL) {
+            if (type == SimpleInjection.RegisterType.OVERRIDE_NORMAL) {
                 registeredNamedServices.remove(namedInstance);
                 return;
             }
-            throw new SPIRuntimeException(
+            throw new InjectRuntimeException(
                     "Service {0} is already registered, to override register please use the override method"
                     , namedInstance);
         }
-        if(serviceRegister.getRegisterType() == SimpleInjection.RegisterType.FINAL){
-            throw new SPIRuntimeException(
+        if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.FINAL) {
+            throw new InjectRuntimeException(
                     "A FINAL Service for {0} is already registered, can not reRegister", namedInstance);
         }
 
@@ -88,19 +86,31 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
     @SuppressWarnings(value = "unchecked")
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
 
-        if(simpleContainerInstanceCreator != null){
-            if(forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()){
-                throw new SPIRuntimeException("Can not use forced scope for service {0}", service);
+        if (simpleContainerInstanceCreator != null) {
+            if (forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()) {
+                throw new InjectRuntimeException("Can not use forced scope for service {0}", service);
             }
-            if(simpleContainerInstanceCreator.supportServiceCreation(service)){
+            if (simpleContainerInstanceCreator.supportServiceCreation(service)) {
                 return simpleContainerInstanceCreator.getService(service);
             }
         }
+        ServiceRegister serviceRegister = findServiceImplementation(service);
+        return instantiateService(service, forcedScope, serviceRegister);
+    }
+
+    private <T> ServiceRegister findServiceImplementation(Class<T> service) {
         if (!registeredServices.containsKey(service)) {
-            throw new SPIRuntimeException("Service {0} not registered in SimpleInjection", service);
+            if(service.isInterface()){ // TODO support this for classes as well? = inheritance support
+                for(ServiceRegister serviceRegister:registeredServices.values()){
+                    if(service.isAssignableFrom(serviceRegister.getService())){
+                        return serviceRegister;                         
+                    }
+                }
+            }
+            throw new InjectRuntimeException("Service {0} not registered in SimpleInjection", service);
         }
         ServiceRegister serviceRegister = registeredServices.get(service);
-        return instantiateService(service, forcedScope, serviceRegister);
+        return serviceRegister;
     }
 
     @Override
@@ -124,20 +134,15 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
     }
 
 
-
-
     public Object createInstance(ServiceRegister serviceRegister) {
         try {
-
             return serviceRegister.getService().newInstance(); // uses empty constructor
-
         } catch (InstantiationException e) {
-            throw new SPIRuntimeException("Could not create an instance of {0}", e, serviceRegister.getService());
+            throw new InjectRuntimeException("Could not create an instance of {0}", e, serviceRegister.getService());
         } catch (IllegalAccessException e) {
-            throw new SPIRuntimeException("Could not create an instance of {0}", e, serviceRegister.getService());
+            throw new InjectRuntimeException("Could not create an instance of {0}", e, serviceRegister.getService());
         }
     }
-
 
 
 }

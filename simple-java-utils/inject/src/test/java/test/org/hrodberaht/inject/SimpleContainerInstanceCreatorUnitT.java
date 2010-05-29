@@ -1,11 +1,12 @@
 package test.org.hrodberaht.inject;
 
 
+import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SPIRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
 import org.junit.Before;
 import org.junit.Test;
+import test.org.hrodberaht.inject.testservices.AnyService;
 
 import static org.junit.Assert.assertEquals;
 
@@ -39,9 +40,9 @@ public class SimpleContainerInstanceCreatorUnitT {
             AnyService anyService = SimpleInjection.getNew(AnyService.class);
 
             assertEquals("Not allowed to reach this statement", null);
-        }catch (SPIRuntimeException e){
+        }catch (InjectRuntimeException e){
             assertEquals("Can not use forced scope for service interface " +
-                    AnyService.class.getName(), 
+                    AnyService.class.getName(),
                     e.getMessage());
         }
 

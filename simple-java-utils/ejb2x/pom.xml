@@ -36,6 +36,6 @@
     </dependencies>
     
     <reporting>
-        <outputDirectory>../target/site/ejb2x</outputDirectory>
+        <outputDirectory>../target/site/${artifactId}</outputDirectory>
     </reporting>
 </project>

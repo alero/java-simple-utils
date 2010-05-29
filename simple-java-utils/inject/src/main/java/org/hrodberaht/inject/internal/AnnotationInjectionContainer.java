@@ -1,6 +1,6 @@
 package org.hrodberaht.inject.internal;
 
-import org.hrodberaht.inject.SPIRuntimeException;
+import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.annotation.AnnotationInjection;
 import org.hrodberaht.inject.internal.annotation.InjectionMetaData;
@@ -31,7 +31,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
         if (!registeredNamedServices.containsKey(service) && service.getClass().isInterface()) {
-            throw new SPIRuntimeException("Service {0} not registered in SimpleInjection and is an interface", service);
+            throw new InjectRuntimeException("Service {0} not registered in SimpleInjection and is an interface", service);
         }
         ServiceRegister serviceRegister = registeredNamedServices.get(service);
         return instantiateService(service, forcedScope, serviceRegister);
@@ -52,7 +52,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     @Override
     public void register(Class anInterface, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredServices.containsKey(anInterface)) {
-            throw new SPIRuntimeException("Can not overwrite an existing service");
+            throw new InjectRuntimeException("Can not overwrite an existing service");
         }
         createInjectionMetaData(service, null);
         registeredServices.put(anInterface,
@@ -66,7 +66,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     @Override
     public void register(String namedInstance, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredNamedServices.containsKey(namedInstance)) {
-            throw new SPIRuntimeException("Can not overwrite an existing service");
+            throw new InjectRuntimeException("Can not overwrite an existing service");
         }
         createInjectionMetaData(service, namedInstance);
         registeredNamedServices.put(namedInstance,
