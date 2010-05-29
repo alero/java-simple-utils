@@ -19,7 +19,7 @@ public class SuiteJsr330TckUnitT extends TestCase {
 
     public static junit.framework.Test suite() {
 
-        AnnotationContinerUtil.prepareRegister();
+        AnnotationContainerUtil.prepareRegister();
 
         final Car car = SimpleInjection.get(Car.class);
         final boolean supportsStatic = false;

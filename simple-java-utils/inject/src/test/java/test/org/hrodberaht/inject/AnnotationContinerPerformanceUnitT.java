@@ -17,11 +17,10 @@ public class AnnotationContinerPerformanceUnitT {
 
     @Test(timeout = 10000)
     public void testPerformance(){
-        AnnotationContinerUtil.prepareRegister();
+        AnnotationContainerUtil.prepareRegister();
         for(int i=0;i<10000;i++){
             final Car car = SimpleInjection.get(Car.class);
             Tck.testsFor(car, false, true);
         }
-
     }
 }

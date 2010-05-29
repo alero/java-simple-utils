@@ -19,7 +19,7 @@ import org.hrodberaht.inject.InjectionRegisterJava;
  * @version 1.0
  * @since 1.0
  */
-public class AnnotationContinerUtil {
+public class AnnotationContainerUtil {
 
     public static void prepareRegister() {
         InjectionRegisterJava.activateJavaXInjectCompliance();
