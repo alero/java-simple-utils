@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>${currentVersion}</version>
+    <version>1.0-M1</version>
     <packaging>pom</packaging>
     <name>Simple Utils (pom)</name>
     <description>A gathering of projects for simpler java development</description>
@@ -17,9 +15,9 @@
     </issueManagement>
     <scm>
         <tag>trunk</tag>
-        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</url>
-        <connection>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</connection>
-        <developerConnection>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils
+        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/1.0-M1</url>
+        <connection>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/1.0-M1</connection>
+        <developerConnection>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/1.0-M1
         </developerConnection>
     </scm>
 

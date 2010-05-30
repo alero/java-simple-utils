@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>${currentVersion}</version>
+        <version>1.0-M1</version>
     </parent>
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>ejb2x</artifactId>
     <packaging>jar</packaging>
-    <version>${currentVersion}</version>
+    <version>1.0-M1</version>
     <name>Simple Utils ejb2x</name>
     <description>The core project for simpler java development</description>
 
@@ -20,7 +18,7 @@
         <dependency>
             <groupId>org.hrodberaht.directus</groupId>
             <artifactId>core</artifactId>
-            <version>${currentVersion}</version>
+            <version>1.0-M1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

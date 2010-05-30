@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>${currentVersion}</version>
+        <version>1.0-M1</version>
     </parent>
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>inject</artifactId>
     <packaging>jar</packaging>
-    <version>${currentVersion}</version>
+    <version>1.0-M1</version>
     <name>Simple Utils Injection</name>
     <description>The Injection project for simpler java development</description>
 
@@ -36,12 +34,14 @@
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
+        <!--
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>jsr250-api</artifactId>
             <version>1.0</version>
+            <scope>test</scope>
         </dependency>
-
+        //-->
     </dependencies>
 
     <reporting>
