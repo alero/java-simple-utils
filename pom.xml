@@ -16,8 +16,8 @@
     <scm>
         <tag>trunk</tag>
         <url>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/1.0-M1</url>
-        <connection>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/1.0-M1</connection>
-        <developerConnection>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/1.0-M1
+        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/1.0-M1</connection>
+        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/1.0-M1
         </developerConnection>
     </scm>
 
