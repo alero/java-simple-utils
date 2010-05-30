@@ -14,11 +14,24 @@
         <url>http://code.google.com/p/java-simple-utils/issues/list</url>
     </issueManagement>
     <scm>
-        <url>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/1.0-M1</url>
-        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/1.0-M1</connection>
-        <developerConnection>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/1.0-M1
+        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</url>
+        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</connection>
+        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils
         </developerConnection>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>LocalRepo</id>
+            <name>My Locale Reposotory</name>
+            <url>file://C:/Users/Robert/.m2</url>
+        </repository>
+        <snapshotRepository>
+            <id>LocalRepo</id>
+            <name>My Locale Reposotory</name>
+            <url>file://C:/Users/Robert/.m2</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <developers>
         <developer>
