@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.0-M1</version>
+        <version>1.0-M2-SNAPSHOT</version>
     </parent>
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>ejb2x</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-M1</version>
+    <version>1.0-M2-SNAPSHOT</version>
     <name>Simple Utils ejb2x</name>
     <description>The core project for simpler java development</description>
 
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.hrodberaht.directus</groupId>
             <artifactId>core</artifactId>
-            <version>1.0-M1</version>
+            <version>1.0-M2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
