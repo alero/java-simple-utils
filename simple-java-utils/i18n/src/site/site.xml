@@ -19,7 +19,7 @@
     <bannerLeft>
         <name>Simple Utils i18n</name>
         <src>http://1.bp.blogspot.com/_DpEQInQwvDI/ScP9o7fkN6I/AAAAAAAAAH0/AYpCMzYL4UM/S1600-R/brain.png</src>
-        <href>#</href>
+        <href>./index.html</href>
     </bannerLeft>
     <skin>
         <groupId>org.apache.maven.skins</groupId>
@@ -28,7 +28,7 @@
     </skin>
     <body>
         <links>
-            <item name="${project.name}" href="index.html"/>
+            <item name="${project.name}" href="./index.html"/>
         </links>
 
         <menu name="Links">
