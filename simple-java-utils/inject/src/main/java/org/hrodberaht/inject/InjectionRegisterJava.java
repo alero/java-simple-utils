@@ -50,7 +50,11 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
     }
 
     public static void register(Class anInterface, Class service){
-        register(anInterface, service, SimpleInjection.Scope.NEW);
+        if(anInterface.isAnnotation()){
+            register(anInterface.getSimpleName(), service , SimpleInjection.Scope.NEW);
+        }else {
+            register(anInterface, service, SimpleInjection.Scope.NEW);
+        }
     }
 
     public static void register(Class service) {
