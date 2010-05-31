@@ -12,13 +12,13 @@
  *   ~ See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.hrodberaht.inject.internal;
+package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.internal.annotation.AnnotationInjection;
-import org.hrodberaht.inject.internal.annotation.InjectionMetaData;
-import org.hrodberaht.inject.internal.annotation.InjectionUtils;
+import org.hrodberaht.inject.internal.InjectionContainer;
+import org.hrodberaht.inject.internal.InjectionContainerBase;
+import org.hrodberaht.inject.internal.ServiceRegister;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,14 +41,13 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     private List<InjectionMetaData> injectionMetaDataCache = new ArrayList<InjectionMetaData>();
 
 
-
-
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
+        assert (qualifier != null);
         if (!registeredNamedServices.containsKey(service) && service.getClass().isInterface()) {
             throw new InjectRuntimeException("Service {0} not registered in SimpleInjection and is an interface", service);
         }
         ServiceRegister serviceRegister = registeredNamedServices.get(qualifier);
-        if(serviceRegister == null && !service.getClass().isInterface()){
+        if (serviceRegister == null && !service.isInterface()) {
             serviceRegister = register(qualifier, (Class<Object>) service);
         }
         return instantiateService(service, forcedScope, serviceRegister);
@@ -57,57 +56,70 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     @SuppressWarnings(value = "unchecked")
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
         ServiceRegister serviceRegister = registeredServices.get(service);
-        if(serviceRegister == null && !service.getClass().isInterface()){
+        if (serviceRegister == null && !service.isInterface()) {
             serviceRegister = register((Class<Object>) service);
+        } else if (serviceRegister == null && service.isInterface()) {
+            serviceRegister = registerForInterface((Class<Object>) service);
         }
         return instantiateService(service, forcedScope, serviceRegister);
     }
 
-    ServiceRegister register(Class<Object> service) {
-        register(service, service, SimpleInjection.Scope.NEW, SimpleInjection.RegisterType.NORMAL);
+    private ServiceRegister registerForInterface(Class<Object> service) {
+        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);
+        InjectionMetaData injectionMetaData = annotationInjection.findInjectionData(service, null, false);
+        register(service, injectionMetaData.getServiceClass(), null, null);        
         return registeredServices.get(service);
     }
-     ServiceRegister register(String namedInstance, Class<Object> service) {
-        register(namedInstance, service, SimpleInjection.Scope.NEW, SimpleInjection.RegisterType.NORMAL);
+
+    ServiceRegister register(Class<Object> service) {
+        register(service, service, SimpleInjection.Scope.NEW, null);
+        return registeredServices.get(service);
+    }
+
+    ServiceRegister register(String namedInstance, Class<Object> service) {
+        register(namedInstance, service, SimpleInjection.Scope.NEW, null);
         return registeredServices.get(service);
     }
 
     public Object createInstance(ServiceRegister serviceRegister) {
-            AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);
-            return annotationInjection.createInstance(serviceRegister.getService());
+        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);
+        return annotationInjection.createInstance(serviceRegister.getService());
     }
 
     @Override
-    public void register(Class anInterface, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public synchronized void register(Class anInterface, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredServices.containsKey(anInterface)) {
             throw new InjectRuntimeException("Can not overwrite an existing service");
         }
-        createInjectionMetaData(service, null);
+        InjectionMetaData injectionMetaData = createInjectionMetaData(service, null);
         registeredServices.put(anInterface,
-                new ServiceRegister(service, null, scope, normalizeType(type))
+                new ServiceRegister(service, null, getAnnotationScope(injectionMetaData), normalizeType(type))
         );
 
     }
 
-
-
     @Override
-    public void register(String namedInstance, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public synchronized void register(String namedInstance, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredNamedServices.containsKey(namedInstance)) {
             throw new InjectRuntimeException("Can not overwrite an existing service");
         }
-        createInjectionMetaData(service, namedInstance);
+        InjectionMetaData injectionMetaData = createInjectionMetaData(service, namedInstance);
         registeredNamedServices.put(namedInstance,
-                new ServiceRegister(service, null, scope, normalizeType(type))
+                new ServiceRegister(service, null, getAnnotationScope(injectionMetaData), normalizeType(type))
         );
 
     }
 
-    private void createInjectionMetaData(Class<Object> service, String qualifier) {
+    private SimpleInjection.Scope getAnnotationScope(InjectionMetaData injectionMetaData) {
+        return injectionMetaData.isSingleton() ? SimpleInjection.Scope.SINGLETON : SimpleInjection.Scope.NEW;
+    }
+
+    private InjectionMetaData createInjectionMetaData(Class<Object> service, String qualifier) {
         AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);
         InjectionMetaData injectionMetaData =
                 annotationInjection.createInjectionMetaData(service, qualifier, InjectionUtils.isProvider(service));
         injectionMetaDataCache.add(injectionMetaData);
+        return injectionMetaData;
     }
 
 

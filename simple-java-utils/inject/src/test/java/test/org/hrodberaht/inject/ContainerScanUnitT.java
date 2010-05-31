@@ -38,7 +38,7 @@ public class ContainerScanUnitT {
 
     @Test
     public void testScanningOfImplementations() {
-        InjectionRegisterScan.resetContainerToDefault();
+        InjectionRegisterScan.activateContainerDefault();
         // Tests scanning and exclusion of single class
         InjectionRegisterScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
 
@@ -53,7 +53,7 @@ public class ContainerScanUnitT {
 
     @Test
     public void testAnnotatedScanningOfImplementations() {
-        InjectionRegisterScan.activateJavaXInjectCompliance();
+        InjectionRegisterScan.activateInternalJavaXInjectAnnotations();
         // Tests scanning and exclusion of single class
         InjectionRegisterScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
         Car aCar = SimpleInjection.get(Car.class);

@@ -24,12 +24,20 @@ package org.hrodberaht.inject;
  */
 public abstract class InjectionRegisterBase {
 
-    public static void activateJavaXInjectCompliance() {
+    public static void activateInternalJavaXInjectAnnotations() {
         SimpleInjection.setContainerInjectAnnotationCompliantMode();
     }
 
-    public static void resetContainerToDefault() {
-        SimpleInjection.resetContainerToDefault();
+    public static void activateContainerDefault() {
+        SimpleInjection.setContainerSimpleInjection();
+    }
+
+    public static void activateContainerSpring() {
+        SimpleInjection.setContainerSpring();
+    }
+
+    public static void activateContainerGuice() {
+        SimpleInjection.setContainerGuice();
     }
 
 }

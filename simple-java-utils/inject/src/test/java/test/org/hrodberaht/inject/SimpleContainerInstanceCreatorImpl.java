@@ -14,7 +14,6 @@
 
 package test.org.hrodberaht.inject;
 
-import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
 import test.org.hrodberaht.inject.testservices.AnyService;
 import test.org.hrodberaht.inject.testservices.AnyServiceDoSomethingImpl;
 
@@ -27,21 +26,21 @@ import test.org.hrodberaht.inject.testservices.AnyServiceDoSomethingImpl;
  * @version 1.0
  * @since 1.0
  */
-public class SimpleContainerInstanceCreatorImpl implements SimpleContainerInstanceCreator {
+public class SimpleContainerInstanceCreatorImpl {
 
 
 
-    @Override
+
     public <T> T getService(Class<T> service) {
         return (T) new AnyServiceDoSomethingImpl();
     }
 
-    @Override
+
     public boolean supportServiceCreation(Class service) {
         return service.isAssignableFrom(AnyService.class);
     }
 
-    @Override
+    
     public boolean supportForcedInstanceScope() {
         return false;
     }

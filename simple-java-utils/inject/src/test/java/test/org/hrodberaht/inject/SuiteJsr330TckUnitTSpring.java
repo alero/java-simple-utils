@@ -14,33 +14,38 @@
 
 package test.org.hrodberaht.inject;
 
+import junit.framework.TestCase;
 import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
+import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.SimpleInjection;
-import org.junit.Test;
+
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Injection
  *
  * @author Robert Alexandersson
- *         2010-maj-29 15:39:23
+ *         2010-maj-28 19:27:43
  * @version 1.0
  * @since 1.0
  */
-public class AnnotationContinerPerformanceUnitT {
 
-    @Test(timeout = 10000)
-    public void testPerformance(){
-        AnnotationContainerUtil.prepareRegister();
-        for(int i=0;i<1000;i++){
-            Car car = SimpleInjection.get(Car.class);
-            // This does loads of fetching from the container, will stress test it a lot.
-            // Form what i could see on the Cobertura report each rotation give about 100 calls.
-            // meaning this will test about 100 000 calls to the SimpleInjection.get method.
+public class SuiteJsr330TckUnitTSpring extends TestCase {
 
-            // On my machine an Intel i7 820 this takes about 0.4 seconds using 1 of 4 CPU's at 75%.
-            // This is not strange as this test is not threaded in any way. 
-            Tck.testsFor(car, false, true);
-        }
+    public static junit.framework.Test suite() {
+
+        InjectionRegisterJava.activateContainerSpring();
+
+        InjectionRegisterJava.registerSpringResource(
+                "classpath:test/org/hrodbreaht/inject/spring/spring-config-tck.xml"
+        );
+
+
+        final Car car = SimpleInjection.get(Car.class);
+        final boolean supportsStatic = false;
+        final boolean supportsPrivate = true;
+
+        return Tck.testsFor(car, supportsStatic, supportsPrivate);
+
     }
 }

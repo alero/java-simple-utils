@@ -14,7 +14,7 @@
 
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
+import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 
 /**
  * Simple Java Utils
@@ -24,10 +24,6 @@ import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
  * @since 1.0
  */
 public class InjectionRegisterJava extends InjectionRegisterBase {
-
-    public static void registerInstanceCreator(SimpleContainerInstanceCreator instanceCreator){
-        SimpleInjection.registerInstanceCreator(instanceCreator);
-    }
 
     public static void finalRegister(Class anInterface, Class service, SimpleInjection.Scope scope){
         SimpleInjection.register(anInterface, service, scope, SimpleInjection.RegisterType.FINAL);
@@ -75,6 +71,12 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
 
     public static void finalRegister(Class anInterface, Class service){
         finalRegister(anInterface, service, SimpleInjection.Scope.NEW);
+    }
+
+
+    public static void registerSpringResource(String... resources){
+        ((SpringInjectionContainer)SimpleInjection.getContainer())
+                .registerConfigResource(resources);
     }
 
     

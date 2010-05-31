@@ -36,7 +36,7 @@ public class SimpleContainerUnitT {
 
     @Before
     public void init() {
-        InjectionRegisterJava.resetContainerToDefault();
+        InjectionRegisterJava.activateContainerDefault();
     }
 
     @Test

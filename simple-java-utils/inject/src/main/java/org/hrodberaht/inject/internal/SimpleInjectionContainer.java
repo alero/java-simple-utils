@@ -16,7 +16,6 @@ package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
 
 /**
  * Simple Java Utils
@@ -29,21 +28,7 @@ import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
 public class SimpleInjectionContainer extends InjectionContainerBase implements InjectionContainer {
 
 
-    private SimpleContainerInstanceCreator simpleContainerInstanceCreator = null;
-
-    public void setSimpleContainerInstanceCreator(SimpleContainerInstanceCreator simpleContainerInstanceCreator) {
-        this.simpleContainerInstanceCreator = simpleContainerInstanceCreator;
-    }
-
-    public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
-        if (simpleContainerInstanceCreator != null) {
-            if (forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()) {
-                throw new InjectRuntimeException("Can not use forced scope for service {0}", service);
-            }
-            if (simpleContainerInstanceCreator.supportServiceCreation(service)) {
-                return simpleContainerInstanceCreator.getService(service);
-            }
-        }
+    public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {        
         if (!registeredNamedServices.containsKey(qualifier)) {
             throw new InjectRuntimeException("Service {0} not registered in SimpleInjection", service);
         }
@@ -102,15 +87,6 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
 
     @SuppressWarnings(value = "unchecked")
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
-
-        if (simpleContainerInstanceCreator != null) {
-            if (forcedScope != null && !simpleContainerInstanceCreator.supportForcedInstanceScope()) {
-                throw new InjectRuntimeException("Can not use forced scope for service {0}", service);
-            }
-            if (simpleContainerInstanceCreator.supportServiceCreation(service)) {
-                return simpleContainerInstanceCreator.getService(service);
-            }
-        }
         ServiceRegister serviceRegister = findServiceImplementation(service);
         return instantiateService(service, forcedScope, serviceRegister);
     }

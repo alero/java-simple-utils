@@ -14,10 +14,11 @@
 
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.creators.SimpleContainerInstanceCreator;
-import org.hrodberaht.inject.internal.AnnotationInjectionContainer;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.SimpleInjectionContainer;
+import org.hrodberaht.inject.internal.annotation.AnnotationInjectionContainer;
+import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
+import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 
 /**
  * Simple Java Utilts - Container
@@ -33,6 +34,7 @@ public class SimpleInjection {
 
     // Perhaps a SimpleInjection basic singleton value instead of static fot these variables ...
     private static InjectionContainer injectionContainer = new SimpleInjectionContainer();
+
 
     public enum Scope {
         SINGLETON, NEW
@@ -90,13 +92,7 @@ public class SimpleInjection {
         return injectionContainer.getService(service, Scope.SINGLETON);
     }
 
-    protected synchronized static void setContainerInjectAnnotationCompliantMode(){
-        SimpleInjection.injectionContainer = new AnnotationInjectionContainer();
-    }
 
-    protected synchronized static void resetContainerToDefault(){
-        SimpleInjection.injectionContainer = new SimpleInjectionContainer();
-    }
 
     protected synchronized static void register(Class anInterface, Class<Object> service, Scope scope, RegisterType type) {
         injectionContainer.register(anInterface, service, scope,  type);
@@ -104,17 +100,26 @@ public class SimpleInjection {
     protected synchronized static void register(String namedInstance, Class<Object> service, Scope scope, RegisterType type) {
         injectionContainer.register(namedInstance, service, scope,  type);   
     }
+    
+    protected synchronized static void setContainerInjectAnnotationCompliantMode(){
+        SimpleInjection.injectionContainer = new AnnotationInjectionContainer();
+    }
 
-    protected synchronized static void registerInstanceCreator(SimpleContainerInstanceCreator simpleContainerInstanceCreator) {
-        if(injectionContainer instanceof SimpleInjectionContainer){
-            SimpleInjectionContainer simpleInjectionContainer = (SimpleInjectionContainer)injectionContainer;
-            simpleInjectionContainer.setSimpleContainerInstanceCreator(simpleContainerInstanceCreator);
-        }else{
-            throw new InjectRuntimeException(
-                    "could not register {0} as there the current InjectionContainer is not SimpleInjectionContainer"
-                    ,simpleContainerInstanceCreator
-            );
-        }
+    protected synchronized static void setContainerSimpleInjection(){
+        SimpleInjection.injectionContainer = new SimpleInjectionContainer();
+    }
+
+    protected synchronized static void setContainerGuice() {
+        SimpleInjection.injectionContainer = new GuiceInjectionContainer() ;
+    }
+
+    protected synchronized static void setContainerSpring() {
+        SimpleInjection.injectionContainer = new SpringInjectionContainer();            
+    }
+
+    protected synchronized static InjectionContainer getContainer(){
+        // TODO: make this support clone or remove
+        return injectionContainer;
     }
 
 }

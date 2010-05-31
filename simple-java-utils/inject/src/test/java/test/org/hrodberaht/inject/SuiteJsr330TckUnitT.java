@@ -42,9 +42,4 @@ public class SuiteJsr330TckUnitT extends TestCase {
         return Tck.testsFor(car, supportsStatic, supportsPrivate);
 
     }
-
-
-
-
-
 }

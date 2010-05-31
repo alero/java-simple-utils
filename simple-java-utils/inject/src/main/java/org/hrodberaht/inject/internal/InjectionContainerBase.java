@@ -34,10 +34,7 @@ public abstract class InjectionContainerBase {
 
 
     @SuppressWarnings(value = "unchecked")
-    protected <T> T instantiateService(Class<T> service, SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister) {
-        if(serviceRegister == null){
-            return (T) createInstance(new ServiceRegister((Class<Object>) service));
-        }
+    protected <T> T instantiateService(Class<T> service, SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister) {        
         if (forcedScope == null && serviceRegister.getScope() == SimpleInjection.Scope.NEW) {
             return (T) createInstance(serviceRegister);
         } else if (SimpleInjection.Scope.NEW == forcedScope) {
@@ -56,6 +53,6 @@ public abstract class InjectionContainerBase {
         return type;
     }
 
-    abstract Object createInstance(ServiceRegister serviceRegister);
+    protected abstract Object createInstance(ServiceRegister serviceRegister);
 
 }
