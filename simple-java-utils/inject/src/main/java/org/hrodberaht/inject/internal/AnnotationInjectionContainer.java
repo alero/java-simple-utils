@@ -47,16 +47,30 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
         if (!registeredNamedServices.containsKey(service) && service.getClass().isInterface()) {
             throw new InjectRuntimeException("Service {0} not registered in SimpleInjection and is an interface", service);
         }
-        ServiceRegister serviceRegister = registeredNamedServices.get(service);
+        ServiceRegister serviceRegister = registeredNamedServices.get(qualifier);
+        if(serviceRegister == null && !service.getClass().isInterface()){
+            serviceRegister = register(qualifier, (Class<Object>) service);
+        }
         return instantiateService(service, forcedScope, serviceRegister);
     }
 
     @SuppressWarnings(value = "unchecked")
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
         ServiceRegister serviceRegister = registeredServices.get(service);
+        if(serviceRegister == null && !service.getClass().isInterface()){
+            serviceRegister = register((Class<Object>) service);
+        }
         return instantiateService(service, forcedScope, serviceRegister);
     }
 
+    ServiceRegister register(Class<Object> service) {
+        register(service, service, SimpleInjection.Scope.NEW, SimpleInjection.RegisterType.NORMAL);
+        return registeredServices.get(service);
+    }
+     ServiceRegister register(String namedInstance, Class<Object> service) {
+        register(namedInstance, service, SimpleInjection.Scope.NEW, SimpleInjection.RegisterType.NORMAL);
+        return registeredServices.get(service);
+    }
 
     public Object createInstance(ServiceRegister serviceRegister) {
             AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);

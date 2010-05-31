@@ -48,6 +48,9 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
             throw new InjectRuntimeException("Service {0} not registered in SimpleInjection", service);
         }
         ServiceRegister serviceRegister = registeredNamedServices.get(qualifier);
+        if(serviceRegister == null && !service.getClass().isInterface()){
+            serviceRegister = register((Class<Object>) service);
+        }
         return instantiateService(service, forcedScope, serviceRegister);
     }
 
@@ -146,7 +149,11 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
                 new ServiceRegister(service, createInstance(new ServiceRegister(service)), scope, normalizeType(type))
         );
     }
-
+    
+    ServiceRegister register(Class<Object> service) {
+        register(service, service, SimpleInjection.Scope.NEW, SimpleInjection.RegisterType.NORMAL);
+        return registeredServices.get(service);
+    }
 
     public Object createInstance(ServiceRegister serviceRegister) {
         try {

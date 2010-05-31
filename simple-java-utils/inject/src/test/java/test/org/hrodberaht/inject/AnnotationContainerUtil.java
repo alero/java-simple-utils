@@ -19,10 +19,8 @@ import org.atinject.tck.auto.Convertible;
 import org.atinject.tck.auto.Drivers;
 import org.atinject.tck.auto.DriversSeat;
 import org.atinject.tck.auto.Engine;
-import org.atinject.tck.auto.FuelTank;
 import org.atinject.tck.auto.Seat;
 import org.atinject.tck.auto.V8Engine;
-import org.atinject.tck.auto.accessories.Cupholder;
 import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.InjectionRegisterJava;
 
@@ -41,10 +39,10 @@ public class AnnotationContainerUtil {
 
         InjectionRegisterJava.register(Car.class, Convertible.class);
         InjectionRegisterJava.register(Engine.class, V8Engine.class);
-        InjectionRegisterJava.register(Cupholder.class);
+        // InjectionRegisterJava.register(Cupholder.class);
         InjectionRegisterJava.register("spare", SpareTire.class);        
-        InjectionRegisterJava.register(FuelTank.class);
-        InjectionRegisterJava.register(Seat.class);        
+        // InjectionRegisterJava.register(FuelTank.class);
+        InjectionRegisterJava.register(Seat.class);
         InjectionRegisterJava.register(Drivers.class, DriversSeat.class);
     }
 }

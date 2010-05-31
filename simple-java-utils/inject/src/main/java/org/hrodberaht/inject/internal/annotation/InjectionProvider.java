@@ -29,7 +29,7 @@ import javax.inject.Provider;
 public class InjectionProvider implements Provider {
 
     private Class serviceClass;
-    private String qualifierName;    
+    private String qualifierName = null;    
 
     public InjectionProvider(Class serviceClass, String qualifierName) {
         this.serviceClass = serviceClass;

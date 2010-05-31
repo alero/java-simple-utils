@@ -139,6 +139,7 @@ public class AnnotationInjection {
         }
 
         InjectionMetaData injectionMetaData = new InjectionMetaData(service, qualifier, provider);
+        injectionMetaData.setSingleton(InjectionUtils.isSingleton(injectionMetaData.getServiceClass()));
         injectionCacheHandler.put(injectionMetaData);
         Constructor constructor = InjectionUtils.findConstructor(service);
         injectionMetaData.setConstructor(constructor);        
