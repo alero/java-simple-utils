@@ -20,7 +20,7 @@ public class SpringInjectionContainer extends InjectionContainerBase implements 
     // private Map<Class, Class> serviceRegister = new HashMap<Class, Class>();
     private ApplicationContext context = null;
 
-    public SpringInjectionContainer(){
+    public SpringInjectionContainer() {
 
         /*String[] beannames = context.getBeanDefinitionNames();
         for(String beanname:beannames){
@@ -34,7 +34,7 @@ public class SpringInjectionContainer extends InjectionContainerBase implements 
         }*/
     }
 
-    public void registerConfigResource(String... locations){
+    public void registerConfigResource(String... locations) {
         context = new ClassPathXmlApplicationContext(locations);
     }
 

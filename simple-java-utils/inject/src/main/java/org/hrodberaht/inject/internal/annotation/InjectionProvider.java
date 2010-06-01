@@ -26,12 +26,12 @@ import javax.inject.Provider;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionProvider implements Provider {
+public class InjectionProvider<T> implements Provider {
 
-    private Class serviceClass;
+    private Class<T> serviceClass;
     private String qualifierName = null;    
 
-    public InjectionProvider(Class serviceClass, String qualifierName) {
+    public InjectionProvider(Class<T> serviceClass, String qualifierName) {
         this.serviceClass = serviceClass;
         this.qualifierName = qualifierName;
     }
