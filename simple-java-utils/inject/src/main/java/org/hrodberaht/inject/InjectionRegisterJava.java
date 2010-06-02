@@ -47,7 +47,7 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
 
     public static void register(Class anInterface, Class service){
         if(anInterface.isAnnotation()){
-            register(anInterface.getSimpleName(), service , SimpleInjection.Scope.NEW);
+            register(anInterface.getName(), service , SimpleInjection.Scope.NEW);
         }else {
             register(anInterface, service, SimpleInjection.Scope.NEW);
         }

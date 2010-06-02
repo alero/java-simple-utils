@@ -106,10 +106,9 @@ public class AnnotationInjection {
         }
     }
 
-    private Object innerCreateInstance(final InjectionMetaData dependency) {
+    private Object innerCreateInstance(InjectionMetaData dependency) {
         if (dependency.isProvider()) {
-            InjectionMetaData injectionMetaData =
-                    findInjectionData(dependency, false);
+            InjectionMetaData injectionMetaData = findInjectionData(dependency, false);
             return new InjectionProvider(injectionMetaData.getServiceClass(), injectionMetaData.getQualifierName());
         }
         return createInstance(dependency);
@@ -130,7 +129,8 @@ public class AnnotationInjection {
     }
 
     public InjectionMetaData findInjectionData(Class<Object> service, String qualifier, boolean provider) {
-        InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(new InjectionMetaData(service, qualifier, provider));
+        InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(
+                new InjectionMetaData(service, qualifier, provider));
         if(cachedInjectionMetaData != null){
             if(cachedInjectionMetaData.isPreDefined()){
                 resolvePredefinedService(cachedInjectionMetaData);
@@ -194,7 +194,6 @@ public class AnnotationInjection {
         return !ReflectionUtils.isStatic(field)
              && !ReflectionUtils.isFinal(field)
              && field.isAnnotationPresent(InjectionUtils.INJECT);
-
     }
 
     private List<InjectionMetaData> findDependencies(Constructor constructor) {

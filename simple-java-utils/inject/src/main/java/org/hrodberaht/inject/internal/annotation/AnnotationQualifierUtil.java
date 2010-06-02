@@ -60,7 +60,7 @@ public class AnnotationQualifierUtil {
             }
             return value;
         } else {
-            return annotation.annotationType().getSimpleName();
+            return annotation.annotationType().getName();
         }
     }
 
