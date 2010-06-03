@@ -15,7 +15,9 @@
 package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.internal.annotation.InjectionKey;
 
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 
 /**
@@ -29,25 +31,32 @@ import java.util.HashMap;
 public abstract class InjectionContainerBase {
 
 
-    protected HashMap<Object, ServiceRegister> registeredServices = new HashMap<Object, ServiceRegister>();
-    protected HashMap<String, ServiceRegister> registeredNamedServices = new HashMap<String, ServiceRegister>();
+    protected HashMap<Class, ServiceRegister> registeredServices = new HashMap<Class, ServiceRegister>();
+    protected HashMap<InjectionKey, ServiceRegister> registeredNamedServices = new HashMap<InjectionKey, ServiceRegister>();
 
+    protected InjectionKey getNamedKey(String qualifier, Class service) {
+        return new InjectionKey(qualifier, service);
+    }
+
+    protected InjectionKey getAnnotatedKey(Class<? extends Annotation> qualifier, Class service) {
+        return new InjectionKey(qualifier, service);
+    }
 
     @SuppressWarnings(value = "unchecked")
-    protected <T> T instantiateService(Class<T> service, SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister) {        
+    protected <T> T instantiateService(Class<T> service, SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister) {
         if (forcedScope == null && serviceRegister.getScope() == SimpleInjection.Scope.NEW) {
             return (T) createInstance(serviceRegister);
         } else if (SimpleInjection.Scope.NEW == forcedScope) {
             return (T) createInstance(serviceRegister);
         }
-        if(serviceRegister.getSingleton() == null){
-            serviceRegister.setSingleton(createInstance(serviceRegister));               
+        if (serviceRegister.getSingleton() == null) {
+            serviceRegister.setSingleton(createInstance(serviceRegister));
         }
         return (T) serviceRegister.getSingleton();
     }
 
     protected static SimpleInjection.RegisterType normalizeType(SimpleInjection.RegisterType type) {
-        if(type == SimpleInjection.RegisterType.OVERRIDE_NORMAL){
+        if (type == SimpleInjection.RegisterType.OVERRIDE_NORMAL) {
             return SimpleInjection.RegisterType.NORMAL;
         }
         return type;

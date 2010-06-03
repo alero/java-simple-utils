@@ -1,11 +1,15 @@
 package org.hrodberaht.inject.internal.spring;
 
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.creators.annotation.RegistrationModule;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.ServiceRegister;
+import org.hrodberaht.inject.internal.annotation.InjectionKey;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Simple Java Utils
@@ -44,18 +48,28 @@ public class SpringInjectionContainer extends InjectionContainerBase implements 
     }
 
     @Override
+    public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
         return context.getBean(service);
     }
 
     @Override
-    public void register(Class anInterface, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public void register(Class anInterface, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         // TODO: implements Spring registration support
     }
 
     @Override
-    public void register(String namedInstance, Class<Object> service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public void register(InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         // TODO: implements Spring registration support
+    }
+
+    @Override
+    public void register(RegistrationModule... module) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

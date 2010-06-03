@@ -44,7 +44,7 @@ public class AnnotationInjection {
     }
 
 
-    public Object createInstance(Class<Object> service) {
+    public Object createInstance(Class service) {
         InjectionMetaData injectionMetaData =
                 findInjectionData(service, null, InjectionUtils.isProvider(service));
 
@@ -114,7 +114,7 @@ public class AnnotationInjection {
         return createInstance(dependency);
     }
 
-    public InjectionMetaData createInjectionMetaData(Class<Object> service, String qualifier, boolean provider) {
+    public InjectionMetaData createInjectionMetaData(Class service, String qualifier, boolean provider) {
         InjectionMetaData injectionMetaData = new InjectionMetaData(service, qualifier, provider);       
         Constructor constructor = InjectionUtils.findConstructor(service);
         injectionMetaData.setConstructor(constructor);
@@ -128,7 +128,7 @@ public class AnnotationInjection {
         return findInjectionData(metaData.getServiceClass(), metaData.getQualifierName(), provider);           
     }
 
-    public InjectionMetaData findInjectionData(Class<Object> service, String qualifier, boolean provider) {
+    public InjectionMetaData findInjectionData(Class service, String qualifier, boolean provider) {
         InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(
                 new InjectionMetaData(service, qualifier, provider));
         if(cachedInjectionMetaData != null){
@@ -159,7 +159,7 @@ public class AnnotationInjection {
         cachedInjectionMetaData.setPreDefined(false);
     }
 
-    private List<InjectionPoint> findAllInjectionPoints(Class<Object> service){
+    private List<InjectionPoint> findAllInjectionPoints(Class service){
         List<InjectionPoint> injectionPoints = new ArrayList<InjectionPoint>();
         List<Method> allMethods = ReflectionUtils.findMethods(service);
         List<Member> allMembers = ReflectionUtils.findMembers(service);

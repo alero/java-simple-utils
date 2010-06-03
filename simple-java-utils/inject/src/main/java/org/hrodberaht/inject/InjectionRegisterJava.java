@@ -14,6 +14,8 @@
 
 package org.hrodberaht.inject;
 
+import org.hrodberaht.inject.creators.annotation.RegistrationModule;
+import org.hrodberaht.inject.internal.annotation.InjectionKey;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 
 /**
@@ -38,7 +40,7 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
     }
 
     public static void register(String namedService, Class service, SimpleInjection.Scope scope){
-        SimpleInjection.register(namedService, service, scope, SimpleInjection.RegisterType.NORMAL);
+        SimpleInjection.register(new InjectionKey(namedService, service), service, scope, SimpleInjection.RegisterType.NORMAL);
     }
 
     public static void registerDefault(Class anInterface, Class service, SimpleInjection.Scope scope){
@@ -80,8 +82,7 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
     }
 
 
-    
-
-
-
+    public static void register(RegistrationModule module) {
+        SimpleInjection.register(module);   
+    }
 }

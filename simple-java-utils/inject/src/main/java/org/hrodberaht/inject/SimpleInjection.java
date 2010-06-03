@@ -14,11 +14,15 @@
 
 package org.hrodberaht.inject;
 
+import org.hrodberaht.inject.creators.annotation.RegistrationModule;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.SimpleInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.AnnotationInjectionContainer;
+import org.hrodberaht.inject.internal.annotation.InjectionKey;
 import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Simple Java Utilts - Container
@@ -72,6 +76,20 @@ public class SimpleInjection {
     }
 
     /**
+     * Will retrieve a service as it has been registered, scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
+     *
+     * @param service the interface service intended for creation
+     * @param qualifier the named service intended for creation
+     * @return an instance of the interface requested will be created/fetched and returned from the internal register
+     */
+    public static <T> T get(Class<T> service, Class<? extends Annotation> qualifier) {
+        if(qualifier == null){
+            return injectionContainer.getService(service, null);
+        }
+        return injectionContainer.getService(service, null, qualifier);
+    }
+
+    /**
      * Will retrieve a service and force the scope to {@link SimpleInjection.Scope#NEW}
      *
      * @param service the interface service intended for creation
@@ -94,11 +112,16 @@ public class SimpleInjection {
 
 
 
-    protected synchronized static void register(Class anInterface, Class<Object> service, Scope scope, RegisterType type) {
+    protected synchronized static void register(Class anInterface, Class service, Scope scope, RegisterType type) {
         injectionContainer.register(anInterface, service, scope,  type);
     }
-    protected synchronized static void register(String namedInstance, Class<Object> service, Scope scope, RegisterType type) {
-        injectionContainer.register(namedInstance, service, scope,  type);   
+
+    protected synchronized static void register(InjectionKey key, Class service, Scope scope, RegisterType type) {
+        injectionContainer.register(key, service, scope,  type);
+    }
+
+    public static void register(RegistrationModule module) {
+        injectionContainer.register(module);
     }
     
     protected synchronized static void setContainerInjectAnnotationCompliantMode(){

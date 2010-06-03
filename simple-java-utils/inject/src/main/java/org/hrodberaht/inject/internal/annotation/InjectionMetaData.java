@@ -42,7 +42,7 @@ public class InjectionMetaData {
     private List<InjectionMetaData> constructorDependencies;
     private List<InjectionPoint> injectionPoints;
 
-    public InjectionMetaData(Class<Object> serviceClass, String qualifierName, boolean provider) {
+    public InjectionMetaData(Class serviceClass, String qualifierName, boolean provider) {
         this.serviceClass = serviceClass;
         this.qualifierName = qualifierName;
         this.provider = provider;
