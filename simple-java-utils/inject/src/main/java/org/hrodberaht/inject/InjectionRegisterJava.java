@@ -14,7 +14,7 @@
 
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
+import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 

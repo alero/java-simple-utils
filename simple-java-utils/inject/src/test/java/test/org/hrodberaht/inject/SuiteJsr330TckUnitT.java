@@ -27,7 +27,7 @@ import org.atinject.tck.auto.V8Engine;
 import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
+import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 
 
 /**

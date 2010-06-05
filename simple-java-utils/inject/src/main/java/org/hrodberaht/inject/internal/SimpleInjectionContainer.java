@@ -16,7 +16,7 @@ package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
+import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 
 import java.lang.annotation.Annotation;

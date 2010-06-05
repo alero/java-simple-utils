@@ -16,8 +16,8 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationInstance;
-import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
+import org.hrodberaht.inject.register.annotation.AnnotationRegistrationInstance;
+import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.ServiceRegister;
