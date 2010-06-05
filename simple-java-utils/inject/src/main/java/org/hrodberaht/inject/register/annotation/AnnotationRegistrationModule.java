@@ -1,5 +1,7 @@
 package org.hrodberaht.inject.register.annotation;
 
+import org.hrodberaht.inject.register.RegistrationModule;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +14,7 @@ import java.util.Map;
  * @version 1.0
  * @since 1.0
  */
-public abstract class AnnotationRegistrationModule {
+public abstract class AnnotationRegistrationModule implements RegistrationModule {
 
 
     private Map<Class, AnnotationRegistrationInstance> registrations = new HashMap<Class, AnnotationRegistrationInstance>();

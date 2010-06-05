@@ -16,6 +16,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.register.RegistrationModule;
 import org.hrodberaht.inject.register.annotation.AnnotationRegistrationInstance;
 import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.InjectionContainer;
@@ -100,9 +101,10 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
     @Override
-    public void register(AnnotationRegistrationModule... modules) {
-        for(AnnotationRegistrationModule module:modules){
-            for(AnnotationRegistrationInstance instance: module.getRegistrations()){
+    public void register(RegistrationModule... modules) {
+        for(RegistrationModule module:modules){
+            AnnotationRegistrationModule amodule = (AnnotationRegistrationModule)module;
+            for(AnnotationRegistrationInstance instance: amodule.getRegistrations()){
                 InjectionKey key = instance.getInjectionKey();
                 createAnStoreRegistration(instance, key);
             }

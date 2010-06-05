@@ -16,8 +16,8 @@ package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
+import org.hrodberaht.inject.register.RegistrationModule;
 
 import java.lang.annotation.Annotation;
 
@@ -70,7 +70,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
     }
 
     @Override
-    public void register(AnnotationRegistrationModule... modules) {
+    public void register(RegistrationModule... modules) {
 
     }
 
@@ -138,6 +138,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
             if (service.isInterface()) { // TODO support this for classes as well? = inheritance support
                 for (ServiceRegister serviceRegister : registeredServices.values()) {
                     if (service.isAssignableFrom(serviceRegister.getService())) {
+                        // TODO first make sure there is only one usable service
                         return serviceRegister;
                     }
                 }
@@ -151,7 +152,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
 
 
     ServiceRegister register(InjectionKey key, Class<Object> service) {
-        register(service, service, SimpleInjection.Scope.NEW, SimpleInjection.RegisterType.NORMAL);
+        register(key.getServiceDefinition(), service, SimpleInjection.Scope.NEW, SimpleInjection.RegisterType.NORMAL);
         return registeredServices.get(service);
     }
 

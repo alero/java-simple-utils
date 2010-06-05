@@ -14,13 +14,13 @@
 
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.SimpleInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.AnnotationInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
+import org.hrodberaht.inject.register.RegistrationModule;
 
 import java.lang.annotation.Annotation;
 
@@ -120,7 +120,7 @@ public class SimpleInjection {
         injectionContainer.register(key, service, scope,  type);
     }
 
-    public static void register(AnnotationRegistrationModule module) {
+    public static void register(RegistrationModule module) {
         injectionContainer.register(module);
     }
     

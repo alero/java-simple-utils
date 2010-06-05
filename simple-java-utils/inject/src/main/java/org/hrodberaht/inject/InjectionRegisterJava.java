@@ -39,8 +39,8 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
         SimpleInjection.register(anInterface, service, scope, SimpleInjection.RegisterType.NORMAL);
     }
 
-    public static void register(String namedService, Class service, SimpleInjection.Scope scope){
-        SimpleInjection.register(new InjectionKey(namedService, service), service, scope, SimpleInjection.RegisterType.NORMAL);
+    public static void register(String namedService, Class anInterface, Class service, SimpleInjection.Scope scope){
+        SimpleInjection.register(new InjectionKey(namedService, anInterface), service, scope, SimpleInjection.RegisterType.NORMAL);
     }
 
     public static void registerDefault(Class anInterface, Class service, SimpleInjection.Scope scope){
@@ -48,19 +48,15 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
     }
 
     public static void register(Class anInterface, Class service){
-        if(anInterface.isAnnotation()){
-            register(anInterface.getName(), service , SimpleInjection.Scope.NEW);
-        }else {
-            register(anInterface, service, SimpleInjection.Scope.NEW);
-        }
+        register(anInterface, service, SimpleInjection.Scope.NEW);        
     }
 
     public static void register(Class service) {
         register(service, service, SimpleInjection.Scope.NEW);
     }
 
-    public static void register(String namedService, Class service) {
-        register(namedService, service, SimpleInjection.Scope.NEW);
+    public static void register(String namedService, Class anInterface, Class service) {
+        register(namedService, anInterface, service, SimpleInjection.Scope.NEW);
     }
 
     public static void registerDefault(Class anInterface, Class service){

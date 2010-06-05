@@ -64,7 +64,7 @@ public class SimpleContainerUnitT {
 
     @Test
     public void testNamedNothingServiceWrapping() {
-        InjectionRegisterJava.register("myAnyService", AnyServiceDoNothingImpl.class);
+        InjectionRegisterJava.register("myAnyService", AnyService.class, AnyServiceDoNothingImpl.class);
 
         AnyService anyService = SimpleInjection.get(AnyService.class, "myAnyService");
 
