@@ -16,12 +16,13 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.internal.InjectionContainer;
+import org.hrodberaht.inject.internal.InjectionContainerBase;
+import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
+import org.hrodberaht.inject.internal.ServiceRegister;
 import org.hrodberaht.inject.register.RegistrationModule;
 import org.hrodberaht.inject.register.annotation.AnnotationRegistrationInstance;
 import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
-import org.hrodberaht.inject.internal.InjectionContainer;
-import org.hrodberaht.inject.internal.InjectionContainerBase;
-import org.hrodberaht.inject.internal.ServiceRegister;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class AnnotationInjectionContainer extends InjectionContainerBase implements InjectionContainer {
+public class AnnotationInjectionContainer extends InjectionContainerBase implements InjectionContainer, RegistrationInjectionContainer {
 
     private List<InjectionMetaData> injectionMetaDataCache = new ArrayList<InjectionMetaData>();
     private SimpleInjection container;

@@ -14,9 +14,11 @@
 
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
+import com.google.inject.Module;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
+import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
+import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 
 /**
  * Simple Java Utils
@@ -103,7 +105,14 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         return this;
     }
 
+    public InjectionRegisterJava registerGuiceModule(Module... resources) {
+        ((GuiceInjectionContainer) injection.getContainer())
+                .registerModule(resources);
+        return this;
+    }
+
     public SimpleInjection getInjectionContainer() {
         return injection;
     }
+
 }

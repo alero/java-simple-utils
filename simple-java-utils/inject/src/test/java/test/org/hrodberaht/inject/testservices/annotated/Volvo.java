@@ -40,6 +40,9 @@ public class Volvo implements Car{
         this.spareTire = spareTire;
     }
 
+    public Volvo() {        
+    }
+
     @Override
     public String brand() {
         return "volvo";

@@ -15,6 +15,7 @@
 package org.hrodberaht.inject;
 
 import org.hrodberaht.inject.internal.InjectionContainer;
+import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
 import org.hrodberaht.inject.internal.SimpleInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.AnnotationInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
@@ -113,15 +114,24 @@ public class SimpleInjection {
 
 
     protected synchronized void register(Class anInterface, Class service, Scope scope, RegisterType type) {
-        injectionContainer.register(anInterface, service, scope,  type);
+        if(injectionContainer instanceof RegistrationInjectionContainer){
+            RegistrationInjectionContainer container = (RegistrationInjectionContainer)injectionContainer;
+            container.register(anInterface, service, scope,  type);
+        }
     }
 
     protected synchronized void register(InjectionKey key, Class service, Scope scope, RegisterType type) {
-        injectionContainer.register(key, service, scope,  type);
+        if(injectionContainer instanceof RegistrationInjectionContainer){
+            RegistrationInjectionContainer container = (RegistrationInjectionContainer)injectionContainer;
+            container.register(key, service, scope,  type);
+        }
     }
 
     public void register(RegistrationModule module) {
-        injectionContainer.register(module);
+        if(injectionContainer instanceof RegistrationInjectionContainer){
+            RegistrationInjectionContainer container = (RegistrationInjectionContainer)injectionContainer;
+            container.register(module);
+        }
     }
     
     protected synchronized void setContainerInjectAnnotationCompliantMode(){

@@ -29,7 +29,7 @@ import java.lang.annotation.Annotation;
  * @version 1.0
  * @since 1.0
  */
-public class SimpleInjectionContainer extends InjectionContainerBase implements InjectionContainer {
+public class SimpleInjectionContainer extends InjectionContainerBase implements InjectionContainer, RegistrationInjectionContainer {
 
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
