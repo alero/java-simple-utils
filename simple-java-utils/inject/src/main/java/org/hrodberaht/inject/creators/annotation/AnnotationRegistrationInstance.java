@@ -12,24 +12,24 @@ import java.lang.annotation.Annotation;
  * @version 1.0
  * @since 1.0
  */
-public class RegistrationInstance {
+public class AnnotationRegistrationInstance {
 
     private Class theInterface;
     private Class theService;
     private String name;
     private Class<? extends Annotation> annotation;
 
-    public RegistrationInstance(Class theInterface) {
+    public AnnotationRegistrationInstance(Class theInterface) {
         this.theInterface = theInterface;
         this.theService = theInterface;
     }
 
-    public RegistrationInstance annotated(Class<? extends Annotation> annotation) {
+    public AnnotationRegistrationInstance annotated(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
         return this;
     }
 
-    public RegistrationInstance namned(String named) {
+    public AnnotationRegistrationInstance namned(String named) {
         this.name = named;
         return this;
     }

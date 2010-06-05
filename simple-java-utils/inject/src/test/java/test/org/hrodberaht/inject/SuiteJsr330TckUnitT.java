@@ -27,7 +27,7 @@ import org.atinject.tck.auto.V8Engine;
 import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.annotation.RegistrationModule;
+import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
 
 
 /**
@@ -45,16 +45,16 @@ public class SuiteJsr330TckUnitT extends TestCase {
 
         InjectionRegisterJava.activateInternalJavaXInjectAnnotations();
 
-        InjectionRegisterJava.register(Car.class, Convertible.class);
-        InjectionRegisterJava.register(Engine.class, V8Engine.class);
-        InjectionRegisterJava.register("spare", SpareTire.class);
-        InjectionRegisterJava.register(Drivers.class, DriversSeat.class);
+        // InjectionRegisterJava.register(Car.class, Convertible.class);
+        // InjectionRegisterJava.register(Engine.class, V8Engine.class);
+        // InjectionRegisterJava.register("spare", SpareTire.class);
+        // InjectionRegisterJava.register(Drivers.class, DriversSeat.class);
 
-        RegistrationModule module = new RegistrationModule(){
+        AnnotationRegistrationModule module = new AnnotationRegistrationModule(){
             @Override
             public void registrations() {
-                register(Car.class).with(V8Engine.class);
-                register(Engine.class).with(Convertible.class);
+                register(Car.class).with(Convertible.class);
+                register(Engine.class).with(V8Engine.class);
                 register(Tire.class).namned("spare").with(SpareTire.class);
                 register(Seat.class).annotated(Drivers.class).with(DriversSeat.class);
             }

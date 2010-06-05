@@ -15,7 +15,7 @@
 package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.annotation.RegistrationModule;
+import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 
 import java.lang.annotation.Annotation;
@@ -38,7 +38,7 @@ public interface InjectionContainer {
                   SimpleInjection.Scope scope, SimpleInjection.RegisterType type);
     void register(InjectionKey key, Class service,
                   SimpleInjection.Scope scope, SimpleInjection.RegisterType type);
-    void register(RegistrationModule... modules);
+    void register(AnnotationRegistrationModule... modules);
 
 
 }

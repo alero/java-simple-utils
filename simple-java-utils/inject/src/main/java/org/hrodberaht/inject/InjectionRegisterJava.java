@@ -14,7 +14,7 @@
 
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.creators.annotation.RegistrationModule;
+import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 
@@ -82,7 +82,7 @@ public class InjectionRegisterJava extends InjectionRegisterBase {
     }
 
 
-    public static void register(RegistrationModule module) {
+    public static void register(AnnotationRegistrationModule module) {
         SimpleInjection.register(module);   
     }
 }

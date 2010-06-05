@@ -1,7 +1,7 @@
 package org.hrodberaht.inject.internal.spring;
 
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.annotation.RegistrationModule;
+import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.ServiceRegister;
@@ -68,7 +68,7 @@ public class SpringInjectionContainer extends InjectionContainerBase implements 
     }
 
     @Override
-    public void register(RegistrationModule... module) {
+    public void register(AnnotationRegistrationModule... module) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

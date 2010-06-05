@@ -4,7 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.creators.annotation.RegistrationModule;
+import org.hrodberaht.inject.creators.annotation.AnnotationRegistrationModule;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.ServiceRegister;
@@ -50,7 +50,7 @@ public class GuiceInjectionContainer extends InjectionContainerBase implements I
     }
 
     @Override
-    public void register(RegistrationModule... modules) {
+    public void register(AnnotationRegistrationModule... modules) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
