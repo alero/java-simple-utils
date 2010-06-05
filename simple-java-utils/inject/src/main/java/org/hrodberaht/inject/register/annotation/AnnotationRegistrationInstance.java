@@ -1,4 +1,4 @@
-package org.hrodberaht.inject.creators.annotation;
+package org.hrodberaht.inject.register.annotation;
 
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 

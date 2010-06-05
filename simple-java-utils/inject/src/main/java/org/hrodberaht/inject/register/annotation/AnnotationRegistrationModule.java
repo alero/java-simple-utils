@@ -1,4 +1,4 @@
-package org.hrodberaht.inject.creators.annotation;
+package org.hrodberaht.inject.register.annotation;
 
 import java.util.Collection;
 import java.util.HashMap;
