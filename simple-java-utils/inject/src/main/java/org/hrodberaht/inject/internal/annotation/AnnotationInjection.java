@@ -14,6 +14,7 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
+import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -37,10 +38,12 @@ public class AnnotationInjection {
 
     
     private InjectionCacheHandler injectionCacheHandler = null;
+    private SimpleInjection container;
     
 
-    public AnnotationInjection(List<InjectionMetaData> injectionMetaDataCache) {
+    public AnnotationInjection(List<InjectionMetaData> injectionMetaDataCache, SimpleInjection container) {
         injectionCacheHandler = new InjectionCacheHandler(injectionMetaDataCache);
+        this.container = container;
     }
 
 
@@ -109,7 +112,7 @@ public class AnnotationInjection {
     private Object innerCreateInstance(InjectionMetaData dependency) {
         if (dependency.isProvider()) {
             InjectionMetaData injectionMetaData = findInjectionData(dependency, false);
-            return new InjectionProvider(injectionMetaData.getServiceClass(), injectionMetaData.getQualifierName());
+            return new InjectionProvider(container, injectionMetaData.getServiceClass(), injectionMetaData.getQualifierName());
         }
         return createInstance(dependency);
     }

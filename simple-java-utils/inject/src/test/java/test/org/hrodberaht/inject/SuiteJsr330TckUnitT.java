@@ -43,7 +43,8 @@ public class SuiteJsr330TckUnitT extends TestCase {
 
     public static junit.framework.Test suite() {
 
-        InjectionRegisterJava.activateInternalJavaXInjectAnnotations();
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerJavaXInject();
 
         // InjectionRegisterJava.register(Car.class, Convertible.class);
         // InjectionRegisterJava.register(Engine.class, V8Engine.class);
@@ -60,9 +61,9 @@ public class SuiteJsr330TckUnitT extends TestCase {
             }
         };
 
-        InjectionRegisterJava.register(module);
+        SimpleInjection injection = registerJava.register(module).getInjectionContainer();
 
-        final Car car = SimpleInjection.get(Car.class);
+        final Car car = injection.get(Car.class);
         final boolean supportsStatic = false;
         final boolean supportsPrivate = true;
 

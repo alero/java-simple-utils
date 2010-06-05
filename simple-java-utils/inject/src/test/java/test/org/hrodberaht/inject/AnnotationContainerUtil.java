@@ -23,6 +23,7 @@ import org.atinject.tck.auto.Tire;
 import org.atinject.tck.auto.V8Engine;
 import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.InjectionRegisterJava;
+import org.hrodberaht.inject.SimpleInjection;
 
 /**
  * Simple Java Utils
@@ -34,15 +35,18 @@ import org.hrodberaht.inject.InjectionRegisterJava;
  */
 public class AnnotationContainerUtil {
 
-    public static void prepareRegister() {
-        InjectionRegisterJava.activateInternalJavaXInjectAnnotations();
+    public static SimpleInjection prepareRegister() {
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerJavaXInject();
 
-        InjectionRegisterJava.register(Car.class, Convertible.class);
-        InjectionRegisterJava.register(Engine.class, V8Engine.class);
+        registerJava.register(Car.class, Convertible.class);
+        registerJava.register(Engine.class, V8Engine.class);
         // InjectionRegisterJava.register(Cupholder.class);
-        InjectionRegisterJava.register("spare", Tire.class, SpareTire.class);        
+        registerJava.register("spare", Tire.class, SpareTire.class);
         // InjectionRegisterJava.register(FuelTank.class);
         // InjectionRegisterJava.register(Seat.class);
-        InjectionRegisterJava.register(Drivers.class, DriversSeat.class);
+        registerJava.register(Drivers.class, DriversSeat.class);
+
+        return registerJava.getInjectionContainer();
     }
 }

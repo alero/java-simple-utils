@@ -15,7 +15,6 @@
 package test.org.hrodberaht.inject;
 
 
-import org.hrodberaht.inject.InjectionRegisterJava;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,9 +30,11 @@ import static junit.framework.Assert.assertEquals;
  */
 public class SimpleContainerInstanceCreatorUnitT {
 
+
+
     @Before
     public void init(){
-        InjectionRegisterJava.activateContainerDefault();
+        // InjectionRegisterJava.activateContainerDefault();
         // InjectionRegisterJava.registerInstanceCreator(new SimpleContainerInstanceCreatorImpl());
     }
 

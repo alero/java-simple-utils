@@ -28,54 +28,55 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionRegisterScan extends InjectionRegisterBase {
+public class InjectionRegisterScan extends InjectionRegisterJava {
 
-    public static void registerBasePackageScan(String packagename) {
-        Class[] clazzs = getClasses(packagename);        
-        for(Class aClazz:clazzs){
-            if(
-                    !aClazz.isInterface()
-                    && !aClazz.isAnnotation()
-            ){
-                InjectionRegisterJava.register(aClazz);
-            }
+    public InjectionRegisterScan registerBasePackageScan(String packagename) {
+        Class[] clazzs = getClasses(packagename);
+        for (Class aClazz : clazzs) {
+            createRegistration(aClazz);
         }
+        return this;
     }
 
-    public static void registerBasePackageScan(String packagename, Class... manuallyexluded) {
+    public InjectionRegisterScan registerBasePackageScan(String packagename, Class... manuallyexluded) {
         Class[] clazzs = getClasses(packagename);
         List<Class> listOfClasses = new ArrayList<Class>(clazzs.length);
 
         // remove the manual excludes
-        for(Class aClazz:clazzs){
-            if(!manuallyExluded(aClazz, manuallyexluded)){
+        for (Class aClazz : clazzs) {
+            if (!manuallyExluded(aClazz, manuallyexluded)) {
                 listOfClasses.add(aClazz);
             }
         }
-        for(Class aClazz:listOfClasses){
-            if(
-                    !aClazz.isInterface()
-                    && !aClazz.isAnnotation()
-            ){
-                InjectionRegisterJava.register(aClazz);
-            }
+        for (Class aClazz : listOfClasses) {
+            createRegistration(aClazz);
+        }
+        return this;
+    }
+
+    public InjectionRegisterScan registerSingleLevelPackageScan(String packagename) {
+
+        return this;
+    }
+
+
+    private void createRegistration(Class aClazz) {
+        if (
+                !aClazz.isInterface()
+                        && !aClazz.isAnnotation()
+                ) {
+            register(aClazz);
         }
     }
 
     private static boolean manuallyExluded(Class aClazz, Class[] manuallyexluded) {
-        for(Class excluded:manuallyexluded){
-            if(excluded == aClazz){
-                return true;   
+        for (Class excluded : manuallyexluded) {
+            if (excluded == aClazz) {
+                return true;
             }
         }
         return false;
     }
-
-    public static void registerSingleLevelPackageScan(String packagename) {
-
-    }
-
-    
 
 
     /**

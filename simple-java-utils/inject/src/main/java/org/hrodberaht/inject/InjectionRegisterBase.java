@@ -22,22 +22,33 @@ package org.hrodberaht.inject;
  * @version 1.0
  * @since 1.0
  */
-public abstract class InjectionRegisterBase {
+public abstract class InjectionRegisterBase<T> {
 
-    public static void activateInternalJavaXInjectAnnotations() {
-        SimpleInjection.setContainerInjectAnnotationCompliantMode();
+    protected SimpleInjection injection = null;
+
+    protected InjectionRegisterBase() {
+        this.injection = new SimpleInjection();
+        activateContainerDefault();
     }
 
-    public static void activateContainerDefault() {
-        SimpleInjection.setContainerSimpleInjection();
+    public T activateContainerJavaXInject() {
+        injection.setContainerInjectAnnotationCompliantMode();
+        return (T) this;
     }
 
-    public static void activateContainerSpring() {
-        SimpleInjection.setContainerSpring();
+    public T activateContainerDefault() {
+        injection.setContainerSimpleInjection();
+        return (T) this;
     }
 
-    public static void activateContainerGuice() {
-        SimpleInjection.setContainerGuice();
+    public T activateContainerSpring() {
+        injection.setContainerSpring();
+        return (T) this;
+    }
+
+    public T activateContainerGuice() {
+        injection.setContainerGuice();
+        return (T) this;
     }
 
 }

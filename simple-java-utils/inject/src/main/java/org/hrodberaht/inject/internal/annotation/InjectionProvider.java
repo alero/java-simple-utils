@@ -26,18 +26,21 @@ import javax.inject.Provider;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionProvider<T> implements Provider {
+public class InjectionProvider implements Provider {
 
-    private Class<T> serviceClass;
-    private String qualifierName = null;    
+    private Class serviceClass;
+    private String qualifierName = null;
+    private SimpleInjection injection;
 
-    public InjectionProvider(Class<T> serviceClass, String qualifierName) {
+    public InjectionProvider(SimpleInjection injection, Class serviceClass, String qualifierName) {
         this.serviceClass = serviceClass;
         this.qualifierName = qualifierName;
+        this.injection = injection;
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public Object get() {
-        return SimpleInjection.get(serviceClass, qualifierName);
+        return injection.get(serviceClass, qualifierName);
     }
 }

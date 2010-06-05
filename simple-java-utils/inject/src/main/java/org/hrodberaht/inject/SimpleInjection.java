@@ -37,7 +37,7 @@ public class SimpleInjection {
 
 
     // Perhaps a SimpleInjection basic singleton value instead of static fot these variables ...
-    private static InjectionContainer injectionContainer = new SimpleInjectionContainer();
+    private InjectionContainer injectionContainer = new SimpleInjectionContainer();
 
 
     public enum Scope {
@@ -57,7 +57,7 @@ public class SimpleInjection {
      * @param <T> the typed service intended for creation
      * @return an instance of the interface requested will be created/fetched and returned from the internal register
      */
-    public static <T> T get(Class<T> service) {
+    public <T> T get(Class<T> service) {
         return injectionContainer.getService(service, null);
     }
 
@@ -68,7 +68,7 @@ public class SimpleInjection {
      * @param qualifier the named service intended for creation
      * @return an instance of the interface requested will be created/fetched and returned from the internal register
      */
-    public static <T> T get(Class<T> service, String qualifier) {
+    public <T> T get(Class<T> service, String qualifier) {
         if(qualifier == null || "".equals(qualifier)){
             return injectionContainer.getService(service, null);
         }
@@ -82,7 +82,7 @@ public class SimpleInjection {
      * @param qualifier the named service intended for creation
      * @return an instance of the interface requested will be created/fetched and returned from the internal register
      */
-    public static <T> T get(Class<T> service, Class<? extends Annotation> qualifier) {
+    public <T> T get(Class<T> service, Class<? extends Annotation> qualifier) {
         if(qualifier == null){
             return injectionContainer.getService(service, null);
         }
@@ -96,7 +96,7 @@ public class SimpleInjection {
      * @param <T> the typed service intended for creation
      * @return an instance of the interface requested will be created/fetched and returned from the internal register
      */
-    public static <T> T getNew(Class<T> service) {
+    public <T> T getNew(Class<T> service) {
         return injectionContainer.getService(service, Scope.NEW);
     }
     /**
@@ -106,41 +106,41 @@ public class SimpleInjection {
      * @param <T> the typed service intended for creation
      * @return an instance of the interface requested will be created/fetched and returned from the internal register
      */
-    public static <T> T getSingleton(Class<T> service) {
+    public <T> T getSingleton(Class<T> service) {
         return injectionContainer.getService(service, Scope.SINGLETON);
     }
 
 
 
-    protected synchronized static void register(Class anInterface, Class service, Scope scope, RegisterType type) {
+    protected synchronized void register(Class anInterface, Class service, Scope scope, RegisterType type) {
         injectionContainer.register(anInterface, service, scope,  type);
     }
 
-    protected synchronized static void register(InjectionKey key, Class service, Scope scope, RegisterType type) {
+    protected synchronized void register(InjectionKey key, Class service, Scope scope, RegisterType type) {
         injectionContainer.register(key, service, scope,  type);
     }
 
-    public static void register(RegistrationModule module) {
+    public void register(RegistrationModule module) {
         injectionContainer.register(module);
     }
     
-    protected synchronized static void setContainerInjectAnnotationCompliantMode(){
-        SimpleInjection.injectionContainer = new AnnotationInjectionContainer();
+    protected synchronized void setContainerInjectAnnotationCompliantMode(){
+        injectionContainer = new AnnotationInjectionContainer(this);
     }
 
-    protected synchronized static void setContainerSimpleInjection(){
-        SimpleInjection.injectionContainer = new SimpleInjectionContainer();
+    protected synchronized void setContainerSimpleInjection(){
+        injectionContainer = new SimpleInjectionContainer();
     }
 
-    protected synchronized static void setContainerGuice() {
-        SimpleInjection.injectionContainer = new GuiceInjectionContainer() ;
+    protected synchronized void setContainerGuice() {
+        injectionContainer = new GuiceInjectionContainer() ;
     }
 
-    protected synchronized static void setContainerSpring() {
-        SimpleInjection.injectionContainer = new SpringInjectionContainer();            
+    protected synchronized void setContainerSpring() {
+        injectionContainer = new SpringInjectionContainer();
     }
 
-    protected synchronized static InjectionContainer getContainer(){
+    protected synchronized InjectionContainer getContainer(){
         // TODO: make this support clone or remove
         return injectionContainer;
     }

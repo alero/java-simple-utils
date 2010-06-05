@@ -31,9 +31,9 @@ public class AnnotationContinerPerformanceUnitT {
 
     @Test(timeout = 10000)
     public void testPerformance(){
-        AnnotationContainerUtil.prepareRegister();
+        SimpleInjection container = AnnotationContainerUtil.prepareRegister();
         for(int i=0;i<1000;i++){
-            Car car = SimpleInjection.get(Car.class);
+            Car car = container.get(Car.class);
             // This does loads of fetching from the container, will stress test it a lot.
             // Form what i could see on the Cobertura report each rotation give about 100 calls.
             // meaning this will test about 100 000 calls to the SimpleInjection.get method.

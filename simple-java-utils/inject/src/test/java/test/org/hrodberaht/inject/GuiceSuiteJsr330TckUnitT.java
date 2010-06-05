@@ -15,16 +15,7 @@
 package test.org.hrodberaht.inject;
 
 import junit.framework.TestCase;
-import org.atinject.tck.Tck;
-import org.atinject.tck.auto.Car;
-import org.atinject.tck.auto.Convertible;
-import org.atinject.tck.auto.Drivers;
-import org.atinject.tck.auto.DriversSeat;
-import org.atinject.tck.auto.Engine;
-import org.atinject.tck.auto.V8Engine;
-import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SimpleInjection;
 
 
 /**
@@ -40,7 +31,9 @@ public class GuiceSuiteJsr330TckUnitT extends TestCase {
 
     public static junit.framework.Test suite() {
 
-        InjectionRegisterJava.activateContainerGuice();
+        new InjectionRegisterJava().activateContainerGuice();
+
+        // Guice does not work with the TCK at version 2.0, need to wait for new release.
 
         // InjectionRegisterJava.registerGuiceModule(new GuiceTckModule());
 

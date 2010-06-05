@@ -25,60 +25,85 @@ import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionRegisterJava extends InjectionRegisterBase {
+public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegisterJava> {
 
-    public static void finalRegister(Class anInterface, Class service, SimpleInjection.Scope scope){
-        SimpleInjection.register(anInterface, service, scope, SimpleInjection.RegisterType.FINAL);
+    public InjectionRegisterJava(){
+        super();
     }
 
-    public static void reRegister(Class anInterface, Class service, SimpleInjection.Scope scope){
-        SimpleInjection.register(anInterface, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
+    public InjectionRegisterJava(SimpleInjection injection) {
+        this.injection = injection;
     }
 
-    public static void register(Class anInterface, Class service, SimpleInjection.Scope scope){
-        SimpleInjection.register(anInterface, service, scope, SimpleInjection.RegisterType.NORMAL);
+    public InjectionRegisterJava finalRegister(Class anInterface, Class service, SimpleInjection.Scope scope) {
+        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.FINAL);
+        return this;
     }
 
-    public static void register(String namedService, Class anInterface, Class service, SimpleInjection.Scope scope){
-        SimpleInjection.register(new InjectionKey(namedService, anInterface), service, scope, SimpleInjection.RegisterType.NORMAL);
+    public InjectionRegisterJava reRegister(Class anInterface, Class service, SimpleInjection.Scope scope) {
+        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
+        return this;
     }
 
-    public static void registerDefault(Class anInterface, Class service, SimpleInjection.Scope scope){
-        SimpleInjection.register(anInterface, service, scope, SimpleInjection.RegisterType.WEAK);
+    public InjectionRegisterJava register(Class anInterface, Class service, SimpleInjection.Scope scope) {
+        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.NORMAL);
+        return this;
     }
 
-    public static void register(Class anInterface, Class service){
-        register(anInterface, service, SimpleInjection.Scope.NEW);        
+    public InjectionRegisterJava register(String namedService, Class anInterface, Class service, SimpleInjection.Scope scope) {
+        injection.register(new InjectionKey(namedService, anInterface), service, scope, SimpleInjection.RegisterType.NORMAL);
+        return this;
     }
 
-    public static void register(Class service) {
+    public InjectionRegisterJava registerDefault(Class anInterface, Class service, SimpleInjection.Scope scope) {
+        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.WEAK);
+        return this;
+    }
+
+    public InjectionRegisterJava register(Class anInterface, Class service) {
+        register(anInterface, service, SimpleInjection.Scope.NEW);
+        return this;
+    }
+
+    public InjectionRegisterJava register(Class service) {
         register(service, service, SimpleInjection.Scope.NEW);
+        return this;
     }
 
-    public static void register(String namedService, Class anInterface, Class service) {
+    public InjectionRegisterJava register(String namedService, Class anInterface, Class service) {
         register(namedService, anInterface, service, SimpleInjection.Scope.NEW);
+        return this;
     }
 
-    public static void registerDefault(Class anInterface, Class service){
+    public InjectionRegisterJava registerDefault(Class anInterface, Class service) {
         registerDefault(anInterface, service, SimpleInjection.Scope.NEW);
+        return this;
     }
 
-    public static void reRegister(Class anInterface, Class service){
+    public InjectionRegisterJava reRegister(Class anInterface, Class service) {
         reRegister(anInterface, service, SimpleInjection.Scope.NEW);
+        return this;
     }
 
-    public static void finalRegister(Class anInterface, Class service){
+    public InjectionRegisterJava finalRegister(Class anInterface, Class service) {
         finalRegister(anInterface, service, SimpleInjection.Scope.NEW);
+        return this;
     }
 
 
-    public static void registerSpringResource(String... resources){
-        ((SpringInjectionContainer)SimpleInjection.getContainer())
+    public InjectionRegisterJava registerSpringResource(String... resources) {
+        ((SpringInjectionContainer) injection.getContainer())
                 .registerConfigResource(resources);
+        return this;
     }
 
 
-    public static void register(AnnotationRegistrationModule module) {
-        SimpleInjection.register(module);   
+    public InjectionRegisterJava register(AnnotationRegistrationModule module) {
+        injection.register(module);
+        return this;
+    }
+
+    public SimpleInjection getInjectionContainer() {
+        return injection;
     }
 }

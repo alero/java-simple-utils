@@ -38,12 +38,13 @@ public class ContainerScanUnitT {
 
     @Test
     public void testScanningOfImplementations() {
-        InjectionRegisterScan.activateContainerDefault();
+
+        InjectionRegisterScan register = new InjectionRegisterScan();
         // Tests scanning and exclusion of single class
-        InjectionRegisterScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
+        SimpleInjection container = register.getInjectionContainer();
 
-
-        AnyService anyService = SimpleInjection.get(AnyService.class);
+        AnyService anyService = container.get(AnyService.class);
         anyService.doStuff();
 
         assertEquals(1, anyService.getStuff().size());
@@ -53,10 +54,12 @@ public class ContainerScanUnitT {
 
     @Test
     public void testAnnotatedScanningOfImplementations() {
-        InjectionRegisterScan.activateInternalJavaXInjectAnnotations();
+        InjectionRegisterScan register = new InjectionRegisterScan();
+        register.activateContainerJavaXInject();
         // Tests scanning and exclusion of single class
-        InjectionRegisterScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
-        Car aCar = SimpleInjection.get(Car.class);
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
+        SimpleInjection container = register.getInjectionContainer();
+        Car aCar = container.get(Car.class);
 
         assertEquals("volvo", aCar.brand());
         Volvo aVolvo = (Volvo)aCar;

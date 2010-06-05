@@ -38,6 +38,11 @@ import java.util.List;
 public class AnnotationInjectionContainer extends InjectionContainerBase implements InjectionContainer {
 
     private List<InjectionMetaData> injectionMetaDataCache = new ArrayList<InjectionMetaData>();
+    private SimpleInjection container;
+
+    public AnnotationInjectionContainer(SimpleInjection container) {
+        this.container = container;
+    }
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
         assert (qualifier != null);
@@ -79,7 +84,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
     public Object createInstance(ServiceRegister serviceRegister) {
-        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);
+        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container);
         return annotationInjection.createInstance(serviceRegister.getService());
     }
 
@@ -112,7 +117,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
     private ServiceRegister registerForInterface(Class<Object> service) {
-        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);
+        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container);
         InjectionMetaData injectionMetaData = annotationInjection.findInjectionData(service, null, false);
         register(service, injectionMetaData.getServiceClass(), null, null);        
         return registeredServices.get(service);
@@ -164,7 +169,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
     private InjectionMetaData createInjectionMetaData(Class service, String qualifier) {
-        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache);
+        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container);
         InjectionMetaData injectionMetaData =
                 annotationInjection.createInjectionMetaData(service, qualifier, InjectionUtils.isProvider(service));
         injectionMetaDataCache.add(injectionMetaData);

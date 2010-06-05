@@ -36,14 +36,14 @@ public class SimpleContainerUnitT {
 
     @Before
     public void init() {
-        InjectionRegisterJava.activateContainerDefault();
+
     }
 
     @Test
-    public void testNothingRegistered() {
-
+    public void testNothingRegistered() {        
+        SimpleInjection container = new InjectionRegisterJava().getInjectionContainer();
         try {
-            AnyService anyService = SimpleInjection.get(AnyService.class);
+            AnyService anyService = container.get(AnyService.class);
             assertEquals(null, "Should not be called");
         } catch (InjectRuntimeException e) {
             assertEquals(
@@ -55,27 +55,30 @@ public class SimpleContainerUnitT {
 
     @Test
     public void testNothingServiceWrapping() {
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
+        SimpleInjection container = registerSingle(AnyService.class, AnyServiceDoNothingImpl.class);
 
-        AnyService anyService = SimpleInjection.get(AnyService.class);
+        AnyService anyService = container.get(AnyService.class);
 
         assertEquals(null, anyService.getStuff());
     }
 
+
+
     @Test
     public void testNamedNothingServiceWrapping() {
-        InjectionRegisterJava.register("myAnyService", AnyService.class, AnyServiceDoNothingImpl.class);
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.register("myAnyService", AnyService.class, AnyServiceDoNothingImpl.class);
+        SimpleInjection container = registerJava.getInjectionContainer();
 
-        AnyService anyService = SimpleInjection.get(AnyService.class, "myAnyService");
+        AnyService anyService = container.get(AnyService.class, "myAnyService");
 
         assertEquals(null, anyService.getStuff());
     }
 
     @Test
     public void testSomethingServiceWrapping() {
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
-
-        AnyService anyService = SimpleInjection.get(AnyService.class);
+        SimpleInjection injection = registerSingle(AnyService.class, AnyServiceDoSomethingImpl.class);
+        AnyService anyService = injection.get(AnyService.class);
 
         anyService.doStuff();
 
@@ -84,41 +87,47 @@ public class SimpleContainerUnitT {
 
     @Test
     public void testSomethingServiceNewObjectSupport() {
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class, SimpleInjection.Scope.SINGLETON);
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class, SimpleInjection.Scope.SINGLETON);
+        SimpleInjection container = registerJava.getInjectionContainer();
 
-        AnyService anyService = SimpleInjection.get(AnyService.class);
+        AnyService anyService = container.get(AnyService.class);
         anyService.doStuff();
         assertEquals(1, anyService.getStuff().size());
 
-        AnyService anyServiceSingleton = SimpleInjection.get(AnyService.class);
+        AnyService anyServiceSingleton = container.get(AnyService.class);
         assertEquals(1, anyServiceSingleton.getStuff().size());
 
-        AnyService anyServiceNew = SimpleInjection.getNew(AnyService.class);
+        AnyService anyServiceNew = container.getNew(AnyService.class);
         assertEquals(0, anyServiceNew.getStuff().size());
     }
 
     @Test
     public void testSomethingServiceSingletonObjectSupport() {
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+        SimpleInjection container = registerJava.getInjectionContainer();
 
-        AnyService anyService = SimpleInjection.getSingleton(AnyService.class);
+        AnyService anyService = container.getSingleton(AnyService.class);
         anyService.doStuff();
         assertEquals(1, anyService.getStuff().size());
 
-        AnyService anyServiceSingleton = SimpleInjection.getSingleton(AnyService.class);
+        AnyService anyServiceSingleton = container.getSingleton(AnyService.class);
         assertEquals(1, anyServiceSingleton.getStuff().size());
 
-        AnyService anyServiceNew = SimpleInjection.get(AnyService.class);
+        AnyService anyServiceNew = container.get(AnyService.class);
         assertEquals(0, anyServiceNew.getStuff().size());
     }
 
     @Test
     public void testReRegisterSupport() {
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
+        registerJava.reRegister(AnyService.class, AnyServiceDoSomethingImpl.class);
 
-        InjectionRegisterJava.reRegister(AnyService.class, AnyServiceDoSomethingImpl.class);
+        SimpleInjection container = registerJava.getInjectionContainer();
 
-        AnyService anyService = SimpleInjection.get(AnyService.class);
+        AnyService anyService = container.get(AnyService.class);
         anyService.doStuff();
         assertEquals(1, anyService.getStuff().size());
 
@@ -126,10 +135,12 @@ public class SimpleContainerUnitT {
 
     @Test
     public void testDefaultRegisterSupport() {
-        InjectionRegisterJava.registerDefault(AnyService.class, AnyServiceDoNothingImpl.class);
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.registerDefault(AnyService.class, AnyServiceDoNothingImpl.class);
+        registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+        SimpleInjection container = registerJava.getInjectionContainer();
 
-        AnyService anyService = SimpleInjection.get(AnyService.class);
+        AnyService anyService = container.get(AnyService.class);
         anyService.doStuff();
         assertEquals(1, anyService.getStuff().size());
 
@@ -137,9 +148,9 @@ public class SimpleContainerUnitT {
 
     @Test(expected = InjectRuntimeException.class)
     public void testFinalRegisterSupport() {
-
-        InjectionRegisterJava.finalRegister(AnyService.class, AnyServiceDoNothingImpl.class);
-        InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.finalRegister(AnyService.class, AnyServiceDoNothingImpl.class);
+        registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
 
     }
 
@@ -147,8 +158,9 @@ public class SimpleContainerUnitT {
     public void testNormalRegisterFail() {
 
         try {
-            InjectionRegisterJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
-            InjectionRegisterJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+            InjectionRegisterJava registerJava = new InjectionRegisterJava();
+            registerJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
+            registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
             assertEquals("Not suppose to execute this", "So fail");
         } catch (InjectRuntimeException e) {
             assertEquals(
@@ -158,6 +170,14 @@ public class SimpleContainerUnitT {
         }
 
 
+    }
+
+
+    private SimpleInjection registerSingle(Class anInterface, Class aService) {
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.register(anInterface, aService);
+        SimpleInjection injection = registerJava.getInjectionContainer();
+        return injection;
     }
 
 }

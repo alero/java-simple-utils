@@ -30,15 +30,33 @@ import java.util.Locale;
  */
 public class LocaleProvider {
 
+    private static SimpleInjection injectionContainer;
+
     static{
-        InjectionRegisterJava.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
+        injectionContainer = registerJava.getInjectionContainer();
+    }
+
+    /**
+     * Use the injection container to change the implementation fo the LocaleProvider.
+     * Default version setup is SimpleLocaleProvider and anything implementing ProviderInterface will suffice.
+     *
+     * To Change registered service simply do this
+     * SimpleInjection container = LocaleProvider.getInjectionContainer();
+     * container.register(ProviderInterface.class, ThreadLocaleProvider.class);
+     *
+     * @return
+     */
+    public static SimpleInjection getInjectionContainer() {
+        return injectionContainer;
     }
 
     public static LocaleProfile getProfile(){
-        return SimpleInjection.get(ProviderInterface.class).getProfile();
+        return injectionContainer.get(ProviderInterface.class).getProfile();
     }
     
     public static Locale getSystemLocale(){
-        return SimpleInjection.get(ProviderInterface.class).getSystemLocale();
+        return injectionContainer.get(ProviderInterface.class).getSystemLocale();
     }
 }
