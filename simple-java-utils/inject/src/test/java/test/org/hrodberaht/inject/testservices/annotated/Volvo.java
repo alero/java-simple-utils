@@ -26,7 +26,7 @@ import javax.inject.Inject;
  */
 public class Volvo implements Car{
 
-    @Inject Tire spareTire;
+    Tire spareTire;
 
     @Inject Tire frontLeft;
     @Inject Tire frontRight;
@@ -34,6 +34,11 @@ public class Volvo implements Car{
     @Inject Tire backLeft;
 
     @Inject VindShield vindShield;
+
+    @Inject
+    public Volvo(Tire spareTire) {
+        this.spareTire = spareTire;
+    }
 
     @Override
     public String brand() {

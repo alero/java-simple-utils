@@ -32,13 +32,13 @@ public class AnnotationContinerPerformanceUnitT {
     @Test(timeout = 10000)
     public void testPerformance(){
         SimpleInjection container = AnnotationContainerUtil.prepareRegister();
-        for(int i=0;i<1000;i++){
+        for(int i=0;i<10000;i++){
             Car car = container.get(Car.class);
             // This does loads of fetching from the container, will stress test it a lot.
             // Form what i could see on the Cobertura report each rotation give about 100 calls.
-            // meaning this will test about 100 000 calls to the SimpleInjection.get method.
+            // meaning these 10 000 iterations will test about 1 000 000 calls to the SimpleInjection.get method.
 
-            // On my machine an Intel i7 820 this takes about 0.4 seconds using 1 of 4 CPU's at 75%.
+            // On my machine an Intel i7 820 this takes about 2 seconds using 1 of 4 CPU's at 75%.
             // This is not strange as this test is not threaded in any way. 
             Tck.testsFor(car, false, true);
         }

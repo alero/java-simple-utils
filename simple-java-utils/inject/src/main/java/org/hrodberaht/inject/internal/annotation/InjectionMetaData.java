@@ -14,8 +14,11 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
+import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
+import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorCGLIB;
+import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorDefault;
+
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -40,7 +43,7 @@ public class InjectionMetaData {
 
     private Constructor constructor;
     private List<InjectionMetaData> constructorDependencies;
-    private List<InjectionPoint> injectionPoints;
+    private List<InjectionPoint> injectionPoints;    
 
     public InjectionMetaData(Class serviceClass, String qualifierName, boolean provider) {
         this.serviceClass = serviceClass;
@@ -104,35 +107,28 @@ public class InjectionMetaData {
 
     public Object createInstance(Object[] parameters) {
         final boolean originalAccessible = constructor.isAccessible();
-        constructor.setAccessible(true);
+        if(!originalAccessible){
+            constructor.setAccessible(true);
+        }
 
         try {
-            if(isSingleton && singleton != null){
+            if (isSingleton && singleton != null) {
                 return singleton;
             }
-            final Object newInstance = constructor.newInstance(parameters);
-            if(isSingleton){
-                singleton = newInstance;   
+
+            Object newInstance = getInstanceCreator().createInstance(constructor, parameters);
+            if (isSingleton) {
+                singleton = newInstance;
             }
             return newInstance;
         }
-
-        catch (final InstantiationException e) {
-            throw new RuntimeException(e);
-        }
-
-        catch (final IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
-        catch (final InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-
         finally {
-           constructor.setAccessible(originalAccessible);
+            if(!originalAccessible){
+                constructor.setAccessible(originalAccessible);
+            }
         }
-    }
+    }    
+
 
     public boolean canInject(final InjectionMetaData bean) {
         if (bean == null) {
@@ -150,9 +146,7 @@ public class InjectionMetaData {
         if (serviceClass.isAssignableFrom(bean.getServiceClass())) {
             if (qualifierName == null && bean.getQualifierName() == null) {
                 return true;
-            }
-
-            else if (qualifierName != null && qualifierName.equals(bean.getQualifierName())) {
+            } else if (qualifierName != null && qualifierName.equals(bean.getQualifierName())) {
                 return true;
             }
         }
@@ -160,11 +154,15 @@ public class InjectionMetaData {
         return false;
     }
 
-    public Object getSingleton() {
-        return singleton;
-    }
-
-    public void setSingleton(Object singleton) {
-        this.singleton = singleton;
+    private static InstanceCreator creator = null;
+    public InstanceCreator getInstanceCreator() {
+        if(creator == null){
+            if(System.getProperty("simpleinjection.instancecreator.cglib") != null){
+                creator = new InstanceCreatorCGLIB();
+            } else {
+                creator = new InstanceCreatorDefault();
+            }
+        }
+        return creator;
     }
 }
