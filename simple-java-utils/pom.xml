@@ -44,13 +44,9 @@
         </developer>
     </developers>
 
-    <properties>
-        <currentVersion>1.0-SNAPSHOT</currentVersion>
-    </properties>
-
     <modules>
         <module>core</module>
-        <module>ejb2x</module>
+        <!-- Not part of first release <module>ejb2x</module> -->
         <module>inject</module>
         <module>i18n</module>
     </modules>

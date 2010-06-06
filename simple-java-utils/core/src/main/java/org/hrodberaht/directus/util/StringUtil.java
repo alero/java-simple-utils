@@ -24,7 +24,7 @@ package org.hrodberaht.directus.util;
 public class StringUtil {
 
     public static boolean isBlank(String value) {
-        return value == null || "".equals(value);  //To change body of created methods use File | Settings | File Templates.
+        return value == null || "".equals(value);
     }
 
 }

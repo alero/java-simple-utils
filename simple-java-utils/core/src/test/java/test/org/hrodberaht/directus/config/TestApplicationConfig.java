@@ -21,7 +21,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+
 
 /**
  * Simple Java Utils TestSuite
@@ -40,7 +41,8 @@ public class TestApplicationConfig {
 
     @Test
     public void testConfig() throws ParseException {
-        assertEquals(new Boolean(true), AnyApplicationConfig.A_BOOLEAN.getValue());
+        assertEquals(true, AnyApplicationConfig.IS_ENABLED.getValue());
+        assertEquals(true, AnyApplicationConfig.A_BOOLEAN.getValue());
         assertEquals("Hello", AnyApplicationConfig.ApplicationState.A_STRING.getValue());
         assertEquals(parseDate("2010-05-05"), AnyApplicationConfig.ApplicationState.A_DATE.getValue());
         assertEquals(new Integer(5), AnyApplicationConfig.ApplicationState.A_INTEGER.getValue());
@@ -57,7 +59,7 @@ public class TestApplicationConfig {
         System.setProperty("config.externalfile", "classpath:/test/org/hrodberaht/directus/config/customConfig.properties");
         AnyApplicationConfig.initConfig();
 
-        assertEquals(new Boolean(false), AnyApplicationConfig.A_BOOLEAN.getValue());
+        assertEquals(false, AnyApplicationConfig.A_BOOLEAN.getValue());
         assertEquals("Hello there", AnyApplicationConfig.ApplicationState.A_STRING.getValue());
         assertEquals(parseDate("2010-05-05"), AnyApplicationConfig.ApplicationState.A_DATE.getValue());
         assertEquals(new Integer(6), AnyApplicationConfig.ApplicationState.A_INTEGER.getValue());

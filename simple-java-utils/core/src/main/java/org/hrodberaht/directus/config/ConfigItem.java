@@ -35,6 +35,12 @@ public class ConfigItem<T> {
         this.clazz = clazz;
     }
 
+    public ConfigItem(Class clazz, String name, T defaultValue) {
+        this.name = name;
+        this.clazz = clazz;
+        this.value = defaultValue;
+    }
+
     public String getName() {
         return name;
     }

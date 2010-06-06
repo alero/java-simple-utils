@@ -83,7 +83,8 @@ public abstract class ConfigBase {
         populateConfigurationValues();
 
     }
-
+    
+    @SuppressWarnings(value = "unchecked")
     private void populateConfigurationValues() throws ParseException {
         for (ConfigItem config : configurations.keySet()) {
             // Makes it possible to override values Using System.setProperty();
@@ -92,19 +93,22 @@ public abstract class ConfigBase {
             if(StringUtil.isBlank(value)){
                 value = properties.getProperty(config.getName());
             }
+            if(value != null){
 
-            if (config.getType().isAssignableFrom(Boolean.class)) {
-                config.setValue(Boolean.parseBoolean(value));
-            } else if (config.getType().isAssignableFrom(Integer.class)) {
-                config.setValue(NumberUtil.parseInt(value));
-            } else if (config.getType().isAssignableFrom(Long.class)) {
-                config.setValue(NumberUtil.parseLong(value));
-            } else if (config.getType().isAssignableFrom(String[].class)) {
-                config.setValue(value.split(","));
-            } else if (config.getType().isAssignableFrom(Date.class)) {
-                config.setValue(DateUtil.parseSimpleDate(value));
-            } else {
-                config.setValue(value);
+                if (config.getType().isAssignableFrom(Boolean.class)) {
+                    config.setValue(Boolean.parseBoolean(value));
+                } else if (config.getType().isAssignableFrom(Integer.class)) {
+                    config.setValue(NumberUtil.parseInt(value));
+                } else if (config.getType().isAssignableFrom(Long.class)) {
+                    config.setValue(NumberUtil.parseLong(value));
+                } else if (config.getType().isAssignableFrom(String[].class)) {
+                    config.setValue(value.split(","));
+                } else if (config.getType().isAssignableFrom(Date.class)) {
+                    config.setValue(DateUtil.parseSimpleDate(value));
+                } else {
+                    config.setValue(value);
+                }
+
             }
         }
     }
@@ -112,7 +116,6 @@ public abstract class ConfigBase {
     private void loadProperties(Properties props, String configPath) {
         InputStream data = null;
         try {
-
             if (configPath == null) {
                 throw new RuntimeException("Property path not defined");
             }
@@ -124,6 +127,7 @@ public abstract class ConfigBase {
                 File file = new File(configPath.replaceFirst("file:", ""));
                 data = new FileInputStream(file);
             }
+            
             if (data != null) {
                 props.load(data);
             } else {

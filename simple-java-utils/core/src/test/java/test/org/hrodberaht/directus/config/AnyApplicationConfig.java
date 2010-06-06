@@ -49,6 +49,8 @@ public class AnyApplicationConfig extends ConfigBase {
 
     public static ConfigItem<Boolean> A_BOOLEAN = new ConfigItem<Boolean>(Boolean.class, "anyapp.aboolean");
 
+    public static ConfigItem<Boolean> IS_ENABLED = new ConfigItem<Boolean>(Boolean.class, "anyapp.theboolean", true);
+
     public interface ApplicationState {
 
         ConfigItem<String> A_STRING = new ConfigItem<String>(String.class, "anyapp.astring");
