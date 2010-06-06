@@ -38,13 +38,13 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
         return this;
     }
 
-    public InjectionRegisterScan registerBasePackageScan(String packagename, Class... manuallyexluded) {
+    public InjectionRegisterScan registerBasePackageScan(String packagename, Class... manuallyexcluded) {
         Class[] clazzs = getClasses(packagename);
         List<Class> listOfClasses = new ArrayList<Class>(clazzs.length);
 
         // remove the manual excludes
         for (Class aClazz : clazzs) {
-            if (!manuallyExluded(aClazz, manuallyexluded)) {
+            if (!manuallyExcluded(aClazz, manuallyexcluded)) {
                 listOfClasses.add(aClazz);
             }
         }
@@ -62,14 +62,14 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
 
     private void createRegistration(Class aClazz) {
         if (
-                !aClazz.isInterface()
-                        && !aClazz.isAnnotation()
-                ) {
+            !aClazz.isInterface()
+            && !aClazz.isAnnotation()
+        ) {
             register(aClazz);
         }
     }
 
-    private static boolean manuallyExluded(Class aClazz, Class[] manuallyexluded) {
+    private static boolean manuallyExcluded(Class aClazz, Class[] manuallyexluded) {
         for (Class excluded : manuallyexluded) {
             if (excluded == aClazz) {
                 return true;

@@ -67,11 +67,6 @@ public class AnnotationInjection {
 
     private Object callConstructor(InjectionMetaData injectionMetaData) {
 
-        Object service = injectionCacheHandler.findService(injectionMetaData);
-        if(service != null){
-            return service;
-        }
-
         List<InjectionMetaData> dependencies = injectionMetaData.getConstructorDependencies();
         Object[] servicesForConstructor = new Object[dependencies.size()];
 
@@ -80,9 +75,8 @@ public class AnnotationInjection {
             Object bean = innerCreateInstance(dependency);
             servicesForConstructor[i] = bean;
         }
-        service = injectionMetaData.createInstance(servicesForConstructor);
-        autoWireBean(service, injectionMetaData);
-        injectionCacheHandler.put(injectionMetaData, service);
+        Object service = injectionMetaData.createInstance(servicesForConstructor);
+        autoWireBean(service, injectionMetaData);        
         return service;
     }
 
@@ -120,7 +114,7 @@ public class AnnotationInjection {
         InjectionMetaData injectionMetaData = new InjectionMetaData(service, qualifier, provider);       
         Constructor constructor = InjectionUtils.findConstructor(service);
         injectionMetaData.setConstructor(constructor);
-        injectionMetaData.setSingleton(InjectionUtils.isSingleton(injectionMetaData.getServiceClass()));
+        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
         injectionMetaData.setPreDefined(true);
         return injectionMetaData;
     }
@@ -141,7 +135,7 @@ public class AnnotationInjection {
         }
 
         InjectionMetaData injectionMetaData = new InjectionMetaData(service, qualifier, provider);
-        injectionMetaData.setSingleton(InjectionUtils.isSingleton(injectionMetaData.getServiceClass()));
+        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
         injectionCacheHandler.put(injectionMetaData);
         Constructor constructor = InjectionUtils.findConstructor(service);
         injectionMetaData.setConstructor(constructor);        

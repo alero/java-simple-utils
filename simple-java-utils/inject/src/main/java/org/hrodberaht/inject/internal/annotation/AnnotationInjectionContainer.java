@@ -166,7 +166,8 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
     private SimpleInjection.Scope getAnnotationScope(InjectionMetaData injectionMetaData) {
-        return injectionMetaData.isSingleton() ? SimpleInjection.Scope.SINGLETON : SimpleInjection.Scope.NEW;
+
+        return injectionMetaData.getScope();
     }
 
     private InjectionMetaData createInjectionMetaData(Class service, String qualifier) {

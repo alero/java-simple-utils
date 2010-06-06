@@ -35,6 +35,10 @@ public class Volvo implements Car{
 
     @Inject VindShield vindShield;
 
+    @Inject TestDriver driver;
+
+    @Inject TestDriverManager driverManager;
+
     @Inject
     public Volvo(Tire spareTire) {
         this.spareTire = spareTire;
@@ -46,6 +50,14 @@ public class Volvo implements Car{
     @Override
     public String brand() {
         return "volvo";
+    }
+
+    public TestDriver getDriver() {
+        return driver;
+    }
+
+    public TestDriverManager getDriverManager() {
+        return driverManager;
     }
 
     public Tire getSpareTire() {

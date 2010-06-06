@@ -15,6 +15,13 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.InjectRuntimeException;
+import org.hrodberaht.inject.internal.annotation.scope.DefaultScopeHandler;
+import org.hrodberaht.inject.internal.annotation.scope.InheritableThreadScopeHandler;
+import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
+import org.hrodberaht.inject.internal.annotation.scope.SingletonScopeHandler;
+import org.hrodberaht.inject.internal.annotation.scope.ThreadScopeHandler;
+import org.hrodberaht.inject.scope.InheritableThreadScope;
+import org.hrodberaht.inject.scope.ThreadScope;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -36,7 +43,7 @@ import java.util.List;
  * @since 1.0
  */
 public class InjectionUtils {
-    
+
     public static final Class<Inject> INJECT = Inject.class;
 
     private static final Class<Scope> SCOPE = Scope.class;
@@ -58,7 +65,7 @@ public class InjectionUtils {
     ) {
         List<InjectionMetaData> injectionMetaData = new ArrayList<InjectionMetaData>(parameterTypes.length);
 
-        for(int i=0;i<parameterTypes.length;i++){
+        for (int i = 0; i < parameterTypes.length; i++) {
             Class serviceClass = parameterTypes[i];
             Annotation[] annotations = parameterAnnotation[i];
             if (InjectionUtils.isProvider(serviceClass)) {
@@ -66,7 +73,7 @@ public class InjectionUtils {
                 Class<Object> beanClassFromProvider = InjectionUtils.getClassFromProvider(serviceClass, serviceType);
 
                 addInjectMetaData(injectionMetaData, beanClassFromProvider, annotations, true, annotationInjection);
-            }else{
+            } else {
                 addInjectMetaData(injectionMetaData, serviceClass, annotations, false, annotationInjection);
             }
 
@@ -74,6 +81,7 @@ public class InjectionUtils {
         }
         return injectionMetaData;
     }
+
     private static void addInjectMetaData(
             List<InjectionMetaData> injectionMetaData,
             Class serviceClass,
@@ -107,9 +115,7 @@ public class InjectionUtils {
             catch (NoSuchMethodException e) {
                 throw new InjectRuntimeException(e);
             }
-        }
-
-        else if (annotatedConstructors.size() > 1) {
+        } else if (annotatedConstructors.size() > 1) {
             throw new InjectRuntimeException(
                     "Several annotated constructors found for autowire {0} {1}", beanClass, annotatedConstructors);
         }
@@ -126,15 +132,28 @@ public class InjectionUtils {
         return Provider.class.isAssignableFrom(service);
     }
 
-    public static boolean isSingleton(final Class<?> beanClass) {
+    public static boolean isSingleton(Class beanClass) {
         Annotation scope = getScope(beanClass);
         if (scope instanceof Singleton) {
             return true;
         }
-        if (scope == null) {
-            return false;
+        return false;
+    }
+
+    public static boolean isThread(Class beanClass) {
+        Annotation scope = getScope(beanClass);
+        if (scope instanceof ThreadScope) {
+            return true;
         }
-        throw new InjectRuntimeException("Unknown scope on {0} {1}", beanClass , scope);
+        return false;
+    }
+
+    private static boolean isInheritedThread(Class beanClass) {
+        Annotation scope = getScope(beanClass);
+        if (scope instanceof InheritableThreadScope) {
+            return true;
+        }
+        return false;
     }
 
     private static Annotation getScope(final Class<?> beanClass) {
@@ -155,4 +174,17 @@ public class InjectionUtils {
 
         return scopeAnnotations.get(0);
     }
+
+    public static ScopeHandler getScopeHandler(Class serviceClass) {
+        if (isSingleton(serviceClass)) {
+            return new SingletonScopeHandler();
+        } else if (isThread(serviceClass)) {
+            return new ThreadScopeHandler();
+        } else if (isInheritedThread(serviceClass)) {
+            return new InheritableThreadScopeHandler();
+        }
+        return new DefaultScopeHandler();
+    }
+
+
 }

@@ -14,9 +14,11 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
+import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorCGLIB;
 import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorDefault;
+import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -34,21 +36,25 @@ public class InjectionMetaData {
 
     private String qualifierName;
     private Class serviceClass;
-    private boolean provider = false;
-
-    private boolean isSingleton = false;
-    private Object singleton = null;
-
+    private boolean provider = false;        
     private boolean preDefined = false;
+
+    private ScopeHandler scopeHandler;
 
     private Constructor constructor;
     private List<InjectionMetaData> constructorDependencies;
-    private List<InjectionPoint> injectionPoints;    
+    private List<InjectionPoint> injectionPoints;
 
     public InjectionMetaData(Class serviceClass, String qualifierName, boolean provider) {
         this.serviceClass = serviceClass;
         this.qualifierName = qualifierName;
         this.provider = provider;
+    }
+
+    
+
+    public void setScopeHandler(ScopeHandler scopeHandler) {
+        this.scopeHandler = scopeHandler;
     }
 
     public void setConstructor(Constructor constructor) {
@@ -57,14 +63,6 @@ public class InjectionMetaData {
 
     public Constructor getConstructor() {
         return constructor;
-    }
-
-    public void setSingleton(boolean singleton) {
-        isSingleton = singleton;
-    }
-
-    public boolean isSingleton() {
-        return isSingleton;
     }
 
     public List<InjectionMetaData> getConstructorDependencies() {
@@ -112,14 +110,13 @@ public class InjectionMetaData {
         }
 
         try {
-            if (isSingleton && singleton != null) {
-                return singleton;
+            Object scopedInstance = scopeHandler.getInstance();
+            if (scopedInstance != null) {
+                return scopedInstance;
             }
 
             Object newInstance = getInstanceCreator().createInstance(constructor, parameters);
-            if (isSingleton) {
-                singleton = newInstance;
-            }
+            scopeHandler.addScope(newInstance);            
             return newInstance;
         }
         finally {
@@ -164,5 +161,9 @@ public class InjectionMetaData {
             }
         }
         return creator;
+    }
+
+    public SimpleInjection.Scope getScope() {
+        return scopeHandler.getScope();
     }
 }

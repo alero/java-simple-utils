@@ -42,7 +42,7 @@ public class SimpleInjection implements Container, ScopeContainer {
 
 
     public enum Scope {
-        SINGLETON, NEW
+        SINGLETON, NEW, THREAD, INHERITABLE_THREAD
     }
 
 
