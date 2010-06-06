@@ -12,26 +12,15 @@
  *   ~ See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.inject;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+package test.org.hrodberaht.inject.testservices.annotated;
 
 /**
  * Simple Java Utils
  *
  * @author Robert Alexandersson
- *         2010-maj-29 13:38:13
+ *         2010-maj-29 18:00:14
  * @version 1.0
  * @since 1.0
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-    SuiteJsr330TckUnitT.class,
-    SimpleContainerUnitT.class,    
-    AnnotationContinerPerformanceUnitT.class,
-    ContainerScanUnitT.class,
-    ScopeThreadUnitT.class
-})
-public class TestSuite {
+public class SpareTire extends Tire{
 }

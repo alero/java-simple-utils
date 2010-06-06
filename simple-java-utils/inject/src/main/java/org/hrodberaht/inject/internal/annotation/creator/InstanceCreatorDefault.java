@@ -11,23 +11,18 @@ import java.lang.reflect.InvocationTargetException;
  * @version 1.0
  * @since 1.0
  */
-public class InstanceCreatorDefault implements InstanceCreator{
+public class InstanceCreatorDefault implements InstanceCreator {
 
     @Override
     public Object createInstance(Constructor constructor, Object... parameters) {
-         try{
+        try {
             return constructor.newInstance(parameters);
-
+            
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
-        }
-
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
-        }
-
-        catch (InvocationTargetException
-                e) {
+        }catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
