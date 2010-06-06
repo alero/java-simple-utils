@@ -16,8 +16,8 @@
 
 package org.hrodberaht.i18n.locale;
 
+import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SimpleInjection;
 
 import java.util.Locale;
 
@@ -30,12 +30,12 @@ import java.util.Locale;
  */
 public class LocaleProvider {
 
-    private static SimpleInjection injectionContainer;
+    private static Container injectionContainer;
 
     static{
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
         registerJava.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);
-        injectionContainer = registerJava.getInjectionContainer();
+        injectionContainer = registerJava.getContainer();
     }
 
     /**
@@ -48,7 +48,7 @@ public class LocaleProvider {
      *
      * @return
      */
-    public static SimpleInjection getInjectionContainer() {
+    public static Container getInjectionContainer() {
         return injectionContainer;
     }
 

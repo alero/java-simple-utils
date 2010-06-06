@@ -33,32 +33,32 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         super();
     }
 
-    public InjectionRegisterJava(SimpleInjection injection) {
-        this.injection = injection;
+    public InjectionRegisterJava(SimpleInjection container) {
+        this.container = container;
     }
 
     public InjectionRegisterJava finalRegister(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.FINAL);
+        container.register(anInterface, service, scope, SimpleInjection.RegisterType.FINAL);
         return this;
     }
 
     public InjectionRegisterJava reRegister(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
+        container.register(anInterface, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
         return this;
     }
 
     public InjectionRegisterJava register(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.NORMAL);
+        container.register(anInterface, service, scope, SimpleInjection.RegisterType.NORMAL);
         return this;
     }
 
     public InjectionRegisterJava register(String namedService, Class anInterface, Class service, SimpleInjection.Scope scope) {
-        injection.register(new InjectionKey(namedService, anInterface), service, scope, SimpleInjection.RegisterType.NORMAL);
+        container.register(new InjectionKey(namedService, anInterface), service, scope, SimpleInjection.RegisterType.NORMAL);
         return this;
     }
 
     public InjectionRegisterJava registerDefault(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        injection.register(anInterface, service, scope, SimpleInjection.RegisterType.WEAK);
+        container.register(anInterface, service, scope, SimpleInjection.RegisterType.WEAK);
         return this;
     }
 
@@ -94,25 +94,29 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
 
 
     public InjectionRegisterJava registerSpringResource(String... resources) {
-        ((SpringInjectionContainer) injection.getContainer())
+        ((SpringInjectionContainer) container.getContainer())
                 .registerConfigResource(resources);
         return this;
     }
 
 
     public InjectionRegisterJava register(AnnotationRegistrationModule module) {
-        injection.register(module);
+        container.register(module);
         return this;
     }
 
     public InjectionRegisterJava registerGuiceModule(Module... resources) {
-        ((GuiceInjectionContainer) injection.getContainer())
+        ((GuiceInjectionContainer) container.getContainer())
                 .registerModule(resources);
         return this;
     }
 
-    public SimpleInjection getInjectionContainer() {
-        return injection;
+    public Container getContainer() {
+        return container;
+    }
+
+    public ScopeContainer getScopedContainer() {
+        return container;
     }
 
 }

@@ -14,8 +14,8 @@
 
 package test.org.hrodberaht.inject;
 
+import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterScan;
-import org.hrodberaht.inject.SimpleInjection;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.AnyService;
 import test.org.hrodberaht.inject.testservices.AnyServiceDoNothingImpl;
@@ -42,7 +42,7 @@ public class ContainerScanUnitT {
         InjectionRegisterScan register = new InjectionRegisterScan();
         // Tests scanning and exclusion of single class
         register.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
-        SimpleInjection container = register.getInjectionContainer();
+        Container container = register.getContainer();
 
         AnyService anyService = container.get(AnyService.class);
         anyService.doStuff();
@@ -58,7 +58,7 @@ public class ContainerScanUnitT {
         register.activateContainerJavaXInject();
         // Tests scanning and exclusion of single class
         register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
-        SimpleInjection container = register.getInjectionContainer();
+        Container container = register.getContainer();
         Car aCar = container.get(Car.class);
 
         assertEquals("volvo", aCar.brand());

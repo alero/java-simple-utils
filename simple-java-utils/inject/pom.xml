@@ -65,7 +65,9 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>snapshot</version>
+            <version>2.0</version>
+            <!-- First you need to download and build Guice from trunk and manually install it in local repository 
+            <version>snapshot</version> -->
             <optional>true</optional>
         </dependency>
 

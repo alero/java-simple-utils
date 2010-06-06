@@ -16,8 +16,8 @@ package test.org.hrodberaht.inject;
 
 import junit.framework.TestCase;
 import org.atinject.tck.auto.Car;
+import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SimpleInjection;
 
 
 /**
@@ -38,10 +38,10 @@ public class GuiceSuiteJsr330TckUnitT extends TestCase {
 
         // Guice does not work with the TCK at version 2.0, need to wait for new release.
         registerJava.registerGuiceModule(new GuiceTckModule());
-        SimpleInjection injection = registerJava.getInjectionContainer();
+        Container container = registerJava.getContainer();
 
 
-        final Car car = injection.get(Car.class);
+        final Car car = container.get(Car.class);
         final boolean supportsStatic = false;
         final boolean supportsPrivate = true;
         // return Tck.testsFor(car, supportsStatic, supportsPrivate);

@@ -33,7 +33,7 @@ import java.lang.annotation.Annotation;
  * @version 1.0
  * @since 1.0
  */
-public class SimpleInjection {
+public class SimpleInjection implements Container, ScopeContainer {
 
 
 

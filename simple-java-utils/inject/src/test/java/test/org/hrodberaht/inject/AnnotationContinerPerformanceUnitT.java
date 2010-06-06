@@ -16,8 +16,8 @@ package test.org.hrodberaht.inject;
 
 import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
+import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SimpleInjection;
 import org.junit.Test;
 
 /**
@@ -32,7 +32,7 @@ public class AnnotationContinerPerformanceUnitT {
 
     @Test(timeout = 10000)
     public void testPerformance(){
-        SimpleInjection container = AnnotationContainerUtil.prepareRegister();
+        Container container = AnnotationContainerUtil.prepareRegister();
         for(int i=0;i<10000;i++){
             Car car = container.get(Car.class);
             // This does loads of fetching from the container, will stress test it a lot.
@@ -51,7 +51,7 @@ public class AnnotationContinerPerformanceUnitT {
                 .activateContainerGuice();
 
         registerJava.registerGuiceModule(new GuiceTckModule());
-        SimpleInjection container = registerJava.getInjectionContainer();
+        Container container = registerJava.getContainer();
         for(int i=0;i<10000;i++){
             Car car = container.get(Car.class);
             // This does loads of fetching from the container, will stress test it a lot.

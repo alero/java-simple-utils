@@ -24,30 +24,30 @@ package org.hrodberaht.inject;
  */
 public abstract class InjectionRegisterBase<T> {
 
-    protected SimpleInjection injection = null;
+    protected SimpleInjection container = null;
 
     protected InjectionRegisterBase() {
-        this.injection = new SimpleInjection();
+        this.container = new SimpleInjection();
         activateContainerDefault();
     }
 
     public T activateContainerJavaXInject() {
-        injection.setContainerInjectAnnotationCompliantMode();
+        container.setContainerInjectAnnotationCompliantMode();
         return (T) this;
     }
 
     public T activateContainerDefault() {
-        injection.setContainerSimpleInjection();
+        container.setContainerSimpleInjection();
         return (T) this;
     }
 
     public T activateContainerSpring() {
-        injection.setContainerSpring();
+        container.setContainerSpring();
         return (T) this;
     }
 
     public T activateContainerGuice() {
-        injection.setContainerGuice();
+        container.setContainerGuice();
         return (T) this;
     }
 

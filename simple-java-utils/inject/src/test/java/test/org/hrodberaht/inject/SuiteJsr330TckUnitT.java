@@ -25,8 +25,8 @@ import org.atinject.tck.auto.Seat;
 import org.atinject.tck.auto.Tire;
 import org.atinject.tck.auto.V8Engine;
 import org.atinject.tck.auto.accessories.SpareTire;
+import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 
 
@@ -61,9 +61,9 @@ public class SuiteJsr330TckUnitT extends TestCase {
             }
         };
 
-        SimpleInjection injection = registerJava.register(module).getInjectionContainer();
+        Container container = registerJava.register(module).getContainer();
 
-        final Car car = injection.get(Car.class);
+        final Car car = container.get(Car.class);
         final boolean supportsStatic = false;
         final boolean supportsPrivate = true;
 
