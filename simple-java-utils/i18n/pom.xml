@@ -22,7 +22,7 @@
             <version>1.0-M2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.hrodberaht.directus</groupId>
+            <groupId>org.hrodberaht</groupId>
             <artifactId>inject</artifactId>
             <version>1.0-M2-SNAPSHOT</version>
         </dependency>
