@@ -21,7 +21,9 @@ import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.annotated.Spare;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
+import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
 import test.org.hrodberaht.inject.testservices.annotated.Tire;
+import test.org.hrodberaht.inject.testservices.annotated.VindShield;
 
 import static org.junit.Assert.assertTrue;
 
@@ -37,7 +39,7 @@ public class AnnotationContainerUnitT {
 
 
     @Test
-    public void testFindAnnotatedWithSpecial() {
+    public void testFindAnnotatedWithForTwoDifferentServices() {
 
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
         registerJava.activateContainerJavaXInject();
@@ -45,6 +47,7 @@ public class AnnotationContainerUnitT {
             @Override
             public void registrations() {
                 register(Tire.class).annotated(Spare.class).with(SpareTire.class);
+                register(VindShield.class).annotated(Spare.class).with(SpareVindShield.class);
             }
         });
 
@@ -52,7 +55,11 @@ public class AnnotationContainerUnitT {
 
         Tire spareTire = container.get(Tire.class, Spare.class);
 
+        VindShield vindShield = container.get(VindShield.class, Spare.class);
+
         assertTrue(spareTire instanceof SpareTire);
+
+        assertTrue(vindShield instanceof SpareVindShield);
     }
 
 
