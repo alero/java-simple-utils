@@ -8,15 +8,16 @@
         <artifactId>parent-pom</artifactId>
         <version>1.0-M2-SNAPSHOT</version>
     </parent>
-    <groupId>org.hrodberaht.directus</groupId>
+    <groupId>org.hrodberaht</groupId>
     <artifactId>inject</artifactId>
     <packaging>jar</packaging>
     <version>1.0-M2-SNAPSHOT</version>
     <name>Simple Utils Injection</name>
     <description>The Injection project for simpler java development</description>
-
+    
     <repositories>
         <repository>
+            <!-- Is needed for the javax.inject-tck artifact //-->
             <id>usikkert.repo</id>
             <name>usikkert.net Repository</name>
             <url>http://repo.usikkert.net/maven2</url>

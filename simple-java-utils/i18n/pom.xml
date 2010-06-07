@@ -7,7 +7,7 @@
         <version>1.0-M2-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.hrodberaht.directus</groupId>
+    <groupId>org.hrodberaht</groupId>
     <artifactId>i18n</artifactId>
     <version>1.0-M2-SNAPSHOT</version>
     <name>Simple Utils i18n</name>
