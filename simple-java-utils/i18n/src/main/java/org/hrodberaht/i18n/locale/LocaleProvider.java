@@ -46,7 +46,7 @@ public class LocaleProvider {
      * SimpleInjection container = LocaleProvider.getInjectionContainer();
      * container.register(ProviderInterface.class, ThreadLocaleProvider.class);
      *
-     * @return
+     * @return the Container used for LocaleProvider
      */
     public static Container getInjectionContainer() {
         return injectionContainer;
