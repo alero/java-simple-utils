@@ -16,6 +16,9 @@
 
 package org.hrodberaht.i18n.formatter;
 
+import org.hrodberaht.directus.exception.MessageRuntimeException;
+
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 /**
@@ -26,22 +29,26 @@ import java.text.NumberFormat;
  * @version 1.0
  * @since 1.0
  */
-public class LongFormatter extends NumberFormatter {
+public class DecimalFormatter extends NumberFormatter {
     /**
      * Returns an object representation of its argument.
      */
     public Object convertToObject(String target) {
-
         NumberFormat decimalFormat = NumberFormat.getInstance(locale);
         Number number = parseNumber(target, decimalFormat);
-        return number.longValue();
-
-    }
+        return number.doubleValue();
+    }    
 
     /**
      * Returns a formatted version of its argument.
      */
     public String convertToString(Object obj) {
-        return (obj == null ? null : obj.toString());
+        if (obj instanceof Double) {
+            NumberFormat decimalFormat = NumberFormat.getInstance(locale);
+            decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+            decimalFormat = fixCharacterJVMErrorsForDecimalFormat(decimalFormat);
+            return decimalFormat.format(obj);
+        }
+        throw new MessageRuntimeException("Can not format any objects that are not double");
     }
 }

@@ -16,7 +16,12 @@
 
 package test.org.hrodberaht.i18n.locale;
 
+import org.hrodberaht.i18n.locale.LocaleProfile;
+import org.hrodberaht.i18n.locale.LocaleProvider;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,8 +33,36 @@ import static org.junit.Assert.assertEquals;
  * @since 1.0
  */
 public class TestLocale {
+
+    @Before
+    public void init() {
+        System.setProperty("localeprovide.locale", "sv_SE");
+    }
+
     @Test
-    public void dummyTest(){
-        assertEquals(1,1);
+    public void simpleLocaleTest(){
+
+        Locale testLocale = new Locale("sv","Se");
+        Locale locale = LocaleProvider.getProfile().getLocale();
+        assertEquals(locale, testLocale); 
+    }
+
+    @Test
+    public void simpleSystemLocaleTest(){
+
+        Locale testLocale = new Locale("sv","Se");
+        Locale testProviderLocale = new Locale("en","US");
+
+        // This mimics what can be done in a RequestFilter for example
+        LocaleProvider.setThreadLocaleProvider();
+        LocaleProvider.setProfile(new LocaleProfile(testProviderLocale));
+
+        // While this can be done anywhere in the same JVM and on the same thread (inheritable threads supported).
+        Locale locale = LocaleProvider.getSystemLocale();
+        assertEquals(locale, testLocale);
+
+        locale = LocaleProvider.getProfile().getLocale();
+        assertEquals(locale, testProviderLocale);
+        LocaleProvider.seDefaultLocaleProvider();
     }
 }

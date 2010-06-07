@@ -25,26 +25,25 @@ import java.util.Locale;
  * @version 1.0
  * @since 1.0
  */
-public class ThreadLocaleProvider implements ProviderInterface{
+public class ThreadLocaleProvider extends SimpleLocaleProvider{
 
-    
-    @Override
+    private static final InheritableThreadLocal<LocaleProfile>
+            threadLocal = new InheritableThreadLocal<LocaleProfile>();
+
     public LocaleProfile getProfile() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return threadLocal.get();
     }
 
-    @Override
     public Locale getSystemLocale() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return createSystemLocale();
     }
 
-    @Override
+
     public StatefulProfile statefulProfileSupport() {
         return StatefulProfile.THREAD;
     }
 
-    @Override
     public void setStatefulProfile(LocaleProfile localeProfile) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        threadLocal.set(localeProfile);
     }
 }

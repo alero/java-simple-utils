@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
@@ -11,10 +12,10 @@
     <artifactId>i18n</artifactId>
     <version>1.0-M2-SNAPSHOT</version>
     <name>Simple Utils i18n</name>
-    <description />
+    <description/>
 
-    
-   <dependencies>
+
+    <dependencies>
         <dependency>
             <groupId>org.hrodberaht.directus</groupId>
             <artifactId>core</artifactId>
@@ -25,8 +26,21 @@
             <artifactId>inject</artifactId>
             <version>1.0-M2-SNAPSHOT</version>
         </dependency>
-   </dependencies>
+    </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>                    
+                    <threadCount>1</threadCount>
+                    <useUnlimitedThreads>false</useUnlimitedThreads>
+                    <forkMode>never</forkMode>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <reporting>
         <outputDirectory>../target/site/${artifactId}</outputDirectory>

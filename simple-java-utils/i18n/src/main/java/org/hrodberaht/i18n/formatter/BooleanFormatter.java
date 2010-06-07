@@ -32,10 +32,13 @@ public class BooleanFormatter extends Formatter
 {
 
     static final String CONVERT_MSG = "Unable to create Boolean object from {0}";
-    static final List TRUE_VALUES = Arrays.asList(new String[]  {
-            "yes", "true", "on", "1", "enabled" });
-    static final List FALSE_VALUES = Arrays.asList(new String[] {
-            "no", "false", "off", "0", "disabled" });
+    static final List TRUE_VALUES = Arrays.asList(
+            "yes", "true", "on", "1", "enabled" );
+    static final List FALSE_VALUES = Arrays.asList(
+            "no", "false", "off", "0", "disabled" );
+
+    public static final String BOOLEAN_TRUE = "Yes";
+    public static final String BOOLEAN_FALSE = "No";
     
     public Object convertToObject(String target)
     {
@@ -52,9 +55,9 @@ public class BooleanFormatter extends Formatter
     {
         if (target == null)
             return null;
-        
+
         boolean isTrue = ((Boolean)target);
         
-        return isTrue ? "Yes" : "No";
+        return isTrue ? BOOLEAN_TRUE : BOOLEAN_FALSE;
     }
 }

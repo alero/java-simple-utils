@@ -33,8 +33,8 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         super();
     }
 
-    public InjectionRegisterJava(SimpleInjection container) {
-        this.container = container;
+    public InjectionRegisterJava(Container container) {
+        this.container = (SimpleInjection) container;
     }
 
     public InjectionRegisterJava finalRegister(Class anInterface, Class service, SimpleInjection.Scope scope) {

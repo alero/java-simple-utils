@@ -18,6 +18,8 @@ package org.hrodberaht.i18n.formatter;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 
+import java.text.NumberFormat;
+
 
 /**
  * Simple Java Utils
@@ -26,7 +28,7 @@ import org.hrodberaht.directus.exception.MessageRuntimeException;
  * @version 1.0
  * @since 1.0
  */
-public class IntegerFormatter extends Formatter
+public class IntegerFormatter extends NumberFormatter
 {
      /**
      * Returns an object representation of its argument.
@@ -34,12 +36,16 @@ public class IntegerFormatter extends Formatter
     public Object convertToObject(String target)
     {
         try {
-            return new Integer(target);
+            NumberFormat decimalFormat = NumberFormat.getIntegerInstance(locale);
+            Number number = parseNumber(target, decimalFormat);
+            return number.intValue();
         }
         catch (NumberFormatException e) {
             throw new MessageRuntimeException(e);
         }
     }
+
+
 
     /**
      * Returns a formatted version of its argument.

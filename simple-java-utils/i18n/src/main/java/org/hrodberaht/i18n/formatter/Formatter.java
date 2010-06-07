@@ -17,13 +17,9 @@
 package org.hrodberaht.i18n.formatter;
 
 import org.hrodberaht.i18n.formatter.types.CurrencyData;
-import org.hrodberaht.i18n.formatter.types.MeasureData;
 import org.hrodberaht.i18n.formatter.types.PercentData;
 import org.hrodberaht.i18n.locale.LocaleProvider;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
@@ -42,13 +38,12 @@ public class Formatter<T> {
         return getFormatter(aType, null);
     }
 
+
     public static <T> Formatter<T> getFormatter(Class<T> aType, DateFormatter.DateConvert dateConvert) {
         if (String.class.isAssignableFrom(aType)) {
             return new Formatter<T>();
         } else if (CurrencyData.class.isAssignableFrom(aType)) {
             return new CurrencyFormatter();
-        } else if (MeasureData.class.isAssignableFrom(aType)) {
-            return new MeasureFormatter();
         } else if (PercentData.class.isAssignableFrom(aType)) {
             return new PercentageFormatter();
         } else if (Date.class.isAssignableFrom(aType)) {
@@ -65,6 +60,8 @@ public class Formatter<T> {
             return new BooleanFormatter();
         } else if (Boolean.TYPE.isAssignableFrom(aType)) {
             return new BooleanFormatter();
+        } else if(Double.class.isAssignableFrom(aType)){
+            return new DecimalFormatter();
         }
 
         return null;
@@ -89,32 +86,7 @@ public class Formatter<T> {
         return string == null ? null : (T) string.trim();
     }
 
-    protected Number parseAndErrorhandleNumber(String target, NumberFormat formatter) {
-        ParsePosition parsePosition = new ParsePosition(0);
-        Number parsedNumber = formatter.parse(target.trim(), parsePosition);
-        checkParsePositionForErrors(target, parsePosition);
-        return parsedNumber;
-    }
-
-    protected Date parseAndErrorhandleDate(String target, DateFormat formatter) {
-        ParsePosition parsePosition = new ParsePosition(0);
-        Date parsedDate = formatter.parse(target.trim(), parsePosition);
-        checkParsePositionForErrors(target, parsePosition);
-        return parsedDate;
-    }
-
-    private void checkParsePositionForErrors(String target, ParsePosition parsePosition) {
-        if (parsePosition.getIndex() != target.length()) {
-            throw new FormatException("Parsing stopped for char {0} at position {1}"
-                    , target.charAt(parsePosition.getIndex()), parsePosition.getIndex()
-            );
-        }
-        if (parsePosition.getErrorIndex() != -1) {
-            throw new FormatException("Parsing failed on char {0} at position {1}"
-                    , target.charAt(parsePosition.getErrorIndex()), parsePosition.getErrorIndex()
-            );
-        }
-    }
+    
 
 
 }

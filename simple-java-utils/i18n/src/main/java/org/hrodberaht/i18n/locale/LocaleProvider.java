@@ -18,6 +18,7 @@ package org.hrodberaht.i18n.locale;
 
 import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterJava;
+import org.hrodberaht.inject.SimpleInjection;
 
 import java.util.Locale;
 
@@ -38,13 +39,26 @@ public class LocaleProvider {
         injectionContainer = registerJava.getContainer();
     }
 
+    public static void setThreadLocaleProvider(){
+        InjectionRegisterJava registerJava = new InjectionRegisterJava(
+               (SimpleInjection)LocaleProvider.getInjectionContainer());
+        registerJava.reRegister(ProviderInterface.class, ThreadLocaleProvider.class);
+    }
+
+    public static void seDefaultLocaleProvider() {
+        InjectionRegisterJava registerJava = new InjectionRegisterJava(
+               (SimpleInjection)LocaleProvider.getInjectionContainer());
+        registerJava.reRegister(ProviderInterface.class, SimpleLocaleProvider.class);
+    }
+
     /**
      * Use the injection container to change the implementation fo the LocaleProvider.
      * Default version setup is SimpleLocaleProvider and anything implementing ProviderInterface will suffice.
      *
      * To Change registered service simply do this
-     * SimpleInjection container = LocaleProvider.getInjectionContainer();
-     * container.register(ProviderInterface.class, ThreadLocaleProvider.class);
+     * InjectionRegisterJava registerJava = new InjectionRegisterJava(
+     *          (SimpleInjection)LocaleProvider.getInjectionContainer());
+     * registerJava.register(ProviderInterface.class, ThreadLocaleProvider.class);
      *
      * @return the Container used for LocaleProvider
      */
@@ -59,4 +73,11 @@ public class LocaleProvider {
     public static Locale getSystemLocale(){
         return injectionContainer.get(ProviderInterface.class).getSystemLocale();
     }
+
+    public static void setProfile(LocaleProfile profile){
+        injectionContainer.get(ProviderInterface.class).setStatefulProfile(profile);
+    }
+
+
+
 }

@@ -18,7 +18,9 @@ package org.hrodberaht.i18n.formatter;
 
 import java.text.DateFormat;
 import java.text.FieldPosition;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -90,5 +92,25 @@ public class DateFormatter extends Formatter {
         DateFormat formatter = getFormat(null);
         buf = formatter.format(value, buf, new FieldPosition(0));
         return buf.toString();
+    }
+
+    protected Date parseAndErrorhandleDate(String target, DateFormat formatter) {
+        ParsePosition parsePosition = new ParsePosition(0);
+        Date parsedDate = formatter.parse(target.trim(), parsePosition);
+        checkParsePositionForErrors(target, parsePosition);
+        return parsedDate;
+    }
+
+    private void checkParsePositionForErrors(String target, ParsePosition parsePosition) {
+        if (parsePosition.getIndex() != target.length()) {
+            throw new FormatException("Parsing stopped for char {0} at position {1} for {2}"
+                    , target.charAt(parsePosition.getIndex()), parsePosition.getIndex(), target
+            );
+        }
+        if (parsePosition.getErrorIndex() != -1) {
+            throw new FormatException("Parsing failed on char {0} at position {1} for {2}"
+                    , target.charAt(parsePosition.getErrorIndex()), parsePosition.getErrorIndex(), target
+            );
+        }
     }
 }

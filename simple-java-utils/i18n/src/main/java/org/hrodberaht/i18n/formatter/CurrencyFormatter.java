@@ -17,10 +17,11 @@
 package org.hrodberaht.i18n.formatter;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
+import org.hrodberaht.i18n.formatter.types.CurrencyData;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
 
 /**
  * Simple Java Utils
@@ -29,41 +30,46 @@ import java.text.ParseException;
  * @version 1.0
  * @since 1.0
  */
-public class CurrencyFormatter extends Formatter
-{
+public class CurrencyFormatter extends NumberFormatter {
     public final static int SCALE = 2;
 
-    public Object convertToObject(String target)
-    {
-        if (target == null)  {
+    public Object convertToObject(String target) {
+        if (target == null) {
             return null;
         }
 
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
         // Insert currency symbol if absent
-        String symbol = formatter.getCurrency().getSymbol();
-        if (!hasSymbol(target, symbol)) {
-            target = interpolateSymbol(target, symbol);
-        }
 
-        try {
-            Number parsedNumber = formatter.parse(target.trim());
-            BigDecimal value = new BigDecimal(parsedNumber.doubleValue());
-            value.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
-            return value.doubleValue();
-        }
-        catch (ParseException e) {
-            throw new MessageRuntimeException(target, e);
-        }
+        target = interpolateSymbol(target, formatter);
+
+
+        Number parsedNumber = parseNumber(target, formatter);
+        BigDecimal value = new BigDecimal(parsedNumber.doubleValue());
+        // value = value.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+        return new CurrencyData(value.doubleValue());
+
     }
 
-    private String interpolateSymbol(String target, String symbol) {
-        // TODO, how to insert symbol at correct place, example Swedish kr after and dollars before. 
+    private String interpolateSymbol(String target, NumberFormat formatter) {
+        DecimalFormat decimalFormat = (DecimalFormat) formatter;
+        if(!"".equals(decimalFormat.getPositivePrefix())){
+            String symbol = decimalFormat.getPositivePrefix();
+            if (!hasSymbol(target, symbol)) {
+                return symbol+target;
+            }
+        }
+        if(!"".equals(decimalFormat.getPositiveSuffix())){
+            String symbol = decimalFormat.getPositiveSuffix();
+            if (!hasSymbol(target, symbol)) {
+                return target+symbol;
+            }
+        }
         return target;
     }
 
     private boolean hasSymbol(String target, String symbol) {
-        if(target.indexOf(symbol) != -1){
+        if (target.indexOf(symbol) != -1) {
             return true;
         }
         return false;
@@ -73,16 +79,16 @@ public class CurrencyFormatter extends Formatter
      * Returns a string representation of its argument formatted as a
      * currency value.
      */
-    public String convertToString(Object obj)
-    {
-        if (obj == null)  {
+    public String convertToString(Object obj) {
+        if (obj == null) {
             return null;
         }
-        
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
         try {
             BigDecimal number = (BigDecimal) obj;
             number = number.setScale(SCALE, BigDecimal.ROUND_HALF_UP);
+            formatter = fixCharacterJVMErrorsForDecimalFormat(formatter);
             return formatter.format(number.doubleValue());
         }
         catch (IllegalArgumentException e) {

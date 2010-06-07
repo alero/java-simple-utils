@@ -30,7 +30,7 @@ import java.text.NumberFormat;
  * @version 1.0
  * @since 1.0
  */
-public class PercentageFormatter extends Formatter {
+public class PercentageFormatter extends NumberFormatter {
     /**
      * The default scale for percentage values
      */
@@ -45,7 +45,10 @@ public class PercentageFormatter extends Formatter {
     public Object convertToObject(String target) {
         try {
             NumberFormat formatter = DecimalFormat.getPercentInstance(locale);
-            Number parsedNumber = parseAndErrorhandleNumber(target, formatter);
+            if(target.indexOf("%") == -1){
+                target += "%";                
+            }
+            Number parsedNumber = parseNumber(target, formatter);
             return new PercentData(parsedNumber.doubleValue());
         }
         catch (NumberFormatException e) {
@@ -69,19 +72,15 @@ public class PercentageFormatter extends Formatter {
         try {
             BigDecimal bigDecValue = getBigDecimal(value);
             NumberFormat format = NumberFormat.getPercentInstance(locale);
-            handleFormattingJVMTweaks(format);
+            format = fixCharacterJVMErrorsForDecimalFormat(format);
             return format.format(bigDecValue.doubleValue());
         }
         catch (IllegalArgumentException iae) {
             throw new FormatException("Unable to format {0} as a percentage value", iae, value);
         }
 
-
     }
 
-    private void handleFormattingJVMTweaks(NumberFormat format) {
-
-    }
 
     private BigDecimal getBigDecimal(Object value) {
         BigDecimal bigDecValue;
@@ -90,7 +89,6 @@ public class PercentageFormatter extends Formatter {
         } else {
             bigDecValue = (BigDecimal) value;
         }
-
         bigDecValue = bigDecValue.setScale(PERCENTAGE_SCALE,
                 BigDecimal.ROUND_HALF_UP);
         return bigDecValue;

@@ -20,8 +20,8 @@ import org.hrodberaht.directus.exception.MessageRuntimeException;
 import org.hrodberaht.i18n.formatter.DateFormatter;
 import org.hrodberaht.i18n.formatter.FormatException;
 import org.hrodberaht.i18n.formatter.Formatter;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -37,15 +37,15 @@ import static org.junit.Assert.assertEquals;
  * @version 1.0
  * @since 1.0
  */
-public class TestFormatter {
+public class TestDateFormatter {
 
-    @BeforeClass
-    public static void staticInit(){
+    @Before
+    public void init(){
         System.setProperty("localeprovide.locale", "sv_SE");
     }
 
-    @AfterClass
-    public static void staticDestroy(){
+    @After
+    public void destroy(){
         System.clearProperty("localeprovide.locale");
     }
 
