@@ -21,7 +21,7 @@ import org.hrodberaht.inject.register.RegistrationModule;
 import java.lang.annotation.Annotation;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-maj-29 12:48:43

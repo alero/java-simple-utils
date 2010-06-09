@@ -3,7 +3,7 @@ package org.hrodberaht.inject.internal.annotation.creator;
 import java.lang.reflect.Constructor;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-jun-06 00:16:21

@@ -21,7 +21,7 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-maj-29 13:07:33

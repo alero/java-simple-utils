@@ -19,7 +19,7 @@ import org.hrodberaht.inject.SimpleInjection;
 import javax.inject.Provider;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-maj-29 00:46:09

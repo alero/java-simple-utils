@@ -22,7 +22,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  * @version 1.0

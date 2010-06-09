@@ -3,7 +3,7 @@ package org.hrodberaht.inject.internal.annotation.scope;
 import org.hrodberaht.inject.SimpleInjection;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-jun-06 02:45:49

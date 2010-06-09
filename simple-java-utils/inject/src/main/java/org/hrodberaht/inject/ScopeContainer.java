@@ -1,7 +1,7 @@
 package org.hrodberaht.inject;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-jun-06 02:06:55

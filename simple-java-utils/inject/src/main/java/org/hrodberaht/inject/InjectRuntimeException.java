@@ -17,7 +17,7 @@ package org.hrodberaht.inject;
 import java.text.MessageFormat;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-maj-28 19:00:29

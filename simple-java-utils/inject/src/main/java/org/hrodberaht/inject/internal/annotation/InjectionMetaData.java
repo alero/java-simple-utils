@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-maj-28 21:24:31

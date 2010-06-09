@@ -3,7 +3,7 @@ package org.hrodberaht.inject.internal.annotation;
 import java.lang.annotation.Annotation;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-jun-03 19:57:23
