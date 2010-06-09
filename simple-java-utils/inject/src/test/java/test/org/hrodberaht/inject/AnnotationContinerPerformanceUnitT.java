@@ -58,8 +58,6 @@ public class AnnotationContinerPerformanceUnitT {
             // Form what i could see on the Cobertura report each rotation give about 100 calls.
             // meaning these 10 000 iterations will test about 1 000 000 calls to the SimpleInjection.get method.
 
-            // On my machine an Intel i7 820 this takes about 2 seconds using 1 of 4 CPU's at 75%.
-            // This is not strange as this test is not threaded in any way.
             // Tck.testsFor(car, false, true);
         }
     }

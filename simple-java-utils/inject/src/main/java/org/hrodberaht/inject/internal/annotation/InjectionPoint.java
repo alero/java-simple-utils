@@ -117,15 +117,23 @@ public class InjectionPoint {
 
     private InjectionMetaData findDependency(final Field field, AnnotationInjection annotationInjection) {
         Class fieldBeanClass = field.getType();
-        String qualifier = AnnotationQualifierUtil.getQualifierName(field, field.getAnnotations());
+
 
         if (InjectionUtils.isProvider(fieldBeanClass)) {
             final Type genericType = field.getGenericType();
-            final Class beanClassFromProvider = InjectionUtils.getClassFromProvider(field, genericType);            
-            return annotationInjection.findInjectionData(beanClassFromProvider, qualifier, true);
+            final Class beanClassFromProvider = InjectionUtils.getClassFromProvider(field, genericType);
+            InjectionKey key = AnnotationQualifierUtil.getQualifierKey(beanClassFromProvider, field.getAnnotations());
+            if(key != null){
+                Class serviceImpl = annotationInjection.findServiceClass(key);
+                return annotationInjection.findInjectionData(serviceImpl, key, true);
+            }else{
+                return annotationInjection.findInjectionData(beanClassFromProvider, key, true);    
+            }
+
         }
 
         else {
+            InjectionKey qualifier = AnnotationQualifierUtil.getQualifierKey(fieldBeanClass, field.getAnnotations());
             return annotationInjection.findInjectionData(fieldBeanClass, qualifier, false);
         }
     }

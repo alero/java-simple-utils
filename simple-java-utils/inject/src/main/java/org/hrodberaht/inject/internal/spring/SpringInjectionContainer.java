@@ -23,17 +23,16 @@ public class SpringInjectionContainer implements InjectionContainer {
         context = new ClassPathXmlApplicationContext(locations);
     }
 
-    @Override
+
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
         return context.getBean(qualifier, service);
     }
 
-    @Override
+
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
         return context.getBean(service);
     }

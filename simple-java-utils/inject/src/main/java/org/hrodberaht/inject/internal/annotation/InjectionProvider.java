@@ -28,19 +28,16 @@ import javax.inject.Provider;
  */
 public class InjectionProvider implements Provider {
 
-    private Class serviceClass;
-    private String qualifierName = null;
+    private Class serviceClass;    
     private SimpleInjection injection;
 
-    public InjectionProvider(SimpleInjection injection, Class serviceClass, String qualifierName) {
+    public InjectionProvider(SimpleInjection injection, Class serviceClass) {
         this.serviceClass = serviceClass;
-        this.qualifierName = qualifierName;
         this.injection = injection;
     }
-
-    @Override
+    
     @SuppressWarnings(value = "unchecked")
     public Object get() {
-        return injection.get(serviceClass, qualifierName);
+        return injection.get(serviceClass);
     }
 }

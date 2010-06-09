@@ -37,7 +37,6 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         return getQualifiedService(service, forcedScope, key);
     }
 
-    @Override
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
         InjectionKey key = getAnnotatedKey(qualifier, service);
         return getQualifiedService(service, forcedScope, key);
@@ -48,7 +47,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         return instantiateService(service, forcedScope, serviceRegister);
     }
 
-     @Override
+
     public void register(Class anInterface, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredServices.containsKey(anInterface)) {
             reRegisterSupport(anInterface, type);
@@ -58,7 +57,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         );
     }
 
-    @Override
+
     public void register(InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
 
         if (registeredNamedServices.containsKey(key)) {
@@ -69,7 +68,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         );
     }
 
-    @Override
+    
     public void register(RegistrationModule... modules) {
 
     }
@@ -127,7 +126,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         }
         if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.FINAL) {
             throw new InjectRuntimeException(
-                    "A FINAL Service for {0} is already registered, can not reRegister", key.getStringQualifier());
+                    "A FINAL Service for {0} is already registered, can not reRegister", key.getQualifier());
         }
 
     }

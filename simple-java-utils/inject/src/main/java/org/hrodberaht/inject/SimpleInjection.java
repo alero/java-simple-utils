@@ -41,9 +41,7 @@ public class SimpleInjection implements Container, ScopeContainer {
     private InjectionContainer injectionContainer = new SimpleInjectionContainer();
 
 
-    public enum Scope {
-        SINGLETON, NEW, THREAD, INHERITABLE_THREAD
-    }
+    
 
 
     public enum RegisterType {

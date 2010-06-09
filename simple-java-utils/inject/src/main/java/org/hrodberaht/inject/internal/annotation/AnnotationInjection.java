@@ -35,32 +35,199 @@ import java.util.List;
  */
 public class AnnotationInjection {
 
-    
-    private InjectionCacheHandler injectionCacheHandler = null;
-    private SimpleInjection container;
-    
 
-    public AnnotationInjection(List<InjectionMetaData> injectionMetaDataCache, SimpleInjection container) {
+    private InjectionCacheHandler injectionCacheHandler;
+    private AnnotationInjectionContainer injectionContainer;
+    private SimpleInjection container;
+
+
+
+    public AnnotationInjection(List<InjectionMetaData> injectionMetaDataCache
+            , SimpleInjection container
+            , AnnotationInjectionContainer injectionContainer) {
         injectionCacheHandler = new InjectionCacheHandler(injectionMetaDataCache);
         this.container = container;
+        this.injectionContainer = injectionContainer;
     }
 
-
+    /**
+     * Creates an instance for a service, uses {@link #findInjectionData}
+     * @param service
+     * @return a created object according to its bound scope {@link javax.inject.Scope}
+     */
     public Object createInstance(Class service) {
         InjectionMetaData injectionMetaData =
                 findInjectionData(service, null, InjectionUtils.isProvider(service));
-
         return callConstructor(injectionMetaData);
+    }
+
+    /**
+     * Will create a predefined service for later resolve.
+     * Sets the predefined attribute in the InjectionMetaData to true
+     * @param service
+     * @param key
+     * @param provider
+     * @return a predefined services, not cached.
+     */
+    public InjectionMetaData createInjectionMetaData(Class service, InjectionKey key, boolean provider) {
+        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key, provider);
+        Constructor constructor = InjectionUtils.findConstructor(service);
+        injectionMetaData.setConstructor(constructor);
+        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
+        injectionMetaData.setPreDefined(true);
+        injectionCacheHandler.put(injectionMetaData);
+        return injectionMetaData;
+    }
+
+    /**
+     * Checks the registry for the service class using a key, not nullsafe.
+     * @param key the key to find a serviceclass for
+     * @return the found service class, null not accepted
+     */
+    public Class findServiceClass(InjectionKey key) {
+        return this.injectionContainer.findService(key);
+    }
+
+    /**
+     * Search for injectiondata in the cache, if not found creates new injection data from scratch.
+     * @param service the service implementation to create
+     * @param key the injection key (named or annotated service definition)
+     * @param provider is the service a javax.inject.Provider
+     * @return a cached injection meta data, is not protected from manipulation
+     */
+    public InjectionMetaData findInjectionData(Class service, InjectionKey key, boolean provider) {
+        InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(
+                new InjectionMetaData(service, key, provider));
+        if (cachedInjectionMetaData != null) {
+            if (cachedInjectionMetaData.isPreDefined()) {
+                resolvePredefinedService(cachedInjectionMetaData);
+            }
+            return cachedInjectionMetaData;
+        }
+
+        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key, provider);
+        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
+        injectionCacheHandler.put(injectionMetaData);
+        Constructor constructor = InjectionUtils.findConstructor(service);
+        injectionMetaData.setConstructor(constructor);
+        resolveService(injectionMetaData);
+        return injectionMetaData;
+    }
+
+    @SuppressWarnings(value = "unchecked")
+    private InjectionMetaData findInjectionData(InjectionMetaData metaData, boolean provider) {
+        return findInjectionData(metaData.getServiceClass(), metaData.getKey(), provider);
+    }
+
+    /**
+     * @param dependency
+     * @return
+     */
+    private Object innerCreateInstance(InjectionMetaData dependency) {
+        if (dependency.isProvider()) {
+            InjectionMetaData injectionMetaData = findInjectionData(dependency, false);
+            return new InjectionProvider(container, injectionMetaData.getServiceClass());
+        }
+        return createInstance(dependency);
+    }
+
+    /**
+     * Resolves/finds all injection needs (constructors and members)
+     * @param injectionMetaData the service ready for resolving
+     */
+    private void resolveService(InjectionMetaData injectionMetaData) {
+        injectionMetaData.setConstructorDependencies(findDependencies(injectionMetaData.getConstructor()));
+        injectionMetaData.setInjectionPoints(
+                findAllInjectionPoints(injectionMetaData.getServiceClass())
+        );
+    }
+
+    /**
+     * Will resolve the service and set the predefined to false
+     * @param cachedInjectionMetaData a predefined service
+     */
+    private void resolvePredefinedService(InjectionMetaData cachedInjectionMetaData) {
+        resolveService(cachedInjectionMetaData);
+        cachedInjectionMetaData.setPreDefined(false);
+    }
+
+     /**
+     * Uses the injection points to create instances for all services intended.
+     *
+     * @param service
+     * @param injectionMetaData
+     */
+    private void autoWireBean(Object service, InjectionMetaData injectionMetaData) {
+        List<InjectionPoint> injectionPoints = injectionMetaData.getInjectionPoints();
+
+        for (InjectionPoint injectionPoint : injectionPoints) {
+            List<InjectionMetaData> dependencies = injectionPoint.getDependencies();
+            Object[] serviceDependencies = new Object[dependencies.size()];
+            int i = 0;
+            for (InjectionMetaData dependence : dependencies) {
+                Object serviceDependence = innerCreateInstance(dependence);
+                serviceDependencies[i] = serviceDependence;
+                i++;
+            }
+            injectionPoint.inject(service, serviceDependencies);
+
+        }
+    }
+
+    /**
+     * Finds all injection points for a class analysing fields and methods
+     * @param service the class to analyze
+     * @return found injection points
+     */
+    private List<InjectionPoint> findAllInjectionPoints(Class service) {
+        List<InjectionPoint> injectionPoints = new ArrayList<InjectionPoint>();
+        List<Method> allMethods = ReflectionUtils.findMethods(service);
+        List<Member> allMembers = ReflectionUtils.findMembers(service);
+        for (Member member : allMembers) {
+            if (member instanceof Field) {
+                Field field = (Field) member;
+                if (fieldNeedsInjection(field)) {
+                    injectionPoints.add(new InjectionPoint(field, this));
+                }
+            } else if (member instanceof Method) {
+                Method method = (Method) member;
+                if (methodNeedsInjection(method) &&
+                        // This makes sure that overridden methods are not injected
+                        !ReflectionUtils.isOverridden(method, allMethods)) {
+                    injectionPoints.add(new InjectionPoint(method, this));
+                }
+            } else {
+                throw new UnsupportedOperationException("Unsupported member: " + member);
+            }
+        }
+        return injectionPoints;
+    }
+
+    private boolean methodNeedsInjection(Method method) {
+        return !ReflectionUtils.isStatic(method) && method.isAnnotationPresent(InjectionUtils.INJECT);
+    }
+
+    private boolean fieldNeedsInjection(Field field) {
+        return !ReflectionUtils.isStatic(field)
+                && !ReflectionUtils.isFinal(field)
+                && field.isAnnotationPresent(InjectionUtils.INJECT);
+    }
+
+    private List<InjectionMetaData> findDependencies(Constructor constructor) {
+        Class[] parameterTypes = constructor.getParameterTypes();
+        Type[] genericParameterTypes = constructor.getGenericParameterTypes();
+        Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
+        return InjectionUtils.findDependencies(parameterTypes, genericParameterTypes, parameterAnnotations, this);
     }
 
     @SuppressWarnings(value = "unchecked")
     private Object createInstance(InjectionMetaData metaData) {
-        return createInstance(metaData.getServiceClass(), metaData.getQualifierName());
+        return createInstance(metaData.getServiceClass(), null);
     }
 
-    private Object createInstance(Class<Object> service, String qualifier) {
+    private Object createInstance(Class<Object> service, InjectionKey key) {
         InjectionMetaData injectionMetaData =
-                findInjectionData(service, qualifier, InjectionUtils.isProvider(service));
+                findInjectionData(service, key, InjectionUtils.isProvider(service));
 
         return callConstructor(injectionMetaData);
     }
@@ -76,127 +243,8 @@ public class AnnotationInjection {
             servicesForConstructor[i] = bean;
         }
         Object service = injectionMetaData.createInstance(servicesForConstructor);
-        autoWireBean(service, injectionMetaData);        
+        autoWireBean(service, injectionMetaData);
         return service;
-    }
-
-    /**
-     * Uses the injection points to create instances for all services intended.
-     * @param service
-     * @param injectionMetaData
-     */
-    private void autoWireBean(Object service, InjectionMetaData injectionMetaData) {
-        List<InjectionPoint> injectionPoints = injectionMetaData.getInjectionPoints();
-
-        for(InjectionPoint injectionPoint:injectionPoints){
-            List<InjectionMetaData> dependencies = injectionPoint.getDependencies();
-            Object[] serviceDependencies = new Object[dependencies.size()];
-            int i = 0;
-            for(InjectionMetaData dependence:dependencies){
-                Object serviceDependence = innerCreateInstance(dependence);
-                serviceDependencies[i] = serviceDependence;
-                i++;
-            }
-            injectionPoint.inject(service, serviceDependencies);
-
-        }
-    }
-
-    private Object innerCreateInstance(InjectionMetaData dependency) {
-        if (dependency.isProvider()) {
-            InjectionMetaData injectionMetaData = findInjectionData(dependency, false);
-            return new InjectionProvider(container, injectionMetaData.getServiceClass(), injectionMetaData.getQualifierName());
-        }
-        return createInstance(dependency);
-    }
-
-    public InjectionMetaData createInjectionMetaData(Class service, String qualifier, boolean provider) {
-        InjectionMetaData injectionMetaData = new InjectionMetaData(service, qualifier, provider);       
-        Constructor constructor = InjectionUtils.findConstructor(service);
-        injectionMetaData.setConstructor(constructor);
-        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
-        injectionMetaData.setPreDefined(true);
-        return injectionMetaData;
-    }
-
-    @SuppressWarnings(value = "unchecked")
-    private InjectionMetaData findInjectionData(InjectionMetaData metaData, boolean provider) {
-        return findInjectionData(metaData.getServiceClass(), metaData.getQualifierName(), provider);           
-    }
-
-    public InjectionMetaData findInjectionData(Class service, String qualifier, boolean provider) {
-        InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(
-                new InjectionMetaData(service, qualifier, provider));
-        if(cachedInjectionMetaData != null){
-            if(cachedInjectionMetaData.isPreDefined()){
-                resolvePredefinedService(cachedInjectionMetaData);
-            }
-            return cachedInjectionMetaData;
-        }
-
-        InjectionMetaData injectionMetaData = new InjectionMetaData(service, qualifier, provider);
-        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
-        injectionCacheHandler.put(injectionMetaData);
-        Constructor constructor = InjectionUtils.findConstructor(service);
-        injectionMetaData.setConstructor(constructor);        
-        resolveService(injectionMetaData);
-        return injectionMetaData;
-    }
-
-    private void resolveService(InjectionMetaData injectionMetaData) {
-        injectionMetaData.setConstructorDependencies(findDependencies(injectionMetaData.getConstructor()));
-        injectionMetaData.setInjectionPoints(
-                findAllInjectionPoints(injectionMetaData.getServiceClass())
-        );
-    }
-
-    private void resolvePredefinedService(InjectionMetaData cachedInjectionMetaData) {
-        resolveService(cachedInjectionMetaData);
-        cachedInjectionMetaData.setPreDefined(false);
-    }
-
-    private List<InjectionPoint> findAllInjectionPoints(Class service){
-        List<InjectionPoint> injectionPoints = new ArrayList<InjectionPoint>();
-        List<Method> allMethods = ReflectionUtils.findMethods(service);
-        List<Member> allMembers = ReflectionUtils.findMembers(service);
-        for (Member member : allMembers) {
-            if (member instanceof Field) {
-                Field field = (Field) member;
-                if (fieldNeedsInjection(field)) {
-                    injectionPoints.add(new InjectionPoint(field, this));
-                }
-            }
-
-            else if (member instanceof Method) {
-                Method method = (Method) member;
-                if (methodNeedsInjection(method) && !ReflectionUtils.isOverridden(method, allMethods)) {
-                    injectionPoints.add(new InjectionPoint(method, this));
-                }
-            }
-
-            else {
-                throw new UnsupportedOperationException("Unsupported member: " + member);
-            }
-        }
-
-        return injectionPoints;        
-    }
-
-    private boolean methodNeedsInjection(Method method) {
-        return !ReflectionUtils.isStatic(method) && method.isAnnotationPresent(InjectionUtils.INJECT);
-    }
-
-    private boolean fieldNeedsInjection(Field field) {
-        return !ReflectionUtils.isStatic(field)
-             && !ReflectionUtils.isFinal(field)
-             && field.isAnnotationPresent(InjectionUtils.INJECT);
-    }
-
-    private List<InjectionMetaData> findDependencies(Constructor constructor) {
-        Class[] parameterTypes = constructor.getParameterTypes();
-        Type[] genericParameterTypes = constructor.getGenericParameterTypes();
-        Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
-        return InjectionUtils.findDependencies(parameterTypes, genericParameterTypes, parameterAnnotations, this);
     }
 
 

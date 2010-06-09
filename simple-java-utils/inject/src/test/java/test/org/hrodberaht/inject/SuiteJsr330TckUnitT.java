@@ -52,7 +52,7 @@ public class SuiteJsr330TckUnitT extends TestCase {
         // InjectionRegisterJava.register(Drivers.class, DriversSeat.class);
 
         AnnotationRegistrationModule module = new AnnotationRegistrationModule(){
-            @Override
+            
             public void registrations() {
                 register(Car.class).with(Convertible.class);
                 register(Engine.class).with(V8Engine.class);

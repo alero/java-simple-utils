@@ -32,9 +32,8 @@ import java.util.List;
  * @since 1.0
  */
 public class InjectionMetaData {
-
-
-    private String qualifierName;
+    
+    private InjectionKey key;
     private Class serviceClass;
     private boolean provider = false;        
     private boolean preDefined = false;
@@ -45,10 +44,14 @@ public class InjectionMetaData {
     private List<InjectionMetaData> constructorDependencies;
     private List<InjectionPoint> injectionPoints;
 
-    public InjectionMetaData(Class serviceClass, String qualifierName, boolean provider) {
+    public InjectionMetaData(Class serviceClass, InjectionKey key, boolean provider) {
         this.serviceClass = serviceClass;
-        this.qualifierName = qualifierName;
+        this.key = key;
         this.provider = provider;
+    }
+
+    public InjectionKey getKey() {
+        return key;
     }
 
     
@@ -71,10 +74,6 @@ public class InjectionMetaData {
 
     public void setConstructorDependencies(List<InjectionMetaData> constructorDependencies) {
         this.constructorDependencies = constructorDependencies;
-    }
-
-    public String getQualifierName() {
-        return qualifierName;
     }
 
     public void setInjectionPoints(List<InjectionPoint> injectionPoints) {
@@ -124,7 +123,7 @@ public class InjectionMetaData {
                 constructor.setAccessible(originalAccessible);
             }
         }
-    }    
+    }
 
 
     public boolean canInject(final InjectionMetaData bean) {
@@ -136,14 +135,14 @@ public class InjectionMetaData {
             return true;
         }
 
-        if (serviceClass.equals(bean.getServiceClass()) && qualifierName == null) {
+        if (serviceClass.equals(bean.getServiceClass())) {
             return true;
         }
 
         if (serviceClass.isAssignableFrom(bean.getServiceClass())) {
-            if (qualifierName == null && bean.getQualifierName() == null) {
+            if (key == null && bean.getKey() == null) {
                 return true;
-            } else if (qualifierName != null && qualifierName.equals(bean.getQualifierName())) {
+            } else if (key != null && key.equals(bean.getKey())) {
                 return true;
             }
         }

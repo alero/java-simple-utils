@@ -10,6 +10,10 @@ package org.hrodberaht.inject;
  */
 public interface ScopeContainer extends Container {
 
+    public enum Scope {
+        SINGLETON, NEW, THREAD, INHERITABLE_THREAD
+    }
+
     <T> T getNew(Class<T> service);
     <T> T getSingleton(Class<T> service);
 }

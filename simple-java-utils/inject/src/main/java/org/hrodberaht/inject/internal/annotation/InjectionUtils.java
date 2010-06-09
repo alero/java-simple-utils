@@ -88,10 +88,17 @@ public class InjectionUtils {
             Annotation[] annotations,
             boolean provider,
             AnnotationInjection annotationInjection) {
+        InjectionKey key = AnnotationQualifierUtil.getQualifierKey(serviceClass, annotations);
+        Class serviceImplClass;
+        if(key != null){
+            serviceImplClass = annotationInjection.findServiceClass(key);
+        }else{
+            serviceImplClass = serviceClass;
+        }
         injectionMetaData.add(
                 annotationInjection.findInjectionData(
-                        serviceClass,
-                        AnnotationQualifierUtil.getQualifierName(serviceClass, annotations),
+                        serviceImplClass,
+                        key,
                         provider
                 )
         );
@@ -128,7 +135,7 @@ public class InjectionUtils {
     }
 
 
-    public static boolean isProvider(Class<Object> service) {
+    public static boolean isProvider(Class service) {
         return Provider.class.isAssignableFrom(service);
     }
 

@@ -20,17 +20,17 @@ public class GuiceInjectionContainer implements InjectionContainer {
 
     Injector injector = null;
 
-    @Override
+
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
         return injector.getInstance(service);
     }
 
-    @Override
+
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
+    
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
         return injector.getInstance(service);
     }

@@ -34,8 +34,8 @@ public class AnnotationQualifierUtil {
 
     private static final Class<Qualifier> QUALIFIER = Qualifier.class;
 
-    public static String getQualifierName(final Object owner, final Annotation[] annotations) {
-        final List<String> qualifierAnnotations = new ArrayList<String>();
+    public static InjectionKey getQualifierKey(Class owner, Annotation[] annotations) {
+        final List<InjectionKey> qualifierAnnotations = new ArrayList<InjectionKey>();
 
         for (final Annotation annotation : annotations) {
             if (annotation.annotationType().isAnnotationPresent(QUALIFIER)) {
@@ -51,16 +51,16 @@ public class AnnotationQualifierUtil {
         return qualifierAnnotations.get(0);
     }
 
-    private static String getQualifier(final Object owner, final Annotation annotation) {
+    private static InjectionKey getQualifier(Class owner, Annotation annotation) {
         if (annotation instanceof Named) {
             Named named = (Named) annotation;
             String value = named.value();
             if (isEmpty(value)) {
                 throw new InjectRuntimeException("Named qualifier annotation used without a value " + owner);
             }
-            return value;
+            return new InjectionKey(value, owner);
         } else {
-            return annotation.annotationType().getName();
+            return new InjectionKey(annotation.annotationType(), owner);
         }
     }
 
