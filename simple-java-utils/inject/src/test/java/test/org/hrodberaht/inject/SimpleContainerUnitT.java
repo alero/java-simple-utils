@@ -19,13 +19,16 @@ import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.register.RegistrationModuleSimple;
 import org.junit.Before;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.AnyService;
 import test.org.hrodberaht.inject.testservices.AnyServiceDoNothingImpl;
 import test.org.hrodberaht.inject.testservices.AnyServiceDoSomethingImpl;
+import test.org.hrodberaht.inject.testservices.DoNothing;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Simple Java Utils
@@ -42,7 +45,7 @@ public class SimpleContainerUnitT {
     }
 
     @Test
-    public void testNothingRegistered() {        
+    public void testNothingRegistered() {
         Container container = new InjectionRegisterJava().getContainer();
         try {
             AnyService anyService = container.get(AnyService.class);
@@ -63,7 +66,6 @@ public class SimpleContainerUnitT {
 
         assertEquals(null, anyService.getStuff());
     }
-
 
 
     @Test
@@ -171,6 +173,70 @@ public class SimpleContainerUnitT {
                     , e.getMessage());
         }
 
+
+    }
+
+    @Test
+    public void testRegisterModule() {
+
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.register(new RegistrationModuleSimple() {
+            public void registrations() {
+                register(AnyService.class).annotated(DoNothing.class).with(AnyServiceDoNothingImpl.class);
+                register(AnyService.class).with(AnyServiceDoSomethingImpl.class);
+            }
+        });
+        Container container = registerJava.getContainer();
+
+        AnyService anyService = container.get(AnyService.class);
+        anyService.doStuff();
+        assertEquals(1, anyService.getStuff().size());
+
+
+        AnyService anyNothingService = container.get(AnyService.class, DoNothing.class);        
+        assertNull(anyNothingService.getStuff());
+
+    }
+
+    @Test
+    public void testAdvancedRegisterModule() {
+
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.register(new RegistrationModuleSimple() {
+            public void registrations() {
+                register(AnyService.class)
+                        .annotated(DoNothing.class)
+                        .scopeAs(ScopeContainer.Scope.SINGLETON)
+                        .with(AnyServiceDoNothingImpl.class);
+
+                register(AnyService.class)
+                        .registeredAs(SimpleInjection.RegisterType.FINAL)
+                        .with(AnyServiceDoSomethingImpl.class);
+            }
+        });
+        
+        try{
+        registerJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
+        } catch (InjectRuntimeException e) {
+            assertEquals(
+                    "A FINAL Service for interface " + AnyService.class.getName() +" is already registered, can not reRegister"
+                    , e.getMessage());
+        }
+
+
+        Container container = registerJava.getContainer();
+
+        AnyService anyService = container.get(AnyService.class);
+        anyService.doStuff();
+        assertEquals(1, anyService.getStuff().size());
+
+
+        AnyService anyNothingService = container.get(AnyService.class, DoNothing.class);
+        assertNull(anyNothingService.getStuff());
+
+        AnyService anyNothingService2 = container.get(AnyService.class, DoNothing.class);
+        // Verify singleton
+        assertEquals(anyNothingService, anyNothingService2);
 
     }
 

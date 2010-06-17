@@ -14,17 +14,15 @@ public class InheritableThreadScopeHandler implements ScopeHandler{
 
     private InheritableThreadLocal<Object> placeHolder = new InheritableThreadLocal<Object>();
 
-    @Override
+
     public Object getInstance() {
         return placeHolder.get();
     }
 
-    @Override
     public void addScope(Object instance) {
         placeHolder.set(instance);
     }
-
-    @Override
+    
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.INHERITABLE_THREAD;
     }

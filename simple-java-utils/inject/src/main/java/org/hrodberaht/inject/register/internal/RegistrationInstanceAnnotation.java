@@ -1,4 +1,4 @@
-package org.hrodberaht.inject.register.annotation;
+package org.hrodberaht.inject.register.internal;
 
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 
@@ -12,30 +12,32 @@ import java.lang.annotation.Annotation;
  * @version 1.0
  * @since 1.0
  */
-public class AnnotationRegistrationInstance {
+public class RegistrationInstanceAnnotation<T extends Registration> implements Registration {
 
     private Class theInterface;
-    private Class theService;
-    private String name;
-    private Class<? extends Annotation> annotation;
+    protected Class theService;
+    protected String name;
+    protected Class<? extends Annotation> annotation;
 
-    public AnnotationRegistrationInstance(Class theInterface) {
+    public RegistrationInstanceAnnotation(Class theInterface) {
         this.theInterface = theInterface;
         this.theService = theInterface;
     }
 
-    public AnnotationRegistrationInstance annotated(Class<? extends Annotation> annotation) {
+    @SuppressWarnings(value = "unchecked")
+    public T annotated(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
-        return this;
+        return (T) this;
     }
 
-    public AnnotationRegistrationInstance namned(String named) {
+    @SuppressWarnings(value = "unchecked")
+    public T namned(String named) {
         this.name = named;
-        return this;
+        return (T) this;
     }
 
     public void with(Class theService) {
-        this.theService = theService;        
+        this.theService = theService;
     }
 
     public InjectionKey getInjectionKey() {

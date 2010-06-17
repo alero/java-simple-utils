@@ -14,17 +14,14 @@ public class SingletonScopeHandler implements ScopeHandler{
 
     private Object singleton;
 
-    @Override
     public Object getInstance() {
         return singleton;
     }
 
-    @Override
     public void addScope(Object instance) {
         singleton = instance;
     }
-
-    @Override
+    
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.SINGLETON;
     }

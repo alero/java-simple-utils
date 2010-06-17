@@ -14,17 +14,14 @@ public class ThreadScopeHandler implements ScopeHandler{
 
     private ThreadLocal<Object> placeHolder = new ThreadLocal<Object>();
 
-    @Override
     public Object getInstance() {
         return placeHolder.get();
     }
 
-    @Override
     public void addScope(Object instance) {
         placeHolder.set(instance);
     }
-
-    @Override
+    
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.THREAD;
     }

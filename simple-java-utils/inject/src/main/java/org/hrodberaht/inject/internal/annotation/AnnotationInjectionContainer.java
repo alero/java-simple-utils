@@ -20,9 +20,9 @@ import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
 import org.hrodberaht.inject.internal.ServiceRegister;
+import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 import org.hrodberaht.inject.register.RegistrationModule;
-import org.hrodberaht.inject.register.annotation.AnnotationRegistrationInstance;
-import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
+import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -91,8 +91,8 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
 
     public void register(RegistrationModule... modules) {
         for (RegistrationModule module : modules) {
-            AnnotationRegistrationModule aModule = (AnnotationRegistrationModule) module;
-            for (AnnotationRegistrationInstance instance : aModule.getRegistrations()) {
+            RegistrationModuleAnnotation aModule = (RegistrationModuleAnnotation) module;
+            for (RegistrationInstanceSimple instance : aModule.getRegistrations()) {
                 InjectionKey key = instance.getInjectionKey();
                 createAnStoreRegistration(instance, key);
             }
@@ -127,7 +127,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
     private ServiceRegister register(InjectionKey key, Class service) {
-        AnnotationRegistrationInstance instance = new AnnotationRegistrationInstance(service);
+        RegistrationInstanceSimple instance = new RegistrationInstanceSimple(service);
         if (key.getAnnotation() != null) {
             instance.annotated(key.getAnnotation());
         } else if (key.getName() != null) {
@@ -142,7 +142,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
 
-    private ServiceRegister createAnStoreRegistration(AnnotationRegistrationInstance instance, InjectionKey key) {
+    private ServiceRegister createAnStoreRegistration(RegistrationInstanceSimple instance, InjectionKey key) {
         InjectionMetaData injectionMetaData = createInjectionMetaData(instance, key);
         ServiceRegister register = createServiceRegister(instance, injectionMetaData);
         if (key.getQualifier() == null) {
@@ -154,11 +154,11 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
         return register;
     }
 
-    private ServiceRegister createServiceRegister(AnnotationRegistrationInstance instance, InjectionMetaData injectionMetaData) {
+    private ServiceRegister createServiceRegister(RegistrationInstanceSimple instance, InjectionMetaData injectionMetaData) {
         return new ServiceRegister(instance.getService(), null, getAnnotationScope(injectionMetaData), normalizeType(SimpleInjection.RegisterType.NORMAL));
     }
 
-    private InjectionMetaData createInjectionMetaData(AnnotationRegistrationInstance instance, InjectionKey key) {
+    private InjectionMetaData createInjectionMetaData(RegistrationInstanceSimple instance, InjectionKey key) {
         return createInjectionMetaData(instance.getService(), key);
     }
 

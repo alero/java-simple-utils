@@ -17,7 +17,7 @@ package test.org.hrodberaht.inject;
 
 import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.register.annotation.AnnotationRegistrationModule;
+import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.annotated.Spare;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
@@ -43,7 +43,7 @@ public class AnnotationContainerUnitT {
 
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
         registerJava.activateContainerJavaXInject();
-        registerJava.register(new AnnotationRegistrationModule(){
+        registerJava.register(new RegistrationModuleAnnotation(){
             @Override
             public void registrations() {
                 register(Tire.class).annotated(Spare.class).with(SpareTire.class);

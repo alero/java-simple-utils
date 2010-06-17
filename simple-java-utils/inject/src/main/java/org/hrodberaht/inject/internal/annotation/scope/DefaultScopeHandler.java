@@ -12,17 +12,16 @@ import org.hrodberaht.inject.SimpleInjection;
  */
 public class DefaultScopeHandler implements ScopeHandler{
 
-    @Override
+
     public Object getInstance() {
         return null;
     }
 
-    @Override
+
     public void addScope(Object instance) {
 
     }
 
-    @Override
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.NEW;
     }

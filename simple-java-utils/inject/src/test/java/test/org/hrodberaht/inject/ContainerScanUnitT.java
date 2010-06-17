@@ -71,4 +71,19 @@ public class ContainerScanUnitT {
         assertNotNull(aVolvo.getVindShield());
 
     }
+
+    @Test
+    public void testScanningOfSinglePackageImplementations() {
+
+        InjectionRegisterScan register = new InjectionRegisterScan();
+        // Tests scanning and exclusion of single class
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
+        Container container = register.getContainer();
+
+        AnyService anyService = container.get(AnyService.class);
+        anyService.doStuff();
+
+        assertEquals(1, anyService.getStuff().size());
+
+    }
 }

@@ -38,7 +38,7 @@ public class Formatter<T> {
         return getFormatter(aType, null);
     }
 
-
+    @SuppressWarnings(value = "unchecked")
     public static <T> Formatter<T> getFormatter(Class<T> aType, DateFormatter.DateConvert dateConvert) {
         if (String.class.isAssignableFrom(aType)) {
             return new Formatter<T>();

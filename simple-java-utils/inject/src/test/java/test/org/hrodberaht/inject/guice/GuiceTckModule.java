@@ -1,8 +1,6 @@
-package test.org.hrodberaht.inject;
+package test.org.hrodberaht.inject.guice;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import org.atinject.tck.auto.Car;
 import org.atinject.tck.auto.Convertible;

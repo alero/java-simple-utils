@@ -17,6 +17,7 @@ package org.hrodberaht.inject.internal;
 import org.hrodberaht.inject.InjectRuntimeException;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
+import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 import org.hrodberaht.inject.register.RegistrationModule;
 
 import java.lang.annotation.Annotation;
@@ -59,7 +60,6 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
 
 
     public void register(InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
-
         if (registeredNamedServices.containsKey(key)) {
             reRegisterSupport(key, type);
         }
@@ -70,7 +70,20 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
 
     
     public void register(RegistrationModule... modules) {
+        for (RegistrationModule<RegistrationInstanceSimple> module : modules) {
+            for (RegistrationInstanceSimple instance : module.getRegistrations()) {
+                InjectionKey key = instance.getInjectionKey();
+                register(instance, key);
+            }
+        }
+    }
 
+    private void register(RegistrationInstanceSimple instance, InjectionKey key) {
+        if(key.getQualifier() != null){
+            register(key, instance.getService(), instance.getScope(), instance.getRegisterType());
+        } else {
+            register(key.getServiceDefinition(), instance.getService(), instance.getScope(), instance.getRegisterType());
+        }
     }
 
     @SuppressWarnings(value = "unchecked")

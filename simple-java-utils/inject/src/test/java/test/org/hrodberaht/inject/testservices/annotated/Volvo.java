@@ -46,8 +46,7 @@ public class Volvo implements Car{
 
     public Volvo() {        
     }
-
-    @Override
+    
     public String brand() {
         return "volvo";
     }

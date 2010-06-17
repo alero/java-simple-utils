@@ -25,14 +25,13 @@ import java.util.Collection;
  */
 public class AnyServiceDoNothingImpl implements AnyService{
 
-    @Override
+
     public void doStuff() {
         if(true){
             throw new RuntimeException("This service can't do stuff");
         }
     }
 
-    @Override
     public Collection getStuff() {
         return null;
     }

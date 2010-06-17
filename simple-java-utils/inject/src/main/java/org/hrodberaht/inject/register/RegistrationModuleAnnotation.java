@@ -1,15 +1,14 @@
 package org.hrodberaht.inject.register;
 
-import java.util.Collection;
-
 /**
  * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
- *         2010-jun-05 21:13:55
+ *         2010-jun-03 17:49:42
  * @version 1.0
  * @since 1.0
  */
-public interface RegistrationModule<T> {
-    Collection<T> getRegistrations();
+public abstract class RegistrationModuleAnnotation extends RegistrationModuleSimple   {
+
+
 }
