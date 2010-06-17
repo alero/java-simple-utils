@@ -49,11 +49,11 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
     }
 
 
-    public void register(Class anInterface, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
-        if (registeredServices.containsKey(anInterface)) {
-            reRegisterSupport(anInterface, type);
+    public void register(Class serviceDefinition, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+        if (registeredServices.containsKey(serviceDefinition)) {
+            reRegisterSupport(serviceDefinition, type);
         }
-        registeredServices.put(anInterface,
+        registeredServices.put(serviceDefinition,
                 new ServiceRegister(service, createInstance(new ServiceRegister(service)), scope, normalizeType(type))
         );
     }
@@ -98,25 +98,25 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         return instantiateService(service, forcedScope, serviceRegister);
     }
 
-    private void reRegisterSupport(Class anInterface, SimpleInjection.RegisterType type) {
-        ServiceRegister serviceRegister = registeredServices.get(anInterface);
+    private void reRegisterSupport(Class serviceDefinition, SimpleInjection.RegisterType type) {
+        ServiceRegister serviceRegister = registeredServices.get(serviceDefinition);
         if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.WEAK) {
-            registeredServices.remove(anInterface);
+            registeredServices.remove(serviceDefinition);
             return;
         }
 
         if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.NORMAL) {
             if (type == SimpleInjection.RegisterType.OVERRIDE_NORMAL) {
-                registeredServices.remove(anInterface);
+                registeredServices.remove(serviceDefinition);
                 return;
             }
             throw new InjectRuntimeException(
                     "Service {0} is already registered, to override register please use the override method"
-                    , anInterface);
+                    , serviceDefinition);
         }
         if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.FINAL) {
             throw new InjectRuntimeException(
-                    "A FINAL Service for {0} is already registered, can not reRegister", anInterface);
+                    "A FINAL Service for {0} is already registered, can not reRegister", serviceDefinition);
         }
 
     }

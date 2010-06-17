@@ -111,10 +111,10 @@ public class SimpleInjection implements Container, ScopeContainer {
 
 
 
-    protected synchronized void register(Class anInterface, Class service, Scope scope, RegisterType type) {
+    protected synchronized void register(Class serviceDefinition, Class service, Scope scope, RegisterType type) {
         if(injectionContainer instanceof RegistrationInjectionContainer){
             RegistrationInjectionContainer container = (RegistrationInjectionContainer)injectionContainer;
-            container.register(anInterface, service, scope,  type);
+            container.register(serviceDefinition, service, scope,  type);
         }
     }
 

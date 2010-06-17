@@ -241,9 +241,9 @@ public class SimpleContainerUnitT {
     }
 
 
-    private Container registerSingle(Class anInterface, Class aService) {
+    private Container registerSingle(Class serviceDefinition, Class aService) {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
-        registerJava.register(anInterface, aService);
+        registerJava.register(serviceDefinition, aService);
         Container injection = registerJava.getContainer();
         return injection;
     }

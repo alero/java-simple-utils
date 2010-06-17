@@ -31,7 +31,7 @@ import java.lang.annotation.Annotation;
 public interface RegistrationInjectionContainer {
 
 
-    void register(Class anInterface, Class service,
+    void register(Class serviceDefinition, Class service,
                   SimpleInjection.Scope scope, SimpleInjection.RegisterType type);
     void register(InjectionKey key, Class service,
                   SimpleInjection.Scope scope, SimpleInjection.RegisterType type);

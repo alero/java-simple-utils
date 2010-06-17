@@ -75,12 +75,12 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
         return annotationInjection.createInstance(serviceRegister.getService());
     }
 
-    public synchronized void register(Class anInterface, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
-        if (registeredServices.containsKey(anInterface)) {
+    public synchronized void register(Class serviceDefinition, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+        if (registeredServices.containsKey(serviceDefinition)) {
             throw new InjectRuntimeException("Can not overwrite an existing service");
         }
         InjectionMetaData injectionMetaData = createInjectionMetaData(service, null);
-        registeredServices.put(anInterface,
+        registeredServices.put(serviceDefinition,
                 new ServiceRegister(service, null, getAnnotationScope(injectionMetaData), normalizeType(type))
         );
     }

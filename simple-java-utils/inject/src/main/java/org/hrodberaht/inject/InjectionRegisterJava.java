@@ -39,44 +39,44 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         this.container = (SimpleInjection) container;
     }
 
-    public InjectionRegisterJava finalRegister(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        assert anInterface.isInterface();
-        container.register(anInterface, service, scope, SimpleInjection.RegisterType.FINAL);
+    public InjectionRegisterJava finalRegister(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
+        container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.FINAL);
         return this;
     }
 
-    public InjectionRegisterJava reRegister(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        assert anInterface.isInterface();
-        container.register(anInterface, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
+    private void assertTrue(boolean aBoolean) {
+        if(!aBoolean){
+            throw new AssertionError();            
+        }
+    }
+
+    public InjectionRegisterJava reRegister(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
+        container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
         return this;
     }
 
-    public InjectionRegisterJava register(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        assert anInterface.isInterface();
-        container.register(anInterface, service, scope, SimpleInjection.RegisterType.NORMAL);
+    public InjectionRegisterJava register(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
+        container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.NORMAL);
         return this;
     }
 
-    public InjectionRegisterJava register(String namedService, Class anInterface, Class service, SimpleInjection.Scope scope) {
-        assert anInterface.isInterface();
-        container.register(new InjectionKey(namedService, anInterface), service, scope, SimpleInjection.RegisterType.NORMAL);
+    public InjectionRegisterJava register(String namedService, Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
+        container.register(new InjectionKey(namedService, serviceDefinition), service, scope, SimpleInjection.RegisterType.NORMAL);
         return this;
     }
 
-    private InjectionRegisterJava register(Class<? extends Annotation> qualifier, Class anInterface, Class service, SimpleInjection.Scope scope) {
-        assert anInterface.isInterface();
-        container.register(new InjectionKey(qualifier, anInterface), service, scope, SimpleInjection.RegisterType.NORMAL);
+    private InjectionRegisterJava register(Class<? extends Annotation> qualifier, Class serviceDefinition, Class service, SimpleInjection.Scope scope) {        
+        container.register(new InjectionKey(qualifier, serviceDefinition), service, scope, SimpleInjection.RegisterType.NORMAL);
         return this;
     }
 
-    public InjectionRegisterJava registerDefault(Class anInterface, Class service, SimpleInjection.Scope scope) {
-        assert anInterface.isInterface();
-        container.register(anInterface, service, scope, SimpleInjection.RegisterType.WEAK);
+    public InjectionRegisterJava registerDefault(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
+        container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.WEAK);
         return this;
     }
 
-    public InjectionRegisterJava register(Class anInterface, Class service) {
-        register(anInterface, service, SimpleInjection.Scope.NEW);
+    public InjectionRegisterJava register(Class serviceDefinition, Class service) {
+        register(serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
 
@@ -85,29 +85,29 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         return this;
     }
 
-    public InjectionRegisterJava register(String namedService, Class anInterface, Class service) {
-        register(namedService, anInterface, service, SimpleInjection.Scope.NEW);
+    public InjectionRegisterJava register(String namedService, Class serviceDefinition, Class service) {
+        register(namedService, serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
-    public InjectionRegisterJava register(Class<? extends Annotation> qualifier, Class anInterface, Class service) {
-        register(qualifier, anInterface, service, SimpleInjection.Scope.NEW);
-        return this;
-    }
-
-
-
-    public InjectionRegisterJava registerDefault(Class anInterface, Class service) {
-        registerDefault(anInterface, service, SimpleInjection.Scope.NEW);
+    public InjectionRegisterJava register(Class<? extends Annotation> qualifier, Class serviceDefinition, Class service) {
+        register(qualifier, serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
 
-    public InjectionRegisterJava reRegister(Class anInterface, Class service) {
-        reRegister(anInterface, service, SimpleInjection.Scope.NEW);
+
+
+    public InjectionRegisterJava registerDefault(Class serviceDefinition, Class service) {
+        registerDefault(serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
 
-    public InjectionRegisterJava finalRegister(Class anInterface, Class service) {
-        finalRegister(anInterface, service, SimpleInjection.Scope.NEW);
+    public InjectionRegisterJava reRegister(Class serviceDefinition, Class service) {
+        reRegister(serviceDefinition, service, SimpleInjection.Scope.NEW);
+        return this;
+    }
+
+    public InjectionRegisterJava finalRegister(Class serviceDefinition, Class service) {
+        finalRegister(serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
 
