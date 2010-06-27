@@ -54,11 +54,6 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
         return this;
     }
 
-    public InjectionRegisterScan registerSingleLevelPackageScan(String packagename) {
-
-        return this;
-    }
-
 
     private void createRegistration(Class aClazz) {
         if (

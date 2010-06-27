@@ -44,12 +44,6 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         return this;
     }
 
-    private void assertTrue(boolean aBoolean) {
-        if(!aBoolean){
-            throw new AssertionError();            
-        }
-    }
-
     public InjectionRegisterJava reRegister(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
         container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
         return this;

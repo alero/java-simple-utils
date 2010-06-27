@@ -48,7 +48,7 @@ public class ScopeThreadUnitT {
     }
 
     @Test
-    public void testFailThreadScope() {
+    public void testDifferentThreadScope() {
         InjectionRegisterScan register = new InjectionRegisterScan();
         register.activateContainerJavaXInject();
         // Tests scanning and exclusion of single class
