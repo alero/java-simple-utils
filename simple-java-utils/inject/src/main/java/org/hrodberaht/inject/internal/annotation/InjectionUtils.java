@@ -14,7 +14,7 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.InjectRuntimeException;
+import org.hrodberaht.inject.internal.InjectRuntimeException;
 import org.hrodberaht.inject.internal.annotation.scope.DefaultScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.InheritableThreadScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;

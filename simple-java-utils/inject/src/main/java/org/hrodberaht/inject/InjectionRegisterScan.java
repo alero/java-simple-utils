@@ -14,6 +14,8 @@
 
 package org.hrodberaht.inject;
 
+import org.hrodberaht.inject.internal.InjectRuntimeException;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

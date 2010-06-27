@@ -15,7 +15,7 @@
 package test.org.hrodberaht.inject;
 
 import org.hrodberaht.inject.Container;
-import org.hrodberaht.inject.InjectRuntimeException;
+import org.hrodberaht.inject.internal.InjectRuntimeException;
 import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.SimpleInjection;
