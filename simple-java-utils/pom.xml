@@ -21,12 +21,21 @@
         <system>Google Code</system>
         <url>http://code.google.com/p/java-simple-utils/issues/list</url>
     </issueManagement>
+
     <scm>
-        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</url>
-        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</connection>
-        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils
+        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/branches/1.0-BRANCH</url>
+        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/branches/1.0-BRANCH</connection>
+        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/branches/1.0-BRANCH
         </developerConnection>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>Local release</id>
+            <name>Local release</name>
+            <url>file://${user.home}/.m2/repository</url>
+        </repository>
+    </distributionManagement>
 
     <developers>
         <developer>
