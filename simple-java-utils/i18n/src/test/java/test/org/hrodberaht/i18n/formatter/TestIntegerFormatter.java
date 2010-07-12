@@ -42,7 +42,7 @@ public class TestIntegerFormatter {
         String testInteger = "14.2";
         try {
             Formatter<Integer> formatter = Formatter.getFormatter(Integer.class);
-            Integer aInteger = formatter.convertToObject(testInteger);
+            formatter.convertToObject(testInteger);
             assertTrue("Not allowed to reach this", false);
 
         } catch (MessageRuntimeException e) {
