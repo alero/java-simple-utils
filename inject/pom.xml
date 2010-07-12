@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.1-M1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <groupId>org.hrodberaht</groupId>
     <artifactId>inject</artifactId>
     <packaging>jar</packaging>
-    <version>1.1-M1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>Simple Utils Injection</name>
     <description>The Injection project for simpler java development</description>
     
