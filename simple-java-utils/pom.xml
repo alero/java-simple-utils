@@ -4,7 +4,7 @@
 
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>1.0-M2</version>
+    <version>1.0-M3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Simple Utils (pom)</name>
     <description>A gathering of projects for simpler java development</description>
@@ -22,9 +22,9 @@
         <url>http://code.google.com/p/java-simple-utils/issues/list</url>
     </issueManagement>
     <scm>
-        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/parent-pom-1.0-M2</url>
-        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/parent-pom-1.0-M2</connection>
-        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/parent-pom-1.0-M2
+        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</url>
+        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</connection>
+        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils
         </developerConnection>
     </scm>
 
