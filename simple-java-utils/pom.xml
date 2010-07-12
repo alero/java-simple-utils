@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>1.0-M2-SNAPSHOT</version>
+    <version>1.0-M2</version>
     <packaging>pom</packaging>
     <name>Simple Utils (pom)</name>
     <description>A gathering of projects for simpler java development</description>
@@ -23,9 +22,9 @@
         <url>http://code.google.com/p/java-simple-utils/issues/list</url>
     </issueManagement>
     <scm>
-        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</url>
-        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils</connection>
-        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/trunk/simple-java-utils
+        <url>scm:svn:http://java-simple-utils.googlecode.com/svn/tags/parent-pom-1.0-M2</url>
+        <connection>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/parent-pom-1.0-M2</connection>
+        <developerConnection>scm:svn:https://java-simple-utils.googlecode.com/svn/tags/parent-pom-1.0-M2
         </developerConnection>
     </scm>
 
@@ -86,6 +85,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>${basedir}/../checkstyle_customchecks.xml</configLocation>
+                    <xrefLocation>${project.reporting.outputDirectory}/../xref</xrefLocation>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -94,7 +97,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -138,7 +145,7 @@
                     <url>http://san:8081/artifactory/libs-releases</url>
                 </repository>
                 <repository>
-                    <snapshots/>
+                    <snapshots />
                     <id>snapshots</id>
                     <name>libs-snapshots</name>
                     <url>http://san:8081/artifactory/libs-snapshots</url>
@@ -174,7 +181,7 @@
                 <snapshotRepository>
                     <id>sonatype-nexus-snapshot</id>
                     <name>Nexus Snapshot Repository</name>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>                    
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
             </distributionManagement>
             <build>
