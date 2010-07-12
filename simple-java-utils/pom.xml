@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>1.0-M3-SNAPSHOT</version>
+    <version>1.0-M2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Simple Utils (pom)</name>
     <description>A gathering of projects for simpler java development</description>
@@ -133,99 +134,6 @@
         </plugins>
     </reporting>
     <profiles>
-        <profile>
-            <id>alexandersson-local-profile</id>
-            <repositories>
-                <repository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                    <id>central</id>
-                    <name>libs-releases</name>
-                    <url>http://san:8081/artifactory/libs-releases</url>
-                </repository>
-                <repository>
-                    <snapshots />
-                    <id>snapshots</id>
-                    <name>libs-snapshots</name>
-                    <url>http://san:8081/artifactory/libs-snapshots</url>
-                </repository>
-            </repositories>
-            <distributionManagement>
-                <repository>
-                    <id>san</id>
-                    <name>san-releases</name>
-                    <url>http://san:8081/artifactory/libs-releases-local</url>
-                </repository>
-                <snapshotRepository>
-                    <id>san</id>
-                    <name>san-snapshots</name>
-                    <url>http://san:8081/artifactory/libs-snapshots-local</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
-        <profile>
-            <id>release-sign-artifacts-to-sonatype-nexus</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <distributionManagement>
-                <repository>
-                    <id>sonatype-nexus-staging</id>
-                    <name>Nexus Release Repository</name>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-                </repository>
-                <snapshotRepository>
-                    <id>sonatype-nexus-snapshot</id>
-                    <name>Nexus Snapshot Repository</name>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-            </distributionManagement>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+        
     </profiles>
 </project>
