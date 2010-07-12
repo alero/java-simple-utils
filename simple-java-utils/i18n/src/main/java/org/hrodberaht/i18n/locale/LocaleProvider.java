@@ -32,6 +32,9 @@ public class LocaleProvider {
 
     private static Container injectionContainer;
 
+    private LocaleProvider() {
+    }
+
     static{
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
         registerJava.registerDefault(ProviderInterface.class, SimpleLocaleProvider.class);

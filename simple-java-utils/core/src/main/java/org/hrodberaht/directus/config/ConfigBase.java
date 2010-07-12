@@ -46,7 +46,7 @@ public abstract class ConfigBase {
     private static long TIME_STAMP;
     private static boolean reloadEnabled = false;
 
-    private SimpleLogger LOGGER = SimpleLogger.getInstance(ConfigBase.class);
+    private static final SimpleLogger LOGGER = SimpleLogger.getInstance(ConfigBase.class);
     private String propertyPath = null;
     private String customPropertyPath = null;
 
@@ -171,7 +171,9 @@ public abstract class ConfigBase {
 
 
     private static class DateUtil {
-        public static Date parseSimpleDate(String value) throws ParseException {
+        private DateUtil() {}
+
+        private static Date parseSimpleDate(String value) throws ParseException {
             if(value == null){
                 return null;
             }

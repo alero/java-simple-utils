@@ -115,11 +115,10 @@ public class InjectionMetaData {
             }
 
             Object newInstance = getInstanceCreator().createInstance(constructor, parameters);
-            scopeHandler.addScope(newInstance);            
+            scopeHandler.addScope(newInstance);
             return newInstance;
-        }
-        finally {
-            if(!originalAccessible){
+        } finally {
+            if (!originalAccessible) {
                 constructor.setAccessible(originalAccessible);
             }
         }

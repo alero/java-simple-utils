@@ -44,20 +44,26 @@ public class InjectionKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o){
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()){
             return false;
+        }
 
         InjectionKey that = (InjectionKey) o;
 
-        if (annotation != null ? !annotation.equals(that.annotation) : that.annotation != null)
+        if (annotation != null ? !annotation.equals(that.annotation) : that.annotation != null){
             return false;
-        if (name != null ? !name.equals(that.name) : that.name != null)
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null){
             return false;
-        if (serviceDefinition != null ? !serviceDefinition.equals(that.serviceDefinition) : that.serviceDefinition != null)
+        }
+        if (serviceDefinition != null ?
+                !serviceDefinition.equals(that.serviceDefinition) : that.serviceDefinition != null){
             return false;
-
+        }
+            
         return true;
     }
 
@@ -70,9 +76,10 @@ public class InjectionKey {
     }
 
     public String getQualifier() {
-        if( name != null){
+        if(name != null){
             return name;
-        }if(annotation != null){
+        }
+        if(annotation != null){
             return annotation.getName();
         }
         return null;        

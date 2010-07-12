@@ -28,10 +28,10 @@ import java.util.Locale;
 public class ThreadLocaleProvider extends SimpleLocaleProvider{
 
     private static final InheritableThreadLocal<LocaleProfile>
-            threadLocal = new InheritableThreadLocal<LocaleProfile>();
+            THREAD_LOCAL = new InheritableThreadLocal<LocaleProfile>();
 
     public LocaleProfile getProfile() {
-        return threadLocal.get();
+        return THREAD_LOCAL.get();
     }
 
     public Locale getSystemLocale() {
@@ -44,6 +44,6 @@ public class ThreadLocaleProvider extends SimpleLocaleProvider{
     }
 
     public void setStatefulProfile(LocaleProfile localeProfile) {
-        threadLocal.set(localeProfile);
+        THREAD_LOCAL.set(localeProfile);
     }
 }

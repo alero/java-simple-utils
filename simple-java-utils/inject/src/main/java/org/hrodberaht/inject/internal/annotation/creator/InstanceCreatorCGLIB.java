@@ -8,7 +8,8 @@ import java.util.Map;
 /**
  * Simple Java Utils - Container
  *
- * There are no imports to net.sf.cglib, all usage is direct and this means that this class can be loaded without cglib present. 
+ * There are no imports to net.sf.cglib,
+ * all usage is direct and this means that this class can be loaded without cglib present.
  *
  * @author Robert Alexandersson
  *         2010-jun-05 23:25:22
@@ -18,7 +19,7 @@ import java.util.Map;
 public class InstanceCreatorCGLIB implements InstanceCreator{
 
     private static final Map<Constructor, net.sf.cglib.reflect.FastConstructor> 
-            cachedConstructs = new HashMap<Constructor, net.sf.cglib.reflect.FastConstructor>();
+            CACHED_CONSTRUCTS = new HashMap<Constructor, net.sf.cglib.reflect.FastConstructor>();
 
     public Object createInstance(Constructor constructor, Object... parameters) {
         net.sf.cglib.reflect.FastConstructor
@@ -33,15 +34,15 @@ public class InstanceCreatorCGLIB implements InstanceCreator{
     }
 
     private static net.sf.cglib.reflect.FastConstructor findFastCreatorInstance(Constructor constructor) {
-        if(!cachedConstructs.containsKey(constructor)){
+        if(!CACHED_CONSTRUCTS.containsKey(constructor)){
             Class classToConstruct = constructor.getDeclaringClass();
             final net.sf.cglib.reflect.FastConstructor fastConstructor
                     = newFastClass(classToConstruct)
                     .getConstructor(constructor);
-            cachedConstructs.put(constructor, fastConstructor);
+            CACHED_CONSTRUCTS.put(constructor, fastConstructor);
             return fastConstructor;
         }
-        return cachedConstructs.get(constructor);
+        return CACHED_CONSTRUCTS.get(constructor);
     }
 
     // use fully-qualified names so imports don't need preprocessor statements

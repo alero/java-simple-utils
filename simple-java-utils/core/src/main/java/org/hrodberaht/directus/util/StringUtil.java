@@ -23,6 +23,8 @@ package org.hrodberaht.directus.util;
  */
 public class StringUtil {
 
+    private StringUtil() {}
+
     public static boolean isBlank(String value) {
         return value == null || "".equals(value);
     }

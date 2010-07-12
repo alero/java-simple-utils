@@ -18,7 +18,7 @@ import java.lang.annotation.Annotation;
  */
 public class GuiceInjectionContainer implements InjectionContainer {
 
-    Injector injector = null;
+    private Injector injector = null;
 
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
@@ -26,7 +26,8 @@ public class GuiceInjectionContainer implements InjectionContainer {
     }
 
 
-    public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
+    public <T> T getService(
+            Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

@@ -23,7 +23,8 @@ public class ServiceRegister {
     private SimpleInjection.Scope scope;
     private SimpleInjection.RegisterType registerType = SimpleInjection.RegisterType.WEAK;
 
-    public ServiceRegister(Class aService, Object singleton, SimpleInjection.Scope scope, SimpleInjection.RegisterType registerType) {
+    public ServiceRegister(
+            Class aService, Object singleton, SimpleInjection.Scope scope, SimpleInjection.RegisterType registerType) {
         this.service = aService;
         this.singleton = singleton;
         this.scope = scope;

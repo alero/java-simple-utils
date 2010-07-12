@@ -106,7 +106,7 @@ public class ScopeThreadUnitT {
             while (thread.isAlive())
                 Thread.sleep(10);
         } catch (InterruptedException e) {
-
+            throw new RuntimeException(e);
         }
     }
 

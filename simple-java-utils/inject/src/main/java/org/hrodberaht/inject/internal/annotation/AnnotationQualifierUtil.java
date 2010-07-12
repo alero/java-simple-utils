@@ -32,6 +32,8 @@ import java.util.List;
  */
 public class AnnotationQualifierUtil {
 
+    private AnnotationQualifierUtil() {}
+
     private static final Class<Qualifier> QUALIFIER = Qualifier.class;
 
     public static InjectionKey getQualifierKey(Class owner, Annotation[] annotations) {
@@ -45,7 +47,8 @@ public class AnnotationQualifierUtil {
         if (qualifierAnnotations.size() == 0) {
             return null;
         } else if (qualifierAnnotations.size() > 1) {
-            throw new InjectRuntimeException("Several qualifier annotations found on " + owner + " " + qualifierAnnotations);
+            throw new InjectRuntimeException(
+                    "Several qualifier annotations found on " + owner + " " + qualifierAnnotations);
         }
 
         return qualifierAnnotations.get(0);

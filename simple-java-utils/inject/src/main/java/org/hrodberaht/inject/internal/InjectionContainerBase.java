@@ -31,8 +31,11 @@ import java.util.HashMap;
 public abstract class InjectionContainerBase {
 
 
-    protected HashMap<Class, ServiceRegister> registeredServices = new HashMap<Class, ServiceRegister>();
-    protected HashMap<InjectionKey, ServiceRegister> registeredNamedServices = new HashMap<InjectionKey, ServiceRegister>();
+    protected HashMap<Class, ServiceRegister>
+            registeredServices = new HashMap<Class, ServiceRegister>();
+
+    protected HashMap<InjectionKey, ServiceRegister>
+            registeredNamedServices = new HashMap<InjectionKey, ServiceRegister>();
 
     protected InjectionKey getNamedKey(String qualifier, Class service) {
         return new InjectionKey(qualifier, service);
@@ -43,7 +46,8 @@ public abstract class InjectionContainerBase {
     }
 
     @SuppressWarnings(value = "unchecked")
-    protected <T> T instantiateService(Class<T> service, SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister) {
+    protected <T> T instantiateService(
+            Class<T> service, SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister) {
         if (forcedScope == null && serviceRegister.getScope() == SimpleInjection.Scope.NEW) {
             return (T) createInstance(serviceRegister);
         } else if (SimpleInjection.Scope.NEW == forcedScope) {

@@ -22,7 +22,7 @@ package org.hrodberaht.directus.util;
  * @since 1.0
  */
 public class NumberUtil {
-
+    private NumberUtil() {}
 
     public static Long parseLong(String value){
         if(value == null){

@@ -90,10 +90,7 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             assert classLoader != null;
             String path = packageName.replace('.', '/');
-            Enumeration<URL> resources = null;
-
-            resources = classLoader.getResources(path);
-
+            Enumeration<URL> resources = classLoader.getResources(path);
             List<File> dirs = new ArrayList<File>();
             while (resources.hasMoreElements()) {
                 URL resource = resources.nextElement();
@@ -131,7 +128,9 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
                 assert !file.getName().contains(".");
                 classes.addAll(findClasses(file, packageName + "." + file.getName()));
             } else if (file.getName().endsWith(".class")) {
-                classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+                classes.add(
+                        Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6))
+                );
             }
         }
         return classes;

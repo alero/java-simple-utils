@@ -50,7 +50,8 @@ public class SimpleInjection implements Container, ScopeContainer {
 
 
     /**
-     * Will retrieve a service as it has been registered, scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
+     * Will retrieve a service as it has been registered,
+     * scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
      *
      * @param service the interface service intended for creation
      * @param <T> the typed service intended for creation
@@ -61,7 +62,8 @@ public class SimpleInjection implements Container, ScopeContainer {
     }
 
     /**
-     * Will retrieve a service as it has been registered, scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
+     * Will retrieve a service as it has been registered,
+     * scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
      *
      * @param service the interface service intended for creation
      * @param qualifier the named service intended for creation
@@ -75,7 +77,8 @@ public class SimpleInjection implements Container, ScopeContainer {
     }
 
     /**
-     * Will retrieve a service as it has been registered, scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
+     * Will retrieve a service as it has been registered,
+     * scope's supported today are {@link SimpleInjection.Scope#SINGLETON} and {@link SimpleInjection.Scope#NEW}
      *
      * @param service the interface service intended for creation
      * @param qualifier the named service intended for creation

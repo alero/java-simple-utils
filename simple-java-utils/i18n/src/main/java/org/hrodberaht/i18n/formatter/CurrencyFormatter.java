@@ -31,7 +31,7 @@ import java.text.NumberFormat;
  * @since 1.0
  */
 public class CurrencyFormatter extends NumberFormatter {
-    public final static int SCALE = 2;
+    public static final int SCALE = 2;
 
     public Object convertToObject(String target) {
         if (target == null) {
@@ -90,8 +90,7 @@ public class CurrencyFormatter extends NumberFormatter {
             number = number.setScale(SCALE, BigDecimal.ROUND_HALF_UP);
             formatter = fixCharacterJVMErrorsForDecimalFormat(formatter);
             return formatter.format(number.doubleValue());
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             throw new MessageRuntimeException(e);
         }
 

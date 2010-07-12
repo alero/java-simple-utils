@@ -49,8 +49,7 @@ public class DateFormatter extends Formatter {
 
     }
 
-    public Object convertToObject(String target)
-    {
+    public Object convertToObject(String target) {
         DateFormat formatter = getFormat(target);
         return parseAndErrorhandleDate(target, formatter);
     }
@@ -60,7 +59,7 @@ public class DateFormatter extends Formatter {
             return DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
         }
         String longPattern = getCachedLongPattern();
-        if(target != null && longPattern.length() <= target.length() ){
+        if(target != null && longPattern.length() <= target.length()){
             return DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
         }
         return DateFormat.getDateInstance(dateStyle, locale);
@@ -85,8 +84,9 @@ public class DateFormatter extends Formatter {
      * @return a formatted String
      */
     public String convertToString(Object value) {
-        if (value == null)
+        if (value == null) {
             return null;
+        }
 
         StringBuffer buf = new StringBuffer();
         DateFormat formatter = getFormat(null);

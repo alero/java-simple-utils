@@ -36,7 +36,8 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class AnnotationInjectionContainer extends InjectionContainerBase implements InjectionContainer, RegistrationInjectionContainer {
+public class AnnotationInjectionContainer extends InjectionContainerBase
+        implements InjectionContainer, RegistrationInjectionContainer {
 
     private List<InjectionMetaData> injectionMetaDataCache = new ArrayList<InjectionMetaData>();
     private SimpleInjection container;
@@ -52,7 +53,8 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
     }
 
 
-    public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
+    public <T> T getService(
+            Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
         assert (qualifier != null);
         InjectionKey key = getAnnotatedKey(qualifier, service);
         return getQualifiedService(service, forcedScope, key);
@@ -75,7 +77,8 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
         return annotationInjection.createInstance(serviceRegister.getService());
     }
 
-    public synchronized void register(Class serviceDefinition, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public synchronized void register(
+            Class serviceDefinition, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredServices.containsKey(serviceDefinition)) {
             throw new InjectRuntimeException("Can not overwrite an existing service");
         }
@@ -85,7 +88,8 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
         );
     }
 
-    public synchronized void register(InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public synchronized void register(
+            InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         register(key, service);
     }
 
@@ -109,7 +113,9 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
 
     private <T> T getQualifiedService(Class<T> service, SimpleInjection.Scope forcedScope, InjectionKey key) {
         if (!registeredNamedServices.containsKey(key) && service.getClass().isInterface()) {
-            throw new InjectRuntimeException("Service {0} not registered in SimpleInjection and is an interface", service);
+            throw new InjectRuntimeException(
+                    "Service {0} not registered in SimpleInjection and is an interface", service
+            );
         }
 
         ServiceRegister serviceRegister = registeredNamedServices.get(key);
@@ -154,8 +160,15 @@ public class AnnotationInjectionContainer extends InjectionContainerBase impleme
         return register;
     }
 
-    private ServiceRegister createServiceRegister(RegistrationInstanceSimple instance, InjectionMetaData injectionMetaData) {
-        return new ServiceRegister(instance.getService(), null, getAnnotationScope(injectionMetaData), normalizeType(SimpleInjection.RegisterType.NORMAL));
+    private ServiceRegister createServiceRegister(
+            RegistrationInstanceSimple instance, InjectionMetaData injectionMetaData)
+    {
+        return new ServiceRegister(
+                instance.getService(),
+                null,
+                getAnnotationScope(injectionMetaData),
+                normalizeType(SimpleInjection.RegisterType.NORMAL)
+        );
     }
 
     private InjectionMetaData createInjectionMetaData(RegistrationInstanceSimple instance, InjectionKey key) {

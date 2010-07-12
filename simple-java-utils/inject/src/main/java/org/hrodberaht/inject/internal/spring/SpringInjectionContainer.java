@@ -29,7 +29,8 @@ public class SpringInjectionContainer implements InjectionContainer {
     }
 
 
-    public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
+    public <T> T getService(
+            Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

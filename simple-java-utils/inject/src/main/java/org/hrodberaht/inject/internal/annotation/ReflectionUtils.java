@@ -19,6 +19,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,13 +32,13 @@ import java.util.List;
  */
 public class ReflectionUtils {
 
+    private ReflectionUtils() {}
+
     public static List<Method> findMethods(Class clazz) {
         final Method[] declaredMethods = clazz.getDeclaredMethods();
         final List<Method> methods = new ArrayList<Method>();
 
-        for (final Method method : declaredMethods) {
-            methods.add(method);
-        }
+        methods.addAll(Arrays.asList(declaredMethods));
 
         if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
             methods.addAll(findMethods(clazz.getSuperclass()));
@@ -54,15 +55,11 @@ public class ReflectionUtils {
 
         final Field[] declaredFields = clazz.getDeclaredFields();
 
-        for (final Field field : declaredFields) {
-            members.add(field);
-        }
+        members.addAll(Arrays.asList(declaredFields));
 
         final Method[] declaredMethods = clazz.getDeclaredMethods();
 
-        for (final Method method : declaredMethods) {
-            members.add(method);
-        }
+        members.addAll(Arrays.asList(declaredMethods));
 
 
         if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {

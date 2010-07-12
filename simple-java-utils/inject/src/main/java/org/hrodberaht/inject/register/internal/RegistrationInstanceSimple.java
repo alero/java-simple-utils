@@ -11,7 +11,8 @@ import org.hrodberaht.inject.SimpleInjection;
  * @version 1.0
  * @since 1.0
  */
-public class RegistrationInstanceSimple extends RegistrationInstanceAnnotation<RegistrationExtended> implements RegistrationExtended {
+public class RegistrationInstanceSimple extends RegistrationInstanceAnnotation<RegistrationExtended>
+        implements RegistrationExtended {
 
     private SimpleInjection.RegisterType registerType = SimpleInjection.RegisterType.NORMAL;
     private SimpleInjection.Scope scope = SimpleInjection.Scope.NEW;

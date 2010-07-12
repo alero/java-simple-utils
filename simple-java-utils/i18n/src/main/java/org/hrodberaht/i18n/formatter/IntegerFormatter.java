@@ -28,19 +28,16 @@ import java.text.NumberFormat;
  * @version 1.0
  * @since 1.0
  */
-public class IntegerFormatter extends NumberFormatter
-{
+public class IntegerFormatter extends NumberFormatter {
      /**
      * Returns an object representation of its argument.
      */
-    public Object convertToObject(String target)
-    {
+    public Object convertToObject(String target) {
         try {
             NumberFormat decimalFormat = NumberFormat.getIntegerInstance(locale);
             Number number = parseNumber(target, decimalFormat);
             return number.intValue();
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new MessageRuntimeException(e);
         }
     }

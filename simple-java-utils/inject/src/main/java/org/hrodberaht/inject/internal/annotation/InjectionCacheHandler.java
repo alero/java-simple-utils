@@ -14,7 +14,6 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,10 +38,9 @@ public class InjectionCacheHandler {
     }
 
     public InjectionMetaData find(InjectionMetaData injectionMetaData) {
-        final Iterator<InjectionMetaData> iterator = injectionMetaDataCache.iterator();
 
-        while (iterator.hasNext()) {
-            InjectionMetaData singleton = iterator.next();
+        for (InjectionMetaData anInjectionMetaDataCache : injectionMetaDataCache) {
+            InjectionMetaData singleton = anInjectionMetaDataCache;
             if (injectionMetaData.canInject(singleton) && injectionMetaData.isProvider() == singleton.isProvider()) {
                 return singleton;
             }

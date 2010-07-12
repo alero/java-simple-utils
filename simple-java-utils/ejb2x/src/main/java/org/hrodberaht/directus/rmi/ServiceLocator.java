@@ -48,7 +48,7 @@ public class ServiceLocator {
     }
 
     private static Object getEJBService(Class theService) {
-        Class theHomeClass = null;
+        Class theHomeClass;
         try {
             boolean isEntityBean = false;
             if(theService.getName().endsWith("Home")) {
@@ -58,7 +58,7 @@ public class ServiceLocator {
                 theHomeClass = Class.forName(theService.getName() + "Home");
             }
             LOGGER.info("Creating "+theService.getName());
-            Object theHome = null;
+            Object theHome;
             if (services.containsKey(theHomeClass)) {
                 LOGGER.info("Cached Home Creating {0}", theService.getName());
                 theHome = services.get(theHomeClass);

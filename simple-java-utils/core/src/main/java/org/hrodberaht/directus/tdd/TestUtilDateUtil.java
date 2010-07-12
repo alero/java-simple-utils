@@ -32,6 +32,9 @@ import java.util.Date;
  * @since 1.0
  */
 public class TestUtilDateUtil {
+
+    private TestUtilDateUtil() {}
+
     public static void setNowDate(Date date){
 
         try {

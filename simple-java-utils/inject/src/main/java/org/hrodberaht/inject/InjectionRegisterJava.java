@@ -54,13 +54,24 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         return this;
     }
 
-    public InjectionRegisterJava register(String namedService, Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
-        container.register(new InjectionKey(namedService, serviceDefinition), service, scope, SimpleInjection.RegisterType.NORMAL);
+    public InjectionRegisterJava register(
+            String namedService, Class serviceDefinition, Class service, SimpleInjection.Scope scope)
+    {
+        container.register(
+                new InjectionKey(namedService, serviceDefinition)
+                , service, scope, SimpleInjection.RegisterType.NORMAL
+        );
         return this;
     }
 
-    private InjectionRegisterJava register(Class<? extends Annotation> qualifier, Class serviceDefinition, Class service, SimpleInjection.Scope scope) {        
-        container.register(new InjectionKey(qualifier, serviceDefinition), service, scope, SimpleInjection.RegisterType.NORMAL);
+    private InjectionRegisterJava register(
+            Class<? extends Annotation> qualifier,
+            Class serviceDefinition,
+            Class service, SimpleInjection.Scope scope) {        
+        container.register(
+                new InjectionKey(qualifier, serviceDefinition)
+                , service, scope, SimpleInjection.RegisterType.NORMAL
+        );
         return this;
     }
 
@@ -83,7 +94,8 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         register(namedService, serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
-    public InjectionRegisterJava register(Class<? extends Annotation> qualifier, Class serviceDefinition, Class service) {
+    public InjectionRegisterJava register(
+            Class<? extends Annotation> qualifier, Class serviceDefinition, Class service) {
         register(qualifier, serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }

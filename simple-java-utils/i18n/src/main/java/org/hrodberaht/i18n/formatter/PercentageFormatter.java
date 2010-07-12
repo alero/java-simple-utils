@@ -34,7 +34,7 @@ public class PercentageFormatter extends NumberFormatter {
     /**
      * The default scale for percentage values
      */
-    public final static int PERCENTAGE_SCALE = 2;
+    public static final int PERCENTAGE_SCALE = 2;
 
     /**
      * Unformats its argument and returns a BigDecimal instance
@@ -50,8 +50,7 @@ public class PercentageFormatter extends NumberFormatter {
             }
             Number parsedNumber = parseNumber(target, formatter);
             return new PercentData(parsedNumber.doubleValue());
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new MessageRuntimeException(e);
         }
     }
@@ -74,8 +73,7 @@ public class PercentageFormatter extends NumberFormatter {
             NumberFormat format = NumberFormat.getPercentInstance(locale);
             format = fixCharacterJVMErrorsForDecimalFormat(format);
             return format.format(bigDecValue.doubleValue());
-        }
-        catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             throw new FormatException("Unable to format {0} as a percentage value", iae, value);
         }
 

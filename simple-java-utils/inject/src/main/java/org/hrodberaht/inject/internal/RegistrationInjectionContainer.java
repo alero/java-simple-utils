@@ -18,8 +18,6 @@ import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.annotation.InjectionKey;
 import org.hrodberaht.inject.register.RegistrationModule;
 
-import java.lang.annotation.Annotation;
-
 /**
  * Simple Java Utils - Container
  *
@@ -29,7 +27,6 @@ import java.lang.annotation.Annotation;
  * @since 1.0
  */
 public interface RegistrationInjectionContainer {
-
 
     void register(Class serviceDefinition, Class service,
                   SimpleInjection.Scope scope, SimpleInjection.RegisterType type);

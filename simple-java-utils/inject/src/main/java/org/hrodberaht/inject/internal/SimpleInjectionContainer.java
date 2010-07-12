@@ -29,7 +29,8 @@ import java.lang.annotation.Annotation;
  * @version 1.0
  * @since 1.0
  */
-public class SimpleInjectionContainer extends InjectionContainerBase implements InjectionContainer, RegistrationInjectionContainer {
+public class SimpleInjectionContainer extends InjectionContainerBase
+        implements InjectionContainer, RegistrationInjectionContainer {
 
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
@@ -37,7 +38,8 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         return getQualifiedService(service, forcedScope, key);
     }
 
-    public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
+    public <T> T getService(
+            Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier) {
         InjectionKey key = getAnnotatedKey(qualifier, service);
         return getQualifiedService(service, forcedScope, key);
     }
@@ -48,7 +50,8 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
     }
 
 
-    public void register(Class serviceDefinition, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public void register(
+            Class serviceDefinition, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredServices.containsKey(serviceDefinition)) {
             reRegisterSupport(serviceDefinition, type);
         }
@@ -58,7 +61,8 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
     }
 
 
-    public void register(InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+    public void register(
+            InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
         if (registeredNamedServices.containsKey(key)) {
             reRegisterSupport(key, type);
         }
@@ -81,7 +85,9 @@ public class SimpleInjectionContainer extends InjectionContainerBase implements 
         if(key.getQualifier() != null){
             register(key, instance.getService(), instance.getScope(), instance.getRegisterType());
         } else {
-            register(key.getServiceDefinition(), instance.getService(), instance.getScope(), instance.getRegisterType());
+            register(
+                    key.getServiceDefinition(), instance.getService(), instance.getScope(), instance.getRegisterType()
+            );
         }
     }
 

@@ -25,8 +25,7 @@ import java.text.MessageFormat;
  * @version 1.0
  * @since 1.0
  */
-public class FormatException extends RuntimeException
-{
+public class FormatException extends RuntimeException {
 
     private Object[] args = null;
 

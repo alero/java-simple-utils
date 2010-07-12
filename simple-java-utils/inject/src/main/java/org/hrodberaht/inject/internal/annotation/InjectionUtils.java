@@ -43,6 +43,7 @@ import java.util.List;
  * @since 1.0
  */
 public class InjectionUtils {
+    private InjectionUtils() {}
 
     public static final Class<Inject> INJECT = Inject.class;
 
@@ -117,9 +118,7 @@ public class InjectionUtils {
         if (annotatedConstructors.size() == 0) {
             try {
                 return beanClass.getDeclaredConstructor();
-            }
-
-            catch (NoSuchMethodException e) {
+            } catch (NoSuchMethodException e) {
                 throw new InjectRuntimeException(e);
             }
         } else if (annotatedConstructors.size() > 1) {

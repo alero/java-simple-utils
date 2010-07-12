@@ -436,7 +436,8 @@ public final class DateUtil {
         SHORT_DATE = dateFormat.toLocalizedPattern();
         SHORT_DATE_LENGTH = SHORT_DATE.length();
 
-        SimpleDateFormat dateTimeFormat = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, locale);
+        SimpleDateFormat dateTimeFormat = (SimpleDateFormat) 
+                DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, locale);
         LONG_DATE = dateTimeFormat.toLocalizedPattern();
         LONG_DATE_LENGTH = LONG_DATE.length();
     }

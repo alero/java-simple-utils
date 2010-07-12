@@ -83,7 +83,7 @@ public class TestDateUtil {
     public void testDateParseSimple_PatternFail(){
 
         try {
-            Date aDate = DateUtil.parseSimpleDate("10-01-01");
+            DateUtil.parseSimpleDate("10-01-01");
             assertEquals("Dont get here", null);
         } catch (MessageRuntimeException e) {
             assertEquals("Unknown format for 10-01-01 ", e.getMessage());
@@ -108,7 +108,7 @@ public class TestDateUtil {
     @Test(expected = RuntimeException.class)
     public void testParseDateError(){
         DateUtil.setLocale(new Locale("en","US"));
-        Date aDate = DateUtil.parseDate("01/01/2010", "yyyy-mmm.dd");
+        DateUtil.parseDate("01/01/2010", "yyyy-mmm.dd");
         
     }
 

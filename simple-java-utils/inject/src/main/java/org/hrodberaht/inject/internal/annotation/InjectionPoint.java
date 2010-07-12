@@ -73,17 +73,11 @@ public class InjectionPoint {
 
         try {
             method.invoke(service, serviceDependency);
-        }
-
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
-        }
-
-        catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
-        }
-
-        finally {
+        } finally {
             method.setAccessible(originalAccessible);
         }
     }
@@ -94,13 +88,9 @@ public class InjectionPoint {
 
         try {
             field.set(service, serviceDependency);
-        }
-
-        catch (final IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new InjectRuntimeException(e);
-        }
-
-        finally {
+        } finally {
             field.setAccessible(originalAccessible);
         }
     }
@@ -129,10 +119,7 @@ public class InjectionPoint {
             }else{
                 return annotationInjection.findInjectionData(beanClassFromProvider, key, true);    
             }
-
-        }
-
-        else {
+        } else {
             InjectionKey qualifier = AnnotationQualifierUtil.getQualifierKey(fieldBeanClass, field.getAnnotations());
             return annotationInjection.findInjectionData(fieldBeanClass, qualifier, false);
         }
