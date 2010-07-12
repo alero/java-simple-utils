@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <name>Simple Utils (pom)</name>
     <description>A gathering of projects for simpler java development</description>
+    <url>http://code.google.com/p/java-simple-utils/</url>
 
     <licenses>
         <license>
