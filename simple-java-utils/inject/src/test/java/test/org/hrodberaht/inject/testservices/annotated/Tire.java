@@ -22,5 +22,5 @@ package test.org.hrodberaht.inject.testservices.annotated;
  * @version 1.0
  * @since 1.0
  */
-public class Tire {
+public class Tire extends BaseTire{
 }

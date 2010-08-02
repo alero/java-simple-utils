@@ -15,9 +15,7 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
-import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorCGLIB;
-import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorDefault;
+import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
 
 import java.lang.reflect.Constructor;
@@ -32,10 +30,10 @@ import java.util.List;
  * @since 1.0
  */
 public class InjectionMetaData {
-    
+
     private InjectionKey key;
     private Class serviceClass;
-    private boolean provider = false;        
+    private boolean provider = false;
     private boolean preDefined = false;
 
     private ScopeHandler scopeHandler;
@@ -43,6 +41,7 @@ public class InjectionMetaData {
     private Constructor constructor;
     private List<InjectionMetaData> constructorDependencies;
     private List<InjectionPoint> injectionPoints;
+
 
     public InjectionMetaData(Class serviceClass, InjectionKey key, boolean provider) {
         this.serviceClass = serviceClass;
@@ -54,7 +53,7 @@ public class InjectionMetaData {
         return key;
     }
 
-    
+
 
     public void setScopeHandler(ScopeHandler scopeHandler) {
         this.scopeHandler = scopeHandler;
@@ -107,14 +106,13 @@ public class InjectionMetaData {
         if(!originalAccessible){
             constructor.setAccessible(true);
         }
-
         try {
             Object scopedInstance = scopeHandler.getInstance();
             if (scopedInstance != null) {
                 return scopedInstance;
             }
 
-            Object newInstance = getInstanceCreator().createInstance(constructor, parameters);
+            Object newInstance = InstanceCreatorFactory.getInstance().createInstance(constructor, parameters);
             scopeHandler.addScope(newInstance);
             return newInstance;
         } finally {
@@ -134,7 +132,8 @@ public class InjectionMetaData {
             return true;
         }
 
-        if (serviceClass.equals(bean.getServiceClass())) {
+        if (serviceClass.equals(bean.getServiceClass())
+                && !hasQualifier(key)) {
             return true;
         }
 
@@ -149,16 +148,14 @@ public class InjectionMetaData {
         return false;
     }
 
-    private static InstanceCreator creator = null;
-    public InstanceCreator getInstanceCreator() {
-        if(creator == null){
-            if(System.getProperty("simpleinjection.instancecreator.cglib") != null){
-                creator = new InstanceCreatorCGLIB();
-            } else {
-                creator = new InstanceCreatorDefault();
-            }
+    private boolean hasQualifier(InjectionKey key) {
+        if(key == null){
+            return false;
+        }else if(key.getQualifier() == null){
+            return false;
         }
-        return creator;
+        return true;
+
     }
 
     public SimpleInjection.Scope getScope() {

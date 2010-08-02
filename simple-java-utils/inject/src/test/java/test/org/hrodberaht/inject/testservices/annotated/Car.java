@@ -26,4 +26,8 @@ public interface Car {
 
     String brand();
 
+    Tire getSpareTire();
+
+    VindShield getSpareVindShield();
+
 }

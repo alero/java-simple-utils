@@ -15,7 +15,7 @@ public class RegistrationInstanceSimple extends RegistrationInstanceAnnotation<R
         implements RegistrationExtended {
 
     private SimpleInjection.RegisterType registerType = SimpleInjection.RegisterType.NORMAL;
-    private SimpleInjection.Scope scope = SimpleInjection.Scope.NEW;
+    private SimpleInjection.Scope scope = null; // No default scope for registration
 
 
     public RegistrationInstanceSimple(Class theInterface) {

@@ -15,13 +15,20 @@
 package org.hrodberaht.inject;
 
 import org.hrodberaht.inject.internal.InjectRuntimeException;
+import org.hrodberaht.inject.register.InjectionRegister;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Simple Java Utils - Container
@@ -30,7 +37,18 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionRegisterScan extends InjectionRegisterJava {
+public class InjectionRegisterScan extends InjectionRegisterBase<InjectionRegisterScan> {
+
+
+    private boolean detailedScanLogging = false;
+    private Collection<CustomClassLoader> customClassLoaders = new ArrayList<CustomClassLoader>();
+
+    public InjectionRegisterScan() {        
+    }
+
+    public InjectionRegisterScan(InjectionRegister register) {
+        super(register);
+    }
 
     public InjectionRegisterScan registerBasePackageScan(String packagename) {
         Class[] clazzs = getClasses(packagename);
@@ -57,16 +75,44 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
     }
 
 
+    public void registerThirdPartyJar(String... jars) {
+        for (String jar : jars) {
+
+            try {
+                URL u = new URL("jar", "", jar);
+                URLClassLoader jarClassLoader = new URLClassLoader(new URL[]{ u });
+                customClassLoaders.add(new CustomClassLoader(jarClassLoader, CustomClassLoader.ClassLoaderType.JAR));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    public void setDetailedScanLogging(boolean detailedScanLogging) {
+        this.detailedScanLogging = detailedScanLogging;
+    }
+
     private void createRegistration(Class aClazz) {
         if (
-            !aClazz.isInterface()
-            && !aClazz.isAnnotation()
-        ) {
-            register(aClazz);
+                !aClazz.isInterface()
+                && !aClazz.isAnnotation()
+                && !Modifier.isAbstract(aClazz.getModifiers())
+                ) {
+            try{
+                container.register(aClazz, aClazz, null, SimpleInjection.RegisterType.NORMAL);
+            }catch(InjectRuntimeException e){
+                System.out.println("Hrodberaht Injection: Silently failed to register class = "+aClazz);
+                if(detailedScanLogging){
+                    e.printStackTrace(System.err);       
+                }
+            }
         }
     }
 
-    private static boolean manuallyExcluded(Class aClazz, Class[] manuallyexluded) {
+    private boolean manuallyExcluded(Class aClazz, Class[] manuallyexluded) {
         for (Class excluded : manuallyexluded) {
             if (excluded == aClazz) {
                 return true;
@@ -84,10 +130,36 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
      * @throws ClassNotFoundException
      * @throws IOException
      */
-    private static Class[] getClasses(String packageName) {
+    private Class[] getClasses(String packageName) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ArrayList<Class> classes = findClassesToLoad(
+                packageName, classLoader, CustomClassLoader.ClassLoaderType.THREAD
+        );
+        for (CustomClassLoader customclassLoader : customClassLoaders) {
+            ClassLoader parentClassLoader = ClassLoader.getSystemClassLoader();
+            classes.addAll(findClassesToLoad(packageName, parentClassLoader, customclassLoader.loaderType));
+        }
+        return classes.toArray(new Class[classes.size()]);
+
+    }
+
+    private ArrayList<Class> findClassesToLoad(
+            String packageName, ClassLoader classLoader, CustomClassLoader.ClassLoaderType loaderType)
+    {
+        if(loaderType == CustomClassLoader.ClassLoaderType.THREAD){
+            return findFiles(packageName, classLoader);
+        }else if(loaderType == CustomClassLoader.ClassLoaderType.JAR){
+            return findFiles(packageName, classLoader);
+        }
+        return null;
+    }
+
+
+
+    private ArrayList<Class> findFiles(String packageName, ClassLoader classLoader) {
         ArrayList<Class> classes = new ArrayList<Class>();
         try {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
             assert classLoader != null;
             String path = packageName.replace('.', '/');
             Enumeration<URL> resources = classLoader.getResources(path);
@@ -105,8 +177,7 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
         } catch (ClassNotFoundException e) {
             throw new InjectRuntimeException(e);
         }
-        return classes.toArray(new Class[classes.size()]);
-
+        return classes;
     }
 
     /**
@@ -135,5 +206,57 @@ public class InjectionRegisterScan extends InjectionRegisterJava {
         }
         return classes;
     }
+
+    private ArrayList<Class> findJarFiles(String packageName, ClassLoader classLoader) {
+        ArrayList<Class> classes = new ArrayList<Class>();
+        try {
+
+            assert classLoader != null;
+            URLClassLoader urlClassLoader = (URLClassLoader)classLoader;
+            String path = packageName.replace('.', '/');
+            URL[] resources = urlClassLoader.getURLs();
+            List<JarFile> dirs = new ArrayList<JarFile>();
+            for (URL resource:resources) {
+                dirs.add(new JarFile(resource.getFile()));
+            }
+
+            for (JarFile directory : dirs) {
+                classes.addAll(findJarClasses(directory, packageName));
+            }
+        } catch (IOException e) {
+            throw new InjectRuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new InjectRuntimeException(e);
+        }
+        return classes;
+    }
+
+    private static List<Class> findJarClasses(JarFile directory, String packageName) throws ClassNotFoundException {
+        List<Class> classes = new ArrayList<Class>();
+        Enumeration<JarEntry> files = directory.entries();
+        while (files.hasMoreElements()) {
+            JarEntry file = files.nextElement();
+            classes.add(
+                        Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6))
+            );
+        }
+        return classes;
+    }
+
+
+
+
+    private static class CustomClassLoader{
+
+        private enum ClassLoaderType { JAR, THREAD };
+
+        public CustomClassLoader(URLClassLoader classLoader, ClassLoaderType loaderType) {
+            this.classLoader = classLoader;
+            this.loaderType = loaderType;
+        }
+
+        private ClassLoader classLoader;
+        private ClassLoaderType loaderType;
+    }  
 
 }

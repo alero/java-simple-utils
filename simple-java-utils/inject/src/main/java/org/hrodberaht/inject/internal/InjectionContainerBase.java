@@ -15,9 +15,10 @@
 package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.internal.annotation.InjectionKey;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -30,20 +31,22 @@ import java.util.HashMap;
  */
 public abstract class InjectionContainerBase {
 
-
-    protected HashMap<Class, ServiceRegister>
-            registeredServices = new HashMap<Class, ServiceRegister>();
-
     protected HashMap<InjectionKey, ServiceRegister>
             registeredNamedServices = new HashMap<InjectionKey, ServiceRegister>();
 
-    protected InjectionKey getNamedKey(String qualifier, Class service) {
-        return new InjectionKey(qualifier, service);
+    protected InjectionKey getNamedKey(String qualifier, Class serviceDefinition) {
+        return new InjectionKey(qualifier, serviceDefinition);
     }
 
-    protected InjectionKey getAnnotatedKey(Class<? extends Annotation> qualifier, Class service) {
-        return new InjectionKey(qualifier, service);
+    protected InjectionKey getAnnotatedKey(Class<? extends Annotation> qualifier, Class serviceDefinition) {
+        return new InjectionKey(qualifier, serviceDefinition);
     }
+
+    protected InjectionKey getKey(Class serviceDefinition) {
+        return new InjectionKey(serviceDefinition);
+    }
+
+
 
     @SuppressWarnings(value = "unchecked")
     protected <T> T instantiateService(
@@ -66,6 +69,41 @@ public abstract class InjectionContainerBase {
         return type;
     }
 
+    public Collection<ServiceRegister> getServiceRegister() {
+        Collection<ServiceRegister> registry = new ArrayList<ServiceRegister>(50);        
+        registry.addAll(getNamedRegisteredServices());
+        return registry;
+    }
+
+
+    private Collection<ServiceRegisterNamed> getNamedRegisteredServices(){
+        Collection<ServiceRegisterNamed> regulars = new ArrayList<ServiceRegisterNamed>();
+        Collection<InjectionKey> keys = registeredNamedServices.keySet();
+        for(InjectionKey registerKey:keys){
+            ServiceRegister register = registeredNamedServices.get(registerKey);
+            ServiceRegisterNamed registerRegular = new ServiceRegisterNamed(register);
+            registerRegular.setKey(registerKey);
+            regulars.add(registerRegular);
+        }
+        return regulars;
+    }
+
     protected abstract Object createInstance(ServiceRegister serviceRegister);
+
+    protected <T> ServiceRegister findServiceImplementation(Class<T> service) {
+        InjectionKey key = getKey(service);
+        if (!registeredNamedServices.containsKey(key)) {
+            if (service.isInterface()) { // TODO support this for classes as well? = inheritance support
+                for (ServiceRegister serviceRegister : registeredNamedServices.values()) {
+                    if (service.isAssignableFrom(serviceRegister.getService())) {
+                        // TODO first make sure there is only one usable service
+                        return serviceRegister;
+                    }
+                }
+            }
+            throw new InjectRuntimeException("Service {0} not registered in SimpleInjection", service);
+        }
+        return registeredNamedServices.get(key);
+    }
 
 }

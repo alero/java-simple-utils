@@ -44,13 +44,13 @@ public class LocaleProvider {
     public static void setThreadLocaleProvider(){
         InjectionRegisterJava registerJava = new InjectionRegisterJava(
                LocaleProvider.getInjectionContainer());
-        registerJava.reRegister(ProviderInterface.class, ThreadLocaleProvider.class);
+        registerJava.overrideRegister(ProviderInterface.class, ThreadLocaleProvider.class);
     }
 
     public static void seDefaultLocaleProvider() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava(
                LocaleProvider.getInjectionContainer());
-        registerJava.reRegister(ProviderInterface.class, SimpleLocaleProvider.class);
+        registerJava.overrideRegister(ProviderInterface.class, SimpleLocaleProvider.class);
     }
 
     /**

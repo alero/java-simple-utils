@@ -14,6 +14,8 @@
 
 package org.hrodberaht.inject;
 
+import org.hrodberaht.inject.register.InjectionRegister;
+
 /**
  * Simple Java Utils - Container
  *
@@ -21,5 +23,5 @@ package org.hrodberaht.inject;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionRegisterProperty extends InjectionRegisterBase{
+public class InjectionRegisterProperty extends InjectionRegisterBase<InjectionRegister> {
 }

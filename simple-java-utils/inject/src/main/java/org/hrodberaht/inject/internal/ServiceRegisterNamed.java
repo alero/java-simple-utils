@@ -14,22 +14,26 @@
 
 package org.hrodberaht.inject.internal;
 
-import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.register.RegistrationModule;
+public class ServiceRegisterNamed extends ServiceRegister{
 
-/**
- * Simple Java Utils - Container
- *
- * @author Robert Alexandersson
- *         2010-maj-29 12:48:43
- * @version 1.0
- * @since 1.0
- */
-public interface RegistrationInjectionContainer {
-    
-    void register(InjectionKey key, Class service,
-                  SimpleInjection.Scope scope, SimpleInjection.RegisterType type);
-    void register(RegistrationModule... modules);
+    private InjectionKey key;
 
+    public ServiceRegisterNamed(ServiceRegister aService) {
+        super(aService.getService(), aService.getSingleton()
+                , aService.getScope(), aService.getRegisterType());
+        super.setModule(aService.getModule());
+        super.setOverriddenService(aService.getOverriddenService());
+    }
 
+    public ServiceRegisterNamed(Class aService) {
+        super(aService);
+    }
+
+    public InjectionKey getKey() {
+        return key;
+    }
+
+    public void setKey(InjectionKey key) {
+        this.key = key;
+    }
 }

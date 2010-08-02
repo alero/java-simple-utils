@@ -5,8 +5,10 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionContainer;
+import org.hrodberaht.inject.internal.ServiceRegister;
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
 
 /**
  * Simple Java Utils - Container
@@ -34,6 +36,10 @@ public class GuiceInjectionContainer implements InjectionContainer {
     
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
         return injector.getInstance(service);
+    }
+
+    public Collection<ServiceRegister> getServiceRegister() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void registerModule(Module... modules) {

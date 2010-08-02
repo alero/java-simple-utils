@@ -2,10 +2,12 @@ package org.hrodberaht.inject.internal.spring;
 
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionContainer;
+import org.hrodberaht.inject.internal.ServiceRegister;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
 
 /**
  * Simple Java Utils - Container
@@ -38,6 +40,9 @@ public class SpringInjectionContainer implements InjectionContainer {
         return context.getBean(service);
     }
 
- 
+    public Collection<ServiceRegister> getServiceRegister() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 
 }

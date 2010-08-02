@@ -16,14 +16,16 @@ package org.hrodberaht.inject;
 
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
+import org.hrodberaht.inject.internal.ServiceRegister;
 import org.hrodberaht.inject.internal.SimpleInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.AnnotationInjectionContainer;
-import org.hrodberaht.inject.internal.annotation.InjectionKey;
+import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 import org.hrodberaht.inject.register.RegistrationModule;
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
 
 /**
  * Simple Java Utils - Container - Container
@@ -33,16 +35,14 @@ import java.lang.annotation.Annotation;
  * @version 1.0
  * @since 1.0
  */
-public class SimpleInjection implements Container, ScopeContainer {
-
-
-
-    // Perhaps a SimpleInjection basic singleton value instead of static fot these variables ...
-    private InjectionContainer injectionContainer = new SimpleInjectionContainer();
-
+public class SimpleInjection implements Container, ScopeContainer, InjectContainer {
 
     
+    private InjectionContainer injectionContainer = new SimpleInjectionContainer();
 
+    public Collection<ServiceRegister> getServiceRegister() {
+        return injectionContainer.getServiceRegister();
+    }
 
     public enum RegisterType {
         WEAK, NORMAL, OVERRIDE_NORMAL, FINAL
@@ -117,7 +117,7 @@ public class SimpleInjection implements Container, ScopeContainer {
     protected synchronized void register(Class serviceDefinition, Class service, Scope scope, RegisterType type) {
         if(injectionContainer instanceof RegistrationInjectionContainer){
             RegistrationInjectionContainer container = (RegistrationInjectionContainer)injectionContainer;
-            container.register(serviceDefinition, service, scope,  type);
+            container.register(new InjectionKey(serviceDefinition), service, scope,  type);
         }
     }
 
@@ -128,10 +128,10 @@ public class SimpleInjection implements Container, ScopeContainer {
         }
     }
 
-    public void register(RegistrationModule module) {
+    public void register(RegistrationModule... modules) {
         if(injectionContainer instanceof RegistrationInjectionContainer){
             RegistrationInjectionContainer container = (RegistrationInjectionContainer)injectionContainer;
-            container.register(module);
+            container.register(modules);
         }
     }
     
@@ -154,6 +154,17 @@ public class SimpleInjection implements Container, ScopeContainer {
     protected synchronized InjectionContainer getContainer(){
         // TODO: make this support clone or remove
         return injectionContainer;
+    }
+
+    public void injectDependencies(Object service) {
+        if(injectionContainer instanceof AnnotationInjectionContainer){
+            AnnotationInjectionContainer annotationContainer = (AnnotationInjectionContainer) injectionContainer;
+            annotationContainer.injectDependencies(service);
+        } else {
+            throw new IllegalAccessError("Method not supported by InjectionContainer typed: "
+                    +injectionContainer.getClass().getName());
+        }
+
     }
 
 }

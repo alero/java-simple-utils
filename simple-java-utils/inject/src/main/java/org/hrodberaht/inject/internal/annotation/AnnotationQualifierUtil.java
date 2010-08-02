@@ -15,6 +15,7 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.internal.InjectRuntimeException;
+import org.hrodberaht.inject.internal.InjectionKey;
 
 import javax.inject.Named;
 import javax.inject.Qualifier;

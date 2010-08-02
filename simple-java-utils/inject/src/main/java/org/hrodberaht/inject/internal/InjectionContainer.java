@@ -17,6 +17,7 @@ package org.hrodberaht.inject.internal;
 import org.hrodberaht.inject.SimpleInjection;
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
 
 /**
  * Simple Java Utils - Container
@@ -33,4 +34,5 @@ public interface InjectionContainer {
     <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope);
 
 
+    Collection<ServiceRegister> getServiceRegister();
 }

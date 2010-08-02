@@ -14,7 +14,9 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
+import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.internal.InjectRuntimeException;
+import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.annotation.scope.DefaultScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.InheritableThreadScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
@@ -187,6 +189,17 @@ public class InjectionUtils {
         } else if (isThread(serviceClass)) {
             return new ThreadScopeHandler();
         } else if (isInheritedThread(serviceClass)) {
+            return new InheritableThreadScopeHandler();
+        }
+        return new DefaultScopeHandler();
+    }
+
+    public static ScopeHandler getScopeHandler(ScopeContainer.Scope scope) {
+        if (scope == ScopeContainer.Scope.SINGLETON) {
+            return new SingletonScopeHandler();
+        } else if (scope == ScopeContainer.Scope.THREAD) {
+            return new ThreadScopeHandler();
+        } else if (scope == ScopeContainer.Scope.INHERITABLE_THREAD) {
             return new InheritableThreadScopeHandler();
         }
         return new DefaultScopeHandler();

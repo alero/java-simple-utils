@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.util.RegisterStub;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -30,11 +31,9 @@ public class ScopeThreadUnitT {
 
     @Test
     public void testThreadScope() {
-        InjectionRegisterScan register = new InjectionRegisterScan();
-        register.activateContainerJavaXInject();
-        // Tests scanning and exclusion of single class
-        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
+        InjectionRegisterScan register = RegisterStub.createAnnotatedScanRegister();
         Container container = register.getContainer();
+        register.printRegistration();
         Volvo aCar = (Volvo) container.get(Car.class);
 
         Volvo aSecondCar = (Volvo) container.get(Car.class);
@@ -49,10 +48,7 @@ public class ScopeThreadUnitT {
 
     @Test
     public void testDifferentThreadScope() {
-        InjectionRegisterScan register = new InjectionRegisterScan();
-        register.activateContainerJavaXInject();
-        // Tests scanning and exclusion of single class
-        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
+        InjectionRegisterScan register = RegisterStub.createAnnotatedScanRegister();
         final Container container = register.getContainer();
         final Volvo aCar = (Volvo) container.get(Car.class);
 
@@ -74,10 +70,8 @@ public class ScopeThreadUnitT {
 
     @Test
     public void testInheritedThreadScope() {
-        InjectionRegisterScan register = new InjectionRegisterScan();
-        register.activateContainerJavaXInject();
-        // Tests scanning and exclusion of single class
-        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
+        InjectionRegisterScan register = RegisterStub.createAnnotatedScanRegister();
+        
         final Container container = register.getContainer();
         final Volvo aCar = (Volvo) container.get(Car.class);
 
@@ -100,6 +94,8 @@ public class ScopeThreadUnitT {
 
 
     }
+
+    
 
     private void waitForIt(Thread thread) {
         try {

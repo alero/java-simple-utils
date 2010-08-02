@@ -15,12 +15,10 @@
 package org.hrodberaht.inject;
 
 import com.google.inject.Module;
-import org.hrodberaht.inject.internal.annotation.InjectionKey;
+import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
 import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
-import org.hrodberaht.inject.register.RegistrationModule;
-
-import java.lang.annotation.Annotation;
+import org.hrodberaht.inject.register.InjectionRegister;
 
 /**
  * Simple Java Utils - Container
@@ -29,9 +27,9 @@ import java.lang.annotation.Annotation;
  * @version 1.0
  * @since 1.0
  */
-public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegisterJava> {
+public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegister> {
 
-    public InjectionRegisterJava(){
+    public InjectionRegisterJava() {
         super();
     }
 
@@ -39,37 +37,10 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         this.container = (SimpleInjection) container;
     }
 
-    public InjectionRegisterJava finalRegister(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
-        container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.FINAL);
-        return this;
-    }
-
-    public InjectionRegisterJava reRegister(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
-        container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
-        return this;
-    }
-
-    public InjectionRegisterJava register(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
-        container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.NORMAL);
-        return this;
-    }
-
     public InjectionRegisterJava register(
-            String namedService, Class serviceDefinition, Class service, SimpleInjection.Scope scope)
-    {
+            String namedService, Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
         container.register(
                 new InjectionKey(namedService, serviceDefinition)
-                , service, scope, SimpleInjection.RegisterType.NORMAL
-        );
-        return this;
-    }
-
-    private InjectionRegisterJava register(
-            Class<? extends Annotation> qualifier,
-            Class serviceDefinition,
-            Class service, SimpleInjection.Scope scope) {        
-        container.register(
-                new InjectionKey(qualifier, serviceDefinition)
                 , service, scope, SimpleInjection.RegisterType.NORMAL
         );
         return this;
@@ -80,26 +51,15 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         return this;
     }
 
-    public InjectionRegisterJava register(Class serviceDefinition, Class service) {
-        register(serviceDefinition, service, SimpleInjection.Scope.NEW);
-        return this;
+    public InjectionRegister register(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
+        return super.register(serviceDefinition, service, scope);    
     }
 
-    public InjectionRegisterJava register(Class service) {
-        register(service, service, SimpleInjection.Scope.NEW);
-        return this;
-    }
 
     public InjectionRegisterJava register(String namedService, Class serviceDefinition, Class service) {
         register(namedService, serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
-    public InjectionRegisterJava register(
-            Class<? extends Annotation> qualifier, Class serviceDefinition, Class service) {
-        register(qualifier, serviceDefinition, service, SimpleInjection.Scope.NEW);
-        return this;
-    }
-
 
 
     public InjectionRegisterJava registerDefault(Class serviceDefinition, Class service) {
@@ -107,26 +67,9 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         return this;
     }
 
-    public InjectionRegisterJava reRegister(Class serviceDefinition, Class service) {
-        reRegister(serviceDefinition, service, SimpleInjection.Scope.NEW);
-        return this;
-    }
-
-    public InjectionRegisterJava finalRegister(Class serviceDefinition, Class service) {
-        finalRegister(serviceDefinition, service, SimpleInjection.Scope.NEW);
-        return this;
-    }
-
-
     public InjectionRegisterJava registerSpringResource(String... resources) {
         ((SpringInjectionContainer) container.getContainer())
                 .registerConfigResource(resources);
-        return this;
-    }
-
-
-    public InjectionRegisterJava register(RegistrationModule module) {
-        container.register(module);
         return this;
     }
 
@@ -134,15 +77,7 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         ((GuiceInjectionContainer) container.getContainer())
                 .registerModule(resources);
         return this;
-    }
-
-    public Container getContainer() {
-        return container;
-    }
-
-    public ScopeContainer getScopedContainer() {
-        return container;
-    }
+    }   
 
 
 }

@@ -16,15 +16,22 @@ package test.org.hrodberaht.inject;
 
 
 import org.hrodberaht.inject.Container;
-import org.hrodberaht.inject.InjectionRegisterJava;
-import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
+import org.hrodberaht.inject.InjectContainer;
+import org.hrodberaht.inject.InjectionRegisterModule;
+import org.hrodberaht.inject.InjectionRegisterScan;
+import org.hrodberaht.inject.register.InjectionRegister;
 import org.junit.Test;
+import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Spare;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
 import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
 import test.org.hrodberaht.inject.testservices.annotated.Tire;
 import test.org.hrodberaht.inject.testservices.annotated.VindShield;
+import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.testservices.regmodules.OverridesRegisterModuleAnnotated;
+import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleAnnotated;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -41,20 +48,9 @@ public class AnnotationContainerUnitT {
     @Test
     public void testFindAnnotatedWithForTwoDifferentServices() {
 
-        InjectionRegisterJava registerJava = new InjectionRegisterJava();
-        registerJava.activateContainerJavaXInject();
-        registerJava.register(new RegistrationModuleAnnotation(){
-            @Override
-            public void registrations() {
-                register(Tire.class).annotated(Spare.class).with(SpareTire.class);
-                register(VindShield.class).annotated(Spare.class).with(SpareVindShield.class);
-            }
-        });
-
+        InjectionRegister registerJava = createRegistration();
         Container container = registerJava.getContainer();
-
         Tire spareTire = container.get(Tire.class, Spare.class);
-
         VindShield vindShield = container.get(VindShield.class, Spare.class);
 
         assertTrue(spareTire instanceof SpareTire);
@@ -62,5 +58,94 @@ public class AnnotationContainerUnitT {
         assertTrue(vindShield instanceof SpareVindShield);
     }
 
+    @Test
+    public void testInjectDependencies() {
+        InjectionRegister registerJava = createRegistration();
+
+        InjectContainer container = (InjectContainer) registerJava.getContainer();
+
+        Volvo aVolvo = new Volvo();
+        container.injectDependencies(aVolvo);
+
+        assertTrue(aVolvo.getSpareTire() instanceof SpareTire);
+
+        assertTrue(aVolvo.getVindShield() instanceof VindShield);
+    }
+
+    @Test
+    public void testOverrideSupport() {
+
+        InjectionRegister registerJava = createRegistration();
+        registerJava.overrideRegister(Spare.class, Tire.class, Tire.class);
+
+        Container container = registerJava.getContainer();
+        Tire spareTire = container.get(Tire.class, Spare.class);
+        VindShield vindShield = container.get(VindShield.class, Spare.class);
+
+        assertFalse(spareTire instanceof SpareTire);
+
+        assertTrue(vindShield instanceof SpareVindShield);
+    }
+
+    @Test
+    public void testOverrideModuleSupport() {
+
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerJavaXInject();
+
+        // This is normally done in a more dynamic way.
+        // Its intended to support advances inheritance support for registrations
+
+        // The regular (default/basic) registration
+        registerJava.register(new RegisterModuleAnnotated());
+
+        // The override (of a default) registration
+        registerJava.register(new OverridesRegisterModuleAnnotated());
+
+        registerJava.printRegistration();
+
+        Container container = registerJava.getContainer();
+        Tire spareTire = container.get(Tire.class, Spare.class);
+        VindShield vindShield = container.get(VindShield.class, Spare.class);
+
+        assertFalse(spareTire instanceof SpareTire);
+
+        assertTrue(vindShield instanceof SpareVindShield);
+        
+    }
+
+    @Test
+    public void testOverrideModuleScanSupport() {
+
+        // This is normally done in a more dynamic way.
+        // Its intended to give advanced inheritance like support for registrations
+
+        // The regular (default/basic) registration
+        InjectionRegisterScan registerScan = new InjectionRegisterScan();
+        registerScan.activateContainerJavaXInject();
+        registerScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
+        InjectionRegisterModule registerJava = new InjectionRegisterModule(registerScan);
+        // The override (of a default) registration
+        registerJava.register(new RegisterModuleAnnotated());
+
+        registerJava.printRegistration();
+
+        Container container = registerJava.getContainer();
+        Car car = container.get(Car.class);
+
+
+        assertTrue(car.getSpareTire() instanceof SpareTire);
+
+        assertTrue(car.getSpareVindShield() instanceof SpareVindShield);
+
+    }
+
+
+    private InjectionRegisterModule createRegistration() {
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerJavaXInject();
+        registerJava.register(new RegisterModuleAnnotated());
+        return registerJava;
+    }
 
 }

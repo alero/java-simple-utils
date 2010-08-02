@@ -1,4 +1,4 @@
-package org.hrodberaht.inject.internal.annotation;
+package org.hrodberaht.inject.internal;
 
 import java.lang.annotation.Annotation;
 

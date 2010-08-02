@@ -17,7 +17,6 @@ package test.org.hrodberaht.inject;
 import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
 import org.hrodberaht.inject.Container;
-import org.hrodberaht.inject.InjectionRegisterJava;
 import org.junit.Test;
 
 /**
@@ -37,7 +36,7 @@ public class AnnotationContinerPerformanceUnitT {
             Car car = container.get(Car.class);
             // This does loads of fetching from the container, will stress test it a lot.
             // Form what i could see on the Cobertura report each rotation give about 100 calls.
-            // meaning these 1 000 iterations will test about 100 000 calls to the SimpleInjection.get method.
+            // meaning these 1 000 iterations will test about 100 000 calls to the SimpleInjection.getInnerContainer method.
 
             // On my machine an 10 000 Intel i7 820 this takes about 2 seconds using 1 of 4 CPU's at 75%.
             // This is not strange as this test is not threaded in any way. 
@@ -47,16 +46,16 @@ public class AnnotationContinerPerformanceUnitT {
 
     @Test(timeout = 10000)
     public void testGuicePerformance(){
-        InjectionRegisterJava registerJava = new InjectionRegisterJava()
-                .activateContainerGuice();
+        //InjectionRegisterJava registerJava = new InjectionRegisterJava()
+        //        .activateContainerGuice();
 
         // registerJava.registerGuiceModule(new GuiceTckModule());
         // Container container = registerJava.getContainer();
         for(int i=0;i<10000;i++){
-            // Car car = container.get(Car.class);
+            // Car car = container.getInnerContainer(Car.class);
             // This does loads of fetching from the container, will stress test it a lot.
             // Form what i could see on the Cobertura report each rotation give about 100 calls.
-            // meaning these 10 000 iterations will test about 1 000 000 calls to the SimpleInjection.get method.
+            // meaning these 10 000 iterations will test about 1 000 000 calls to the SimpleInjection.getInnerContainer method.
 
             // Tck.testsFor(car, false, true);
         }

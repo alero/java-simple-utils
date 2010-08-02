@@ -15,6 +15,7 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.internal.InjectionKey;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -151,13 +152,16 @@ public class AnnotationInjection {
         cachedInjectionMetaData.setPreDefined(false);
     }
 
-     /**
-     * Uses the injection points to create instances for all services intended.
-     *
-     * @param service
-     * @param injectionMetaData
-     */
-    private void autoWireBean(Object service, InjectionMetaData injectionMetaData) {
+
+    public void injectDependencies(Object service) {
+
+        InjectionMetaData injectionMetaData =
+                findInjectionData(service.getClass(), null, InjectionUtils.isProvider(service.getClass()));
+
+        injectFromInjectionPoints(service, injectionMetaData);
+    }
+
+    private void injectFromInjectionPoints(Object service, InjectionMetaData injectionMetaData) {
         List<InjectionPoint> injectionPoints = injectionMetaData.getInjectionPoints();
 
         for (InjectionPoint injectionPoint : injectionPoints) {
@@ -172,6 +176,16 @@ public class AnnotationInjection {
             injectionPoint.inject(service, serviceDependencies);
 
         }
+    }
+
+    /**
+     * Uses the injection points to create instances for all services intended.
+     *
+     * @param service
+     * @param injectionMetaData
+     */
+    private void autoWireBean(Object service, InjectionMetaData injectionMetaData) {
+        injectFromInjectionPoints(service, injectionMetaData);
     }
 
     /**

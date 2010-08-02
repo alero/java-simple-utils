@@ -16,11 +16,13 @@ package test.org.hrodberaht.inject;
 
 import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectionRegisterScan;
+import org.junit.Ignore;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.AnyService;
 import test.org.hrodberaht.inject.testservices.AnyServiceDoNothingImpl;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.util.RegisterStub;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -42,6 +44,7 @@ public class ContainerScanUnitT {
         InjectionRegisterScan register = new InjectionRegisterScan();
         // Tests scanning and exclusion of single class
         register.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
+
         Container container = register.getContainer();
 
         AnyService anyService = container.get(AnyService.class);
@@ -54,15 +57,13 @@ public class ContainerScanUnitT {
 
     @Test
     public void testAnnotatedScanningOfImplementations() {
-        InjectionRegisterScan register = new InjectionRegisterScan();
-        register.activateContainerJavaXInject();
-        // Tests scanning and exclusion of single class
-        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
+        InjectionRegisterScan register = RegisterStub.createAnnotatedScanRegister();
+
         Container container = register.getContainer();
         Car aCar = container.get(Car.class);
 
         assertEquals("volvo", aCar.brand());
-        Volvo aVolvo = (Volvo)aCar;
+        Volvo aVolvo = (Volvo) aCar;
         assertNotNull(aVolvo.getBackLeft());
         assertNotNull(aVolvo.getBackRight());
         assertNotNull(aVolvo.getFrontLeft());
@@ -73,6 +74,8 @@ public class ContainerScanUnitT {
     }
 
     @Test
+    @Ignore
+    // This is not actually tested anyhow
     public void testScanningOfSinglePackageImplementations() {
 
         InjectionRegisterScan register = new InjectionRegisterScan();
@@ -86,4 +89,6 @@ public class ContainerScanUnitT {
         assertEquals(1, anyService.getStuff().size());
 
     }
+
+
 }

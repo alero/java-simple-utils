@@ -44,7 +44,6 @@ public class AnyApplicationConfig extends ConfigBase {
         }else{
             new AnyApplicationConfig(resource, null);
         }
-
     }
 
     public static ConfigItem<Boolean> A_BOOLEAN = new ConfigItem<Boolean>(Boolean.class, "anyapp.aboolean");

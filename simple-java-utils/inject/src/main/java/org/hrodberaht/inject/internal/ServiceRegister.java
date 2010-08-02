@@ -15,6 +15,7 @@
 package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.register.RegistrationModule;
 
 public class ServiceRegister {
 
@@ -22,6 +23,9 @@ public class ServiceRegister {
     private Object singleton;
     private SimpleInjection.Scope scope;
     private SimpleInjection.RegisterType registerType = SimpleInjection.RegisterType.WEAK;
+    private ServiceRegister overriddenService = null;
+
+    private RegistrationModule module;
 
     public ServiceRegister(
             Class aService, Object singleton, SimpleInjection.Scope scope, SimpleInjection.RegisterType registerType) {
@@ -53,5 +57,21 @@ public class ServiceRegister {
 
     public void setSingleton(Object singleton) {
         this.singleton = singleton;
+    }
+
+    public ServiceRegister getOverriddenService() {
+        return overriddenService;
+    }
+
+    public void setOverriddenService(ServiceRegister overriddenService) {
+        this.overriddenService = overriddenService;
+    }
+
+    public RegistrationModule getModule() {
+        return module;
+    }
+
+    public void setModule(RegistrationModule module) {
+        this.module = module;
     }
 }

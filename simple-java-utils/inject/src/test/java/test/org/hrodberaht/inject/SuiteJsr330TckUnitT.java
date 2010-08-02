@@ -26,7 +26,7 @@ import org.atinject.tck.auto.Tire;
 import org.atinject.tck.auto.V8Engine;
 import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.Container;
-import org.hrodberaht.inject.InjectionRegisterJava;
+import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 
 
@@ -43,7 +43,7 @@ public class SuiteJsr330TckUnitT extends TestCase {
 
     public static junit.framework.Test suite() {
 
-        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
         registerJava.activateContainerJavaXInject();
 
         // InjectionRegisterJava.register(Car.class, Convertible.class);

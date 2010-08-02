@@ -1,6 +1,6 @@
 package org.hrodberaht.inject.register.internal;
 
-import org.hrodberaht.inject.internal.annotation.InjectionKey;
+import org.hrodberaht.inject.internal.InjectionKey;
 
 import java.lang.annotation.Annotation;
 

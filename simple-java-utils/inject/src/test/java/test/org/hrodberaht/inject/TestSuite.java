@@ -30,8 +30,10 @@ import org.junit.runners.Suite;
     SuiteJsr330TckUnitT.class,
     SimpleContainerUnitT.class,    
     AnnotationContinerPerformanceUnitT.class,
+    AnnotationContainerUnitT.class,
     ContainerScanUnitT.class,
-    ScopeThreadUnitT.class
+    ScopeThreadUnitT.class,
+    InstanceCreationUnitT.class
 })
 public class TestSuite {
 }

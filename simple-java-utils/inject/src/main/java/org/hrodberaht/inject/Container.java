@@ -12,7 +12,21 @@ import java.lang.annotation.Annotation;
  */
 public interface Container {
 
+    /**
+     *
+     * @param service
+     * @param <T>
+     * @return
+     */
     <T> T get(Class<T> service);
+
+    /**
+     *
+     * @param service
+     * @param qualifier
+     * @param <T>
+     * @return
+     */
     <T> T get(Class<T> service, String qualifier);
     <T> T get(Class<T> service, Class<? extends Annotation> qualifier);
 }

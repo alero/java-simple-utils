@@ -26,7 +26,9 @@ import javax.inject.Inject;
  */
 public class Volvo implements Car{
 
-    Tire spareTire;
+    @Inject @Spare Tire spareTire;
+
+    @Inject @Spare VindShield spareVindShield;
 
     @Inject Tire frontLeft;
     @Inject Tire frontRight;
@@ -40,7 +42,7 @@ public class Volvo implements Car{
     @Inject TestDriverManager driverManager;
 
     @Inject
-    public Volvo(Tire spareTire) {
+    public Volvo(@Spare Tire spareTire) {
         this.spareTire = spareTire;
     }
 
@@ -61,6 +63,10 @@ public class Volvo implements Car{
 
     public Tire getSpareTire() {
         return spareTire;
+    }
+
+    public VindShield getSpareVindShield() {
+        return spareVindShield;
     }
 
     public Tire getFrontLeft() {
