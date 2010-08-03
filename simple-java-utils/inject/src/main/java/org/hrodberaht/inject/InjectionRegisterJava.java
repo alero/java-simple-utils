@@ -14,10 +14,7 @@
 
 package org.hrodberaht.inject;
 
-import com.google.inject.Module;
 import org.hrodberaht.inject.internal.InjectionKey;
-import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
-import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 import org.hrodberaht.inject.register.InjectionRegister;
 
 /**
@@ -66,18 +63,5 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         registerDefault(serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;
     }
-
-    public InjectionRegisterJava registerSpringResource(String... resources) {
-        ((SpringInjectionContainer) container.getContainer())
-                .registerConfigResource(resources);
-        return this;
-    }
-
-    public InjectionRegisterJava registerGuiceModule(Module... resources) {
-        ((GuiceInjectionContainer) container.getContainer())
-                .registerModule(resources);
-        return this;
-    }   
-
 
 }

@@ -211,7 +211,7 @@ public class SimpleContainerUnitT {
                         .with(AnyServiceDoNothingImpl.class);
 
                 register(AnyService.class)
-                        .registeredAs(SimpleInjection.RegisterType.FINAL)
+                        .registerTypeAs(SimpleInjection.RegisterType.FINAL)
                         .with(AnyServiceDoSomethingImpl.class);
             }
         });

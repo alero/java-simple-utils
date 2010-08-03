@@ -22,7 +22,7 @@ public class RegistrationInstanceSimple extends RegistrationInstanceAnnotation<R
         super(theInterface);
     }
 
-    public RegistrationExtended registeredAs(SimpleInjection.RegisterType registerType) {
+    public RegistrationExtended registerTypeAs(SimpleInjection.RegisterType registerType) {
         this.registerType = registerType;
         return this;
     }
