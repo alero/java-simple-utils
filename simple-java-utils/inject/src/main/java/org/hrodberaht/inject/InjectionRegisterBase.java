@@ -58,16 +58,6 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
         return (T) this;
     }
 
-    public T activateContainerSpring() {
-        container.setContainerSpring();
-        return (T) this;
-    }
-
-    public T activateContainerGuice() {
-        container.setContainerGuice();
-        return (T) this;
-    }
-
     public InjectionRegister register(Class<? extends Annotation> qualifier, Class serviceDefinition, Class service) {
         register(qualifier, serviceDefinition, service, SimpleInjection.Scope.NEW);
         return this;

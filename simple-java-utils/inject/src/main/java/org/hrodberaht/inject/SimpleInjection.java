@@ -20,8 +20,6 @@ import org.hrodberaht.inject.internal.ServiceRegister;
 import org.hrodberaht.inject.internal.SimpleInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.AnnotationInjectionContainer;
 import org.hrodberaht.inject.internal.InjectionKey;
-import org.hrodberaht.inject.internal.guice.GuiceInjectionContainer;
-import org.hrodberaht.inject.internal.spring.SpringInjectionContainer;
 import org.hrodberaht.inject.register.RegistrationModule;
 
 import java.lang.annotation.Annotation;
@@ -141,14 +139,6 @@ public class SimpleInjection implements Container, ScopeContainer, InjectContain
 
     protected synchronized void setContainerSimpleInjection(){
         injectionContainer = new SimpleInjectionContainer();
-    }
-
-    protected synchronized void setContainerGuice() {
-        injectionContainer = new GuiceInjectionContainer() ;
-    }
-
-    protected synchronized void setContainerSpring() {
-        injectionContainer = new SpringInjectionContainer();
     }
 
     protected synchronized InjectionContainer getContainer(){
