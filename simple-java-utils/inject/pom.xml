@@ -96,7 +96,10 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <excludes>
-                <exclude>**/testservices/annotated/*java</exclude>                
+
+                <exclude>**/testservices/annotated/*java</exclude>
+                <exclude>**/testservices/largepackage/*</exclude>
+                <exclude>**/testservices/largepackage/**/*</exclude>
               </excludes>
             </configuration>
           </plugin>

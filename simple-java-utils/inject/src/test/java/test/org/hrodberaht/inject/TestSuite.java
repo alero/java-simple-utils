@@ -31,7 +31,7 @@ import org.junit.runners.Suite;
     SimpleContainerUnitT.class,        
     AnnotationContainerUnitT.class,
     ContainerScanUnitT.class,
-    ScopeThreadUnitT.class,
+    ScopeThreadUnitT.class,        
     InstanceCreationUnitT.class
 })
 public class TestSuite {

@@ -1,4 +1,4 @@
-package test.org.hrodberaht.inject.testservices;
+package test.org.hrodberaht.inject.testservices.simple;
 
 /**
  * Simple Java Utils

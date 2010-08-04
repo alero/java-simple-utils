@@ -24,10 +24,10 @@ import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.register.RegistrationModuleSimple;
 import org.junit.Before;
 import org.junit.Test;
-import test.org.hrodberaht.inject.testservices.AnyService;
-import test.org.hrodberaht.inject.testservices.AnyServiceDoNothingImpl;
-import test.org.hrodberaht.inject.testservices.AnyServiceDoSomethingImpl;
-import test.org.hrodberaht.inject.testservices.DoNothing;
+import test.org.hrodberaht.inject.testservices.simple.AnyService;
+import test.org.hrodberaht.inject.testservices.simple.AnyServiceDoNothingImpl;
+import test.org.hrodberaht.inject.testservices.simple.AnyServiceDoSomethingImpl;
+import test.org.hrodberaht.inject.testservices.simple.DoNothing;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

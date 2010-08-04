@@ -12,7 +12,7 @@
  *   ~ See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.inject.testservices;
+package test.org.hrodberaht.inject.testservices.simple;
 
 import java.util.Collection;
 
@@ -23,16 +23,9 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public class AnyServiceDoNothingImpl implements AnyService{
+public interface AnyService {
 
+    void doStuff();
+    Collection getStuff();
 
-    public void doStuff() {
-        if(true){
-            throw new RuntimeException("This service can't do stuff");
-        }
-    }
-
-    public Collection getStuff() {
-        return null;
-    }
 }

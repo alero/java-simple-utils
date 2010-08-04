@@ -15,17 +15,21 @@
 package test.org.hrodberaht.inject;
 
 import org.hrodberaht.inject.Container;
+import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.InjectionRegisterScan;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.junit.Ignore;
 import org.junit.Test;
-import test.org.hrodberaht.inject.testservices.AnyService;
-import test.org.hrodberaht.inject.testservices.AnyServiceDoNothingImpl;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.testservices.simple.AnyService;
+import test.org.hrodberaht.inject.testservices.simple.AnyServiceDoNothingImpl;
+import test.org.hrodberaht.inject.testservices.simple.AnyServiceDoSomethingImpl;
 import test.org.hrodberaht.inject.util.RegisterStub;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Simple Java Utils
@@ -43,7 +47,7 @@ public class ContainerScanUnitT {
 
         InjectionRegisterScan register = new InjectionRegisterScan();
         // Tests scanning and exclusion of single class
-        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.simple", AnyServiceDoNothingImpl.class);
 
         Container container = register.getContainer();
 
@@ -80,13 +84,56 @@ public class ContainerScanUnitT {
 
         InjectionRegisterScan register = new InjectionRegisterScan();
         // Tests scanning and exclusion of single class
-        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices", AnyServiceDoNothingImpl.class);
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.simple", AnyServiceDoNothingImpl.class);
         Container container = register.getContainer();
 
         AnyService anyService = container.get(AnyService.class);
         anyService.doStuff();
 
         assertEquals(1, anyService.getStuff().size());
+
+    }
+
+    @Test
+    public void testScanningOfDuplicateImplementations() {
+
+        InjectionRegisterScan register = new InjectionRegisterScan();
+        // Tests scanning and exclusion of single class
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.simple");
+
+        Container container = register.getContainer();
+
+        try {
+            AnyService anyService = container.get(AnyService.class);
+            assertEquals("Not allowed", "");
+        } catch (InjectRuntimeException e) {
+            assertEquals(
+                    "Found two Implementations " +
+                            "\"class test.org.hrodberaht.inject.testservices.simple.AnyServiceDoSomethingImpl\"" +
+                            ", \"class test.org.hrodberaht.inject.testservices.simple.AnyServiceDoNothingImpl\" " +
+                            "matching the Interface \"interface test.org.hrodberaht.inject.testservices.simple.AnyService\"" +
+                            ". This normally occurs when scanning implementations and can be corrected " +
+                            " by manually registering one of them to the Interface"
+                    , e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testScanningAndRegisterWhenDuplicateImplementations() {
+
+
+        InjectionRegisterScan register = new InjectionRegisterScan();
+        // Tests scanning and exclusion of single class
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.simple");
+
+        InjectionRegisterJava registerJava = new InjectionRegisterJava(register);
+        registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+
+        Container container = register.getContainer();
+
+        AnyService anyService = container.get(AnyService.class);
+        assertTrue(anyService instanceof AnyServiceDoSomethingImpl);
 
     }
 
