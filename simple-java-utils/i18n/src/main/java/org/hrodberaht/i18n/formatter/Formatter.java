@@ -74,6 +74,7 @@ public class Formatter<T> {
      *
      * @see #getFormatter(Class)
      */
+    @SuppressWarnings(value = "unchecked")
     public static boolean isSupportedType(Class type) {
         return getFormatter(type) != null;
     }
@@ -82,6 +83,7 @@ public class Formatter<T> {
         return value.toString();
     }
 
+    @SuppressWarnings(value = "unchecked")
     public T convertToObject(String string) {
         return string == null ? null : (T) string.trim();
     }
