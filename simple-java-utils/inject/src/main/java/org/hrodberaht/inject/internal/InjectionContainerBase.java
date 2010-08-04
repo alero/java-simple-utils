@@ -80,12 +80,25 @@ public abstract class InjectionContainerBase {
     protected <T> ServiceRegister findServiceImplementation(Class<T> service) {
         InjectionKey key = getKey(service);
         if (!registeredNamedServices.containsKey(key)) {
-            if (service.isInterface()) { // TODO support this for classes as well? = inheritance support
+            if (service.isInterface()) {
+                ServiceRegister foundServiceRegister = null;
                 for (ServiceRegister serviceRegister : registeredNamedServices.values()) {
                     if (service.isAssignableFrom(serviceRegister.getService())) {
-                        // TODO first make sure there is only one usable service
-                        return serviceRegister;
+                        if(foundServiceRegister == null){
+                            foundServiceRegister = serviceRegister;
+                        }else{
+                            throw new InjectRuntimeException("Found two Implementations \"{0}\", \"{1}\" " +
+                                    "matching the Interface \"{2}\""+
+                                    ". This normally occurs when scanning implementations and can be corrected " +
+                                    " by manually registering one of them to the Interface",
+                                    foundServiceRegister.getService(),
+                                    serviceRegister.getService()
+                                    , service);
+                        }
                     }
+                }
+                if(foundServiceRegister != null){
+                    return foundServiceRegister;      
                 }
             }
             throw new InjectRuntimeException("Service {0} not registered in SimpleInjection", service);

@@ -34,6 +34,10 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         this.container = (SimpleInjection) container;
     }
 
+    public InjectionRegisterJava(InjectionRegister register) {
+        super(register);
+    }
+
     public InjectionRegisterJava register(
             String namedService, Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
         container.register(
