@@ -19,7 +19,8 @@ import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.SimpleInjection;
-import org.hrodberaht.inject.internal.InjectRuntimeException;
+import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.register.RegistrationModuleSimple;
 import org.junit.Before;
 import org.junit.Test;
@@ -151,7 +152,7 @@ public class SimpleContainerUnitT {
 
     }
 
-    @Test(expected = InjectRuntimeException.class)
+    @Test(expected = DuplicateRegistrationException.class)
     public void testFinalRegisterSupport() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
         registerJava.finalRegister(AnyService.class, AnyServiceDoNothingImpl.class);
@@ -167,7 +168,7 @@ public class SimpleContainerUnitT {
             registerJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
             registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
             assertEquals("Not suppose to execute this", "So fail");
-        } catch (InjectRuntimeException e) {
+        } catch (DuplicateRegistrationException e) {
             assertEquals(
                     "a Service for serviceDefinition \"interface " + AnyService.class.getName() +
                             "\" is already registered, to override register please use overrideRegister method"
@@ -218,7 +219,7 @@ public class SimpleContainerUnitT {
         
         try{
         registerJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
-        } catch (InjectRuntimeException e) {
+        } catch (DuplicateRegistrationException e) {
             assertEquals(
                     "a FINAL Service for serviceDefinition \"interface "
                             + AnyService.class.getName() +"\" is already registered, " +

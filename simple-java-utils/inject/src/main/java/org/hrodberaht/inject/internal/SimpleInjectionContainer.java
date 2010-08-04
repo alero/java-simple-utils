@@ -15,6 +15,8 @@
 package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 import org.hrodberaht.inject.register.RegistrationModule;
 
@@ -42,24 +44,30 @@ public class SimpleInjectionContainer extends InjectionContainerBase
         InjectionKey key = getAnnotatedKey(qualifier, service);
         return getQualifiedService(service, forcedScope, key);
     }
-    
+
+    @SuppressWarnings(value = "unchecked")
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope) {
         ServiceRegister serviceRegister = findServiceImplementation(service);
-        return instantiateService(service, forcedScope, serviceRegister);
+        return (T) instantiateService(forcedScope, serviceRegister, null);
     }
 
 
     public void register(
-            InjectionKey key, Class service, SimpleInjection.Scope scope, SimpleInjection.RegisterType type) {
+            InjectionKey key, Class service, SimpleInjection.Scope scope,
+            SimpleInjection.RegisterType type, boolean throwError) {
         if (registeredNamedServices.containsKey(key)) {
-            reRegisterSupport(key, type);
+            reRegisterSupport(key, type, throwError);
         }
-        registeredNamedServices.put(key,
-                new ServiceRegister(service, createInstance(new ServiceRegister(service)), scope, normalizeType(type))
+
+        putServiceIntoRegister(key,
+                new ServiceRegister(service,
+                        createInstance(new ServiceRegister(service), key)
+                        , scope, normalizeType(type)
+                )
         );
     }
 
-    
+    @SuppressWarnings(value = "unchecked")
     public void register(RegistrationModule... modules) {
         for (RegistrationModule<RegistrationInstanceSimple> module : modules) {
             for (RegistrationInstanceSimple instance : module.getRegistrations()) {
@@ -70,7 +78,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase
     }
 
     private void register(RegistrationInstanceSimple instance, InjectionKey key) {
-        register(key, instance.getService(), instance.getScope(), instance.getRegisterType());
+        register(key, instance.getService(), instance.getScope(), instance.getRegisterType(), false);
     }
 
     @SuppressWarnings(value = "unchecked")
@@ -80,47 +88,50 @@ public class SimpleInjectionContainer extends InjectionContainerBase
         }
         ServiceRegister serviceRegister = registeredNamedServices.get(key);
         if (serviceRegister == null && !service.getClass().isInterface()) {
-            register(key, service, forcedScope, SimpleInjection.RegisterType.NORMAL);
+            register(key, service, forcedScope, SimpleInjection.RegisterType.NORMAL, false);
             serviceRegister = registeredNamedServices.get(key);
         }
-        return instantiateService(service, forcedScope, serviceRegister);
+        return (T) instantiateService(forcedScope, serviceRegister, key);
     }
 
-    private void reRegisterSupport(InjectionKey key, SimpleInjection.RegisterType type) {
+    private void reRegisterSupport(InjectionKey key, SimpleInjection.RegisterType type, boolean throwError) {
         ServiceRegister serviceRegister = registeredNamedServices.get(key);
         if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.WEAK) {
-            registeredNamedServices.remove(key);
+            // registeredNamedServices.remove(key);
             return;
         }
 
         if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.NORMAL) {
             if (type == SimpleInjection.RegisterType.OVERRIDE_NORMAL) {
-                registeredNamedServices.remove(key);
+                // registeredNamedServices.remove(key);
                 return;
             }
             throwRegistrationError("a Service",
-                    "to override register please use overrideRegister method", key);
+                    "to override register please use overrideRegister method", key, throwError);
         }
         if (serviceRegister.getRegisterType() == SimpleInjection.RegisterType.FINAL) {
-            throwRegistrationError("a FINAL Service", "can not perform override registration", key);
+            throwRegistrationError("a FINAL Service", "can not perform override registration", key, throwError);
         }
 
     }
 
-    private void throwRegistrationError(String message, String help, InjectionKey key) {
+    private void throwRegistrationError(String message, String help, InjectionKey key, boolean throwError) {
         String qualifier = key.getQualifier();
+        if(!throwError){
+            return;
+        }
         if(qualifier != null){
-            throw new InjectRuntimeException(
+            throw new DuplicateRegistrationException(
                 message+" for qualifier \"{0}\" and serviceDefinition \"{1}\" " +
                         "is already registered, "+help, qualifier , key.getServiceDefinition());
         } else {
-            throw new InjectRuntimeException(
+            throw new DuplicateRegistrationException(
                 message+" for serviceDefinition \"{0}\" " +
                         "is already registered, "+help, key.getServiceDefinition());
         }
     }
 
-    public Object createInstance(ServiceRegister serviceRegister) {
+    public Object createInstance(ServiceRegister serviceRegister, InjectionKey key) {
         try {
             return serviceRegister.getService().newInstance(); // uses empty constructor
         } catch (InstantiationException e) {

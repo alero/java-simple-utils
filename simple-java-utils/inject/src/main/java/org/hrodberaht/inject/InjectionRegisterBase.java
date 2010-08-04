@@ -137,7 +137,7 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
             Class serviceDefinition,
             Class service, SimpleInjection.Scope scope) {
         container.register(
-                new InjectionKey(qualifier, serviceDefinition)
+                new InjectionKey(qualifier, serviceDefinition, false)
                 , service, scope, SimpleInjection.RegisterType.NORMAL
         );
         return this;
@@ -148,7 +148,7 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
             Class serviceDefinition,
             Class service, SimpleInjection.Scope scope) {
         container.register(
-                new InjectionKey(qualifier, serviceDefinition)
+                new InjectionKey(qualifier, serviceDefinition, false)
                 , service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL
         );
         return this;
@@ -160,7 +160,7 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
             Class service,
             ScopeContainer.Scope scope) {
         container.register(
-                new InjectionKey(qualifier, serviceDefinition)
+                new InjectionKey(qualifier, serviceDefinition, false)
                 , service, scope, SimpleInjection.RegisterType.FINAL
         );
         return this;

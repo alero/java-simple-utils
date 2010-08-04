@@ -18,6 +18,7 @@ import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorCGLIB;
 import org.hrodberaht.inject.internal.annotation.creator.InstanceCreatorDefault;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import test.org.hrodberaht.inject.testservices.annotated.Tire;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
 
@@ -32,6 +33,7 @@ import java.util.Date;
  * @version 1.0
  * @since 1.0
  */
+@Category({PerformanceTests.class})
 public class InstanceCreationPerformanceUnitT {
 
     @Test(timeout = 10000)

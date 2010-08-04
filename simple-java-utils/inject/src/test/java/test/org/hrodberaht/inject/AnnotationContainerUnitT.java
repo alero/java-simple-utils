@@ -25,6 +25,7 @@ import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Spare;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
 import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
+import test.org.hrodberaht.inject.testservices.annotated.TestDriverManager;
 import test.org.hrodberaht.inject.testservices.annotated.Tire;
 import test.org.hrodberaht.inject.testservices.annotated.VindShield;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
@@ -48,7 +49,7 @@ public class AnnotationContainerUnitT {
     @Test
     public void testFindAnnotatedWithForTwoDifferentServices() {
 
-        InjectionRegister registerJava = createRegistration();
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
         Container container = registerJava.getContainer();
         Tire spareTire = container.get(Tire.class, Spare.class);
         VindShield vindShield = container.get(VindShield.class, Spare.class);
@@ -60,7 +61,7 @@ public class AnnotationContainerUnitT {
 
     @Test
     public void testInjectDependencies() {
-        InjectionRegister registerJava = createRegistration();
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
 
         InjectContainer container = (InjectContainer) registerJava.getContainer();
 
@@ -75,7 +76,7 @@ public class AnnotationContainerUnitT {
     @Test
     public void testOverrideSupport() {
 
-        InjectionRegister registerJava = createRegistration();
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
         registerJava.overrideRegister(Spare.class, Tire.class, Tire.class);
 
         Container container = registerJava.getContainer();
@@ -111,7 +112,7 @@ public class AnnotationContainerUnitT {
         assertFalse(spareTire instanceof SpareTire);
 
         assertTrue(vindShield instanceof SpareVindShield);
-        
+
     }
 
     @Test
@@ -140,12 +141,20 @@ public class AnnotationContainerUnitT {
 
     }
 
+    @Test
+    public void testProviderInjection() {
 
-    private InjectionRegisterModule createRegistration() {
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
-        registerJava.register(new RegisterModuleAnnotated());
-        return registerJava;
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
+        Container container = registerJava.getContainer();
+        TestDriverManager manager = container.get(TestDriverManager.class);
+
+
+        assertTrue(manager.getCar() instanceof Volvo);
+        assertTrue(manager.getTire() instanceof SpareTire);
+
     }
+
+
+
 
 }

@@ -17,17 +17,7 @@ package test.org.hrodberaht.inject;
 import junit.framework.TestCase;
 import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
-import org.atinject.tck.auto.Convertible;
-import org.atinject.tck.auto.Drivers;
-import org.atinject.tck.auto.DriversSeat;
-import org.atinject.tck.auto.Engine;
-import org.atinject.tck.auto.Seat;
-import org.atinject.tck.auto.Tire;
-import org.atinject.tck.auto.V8Engine;
-import org.atinject.tck.auto.accessories.SpareTire;
 import org.hrodberaht.inject.Container;
-import org.hrodberaht.inject.InjectionRegisterModule;
-import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 
 
 /**
@@ -43,25 +33,9 @@ public class SuiteJsr330TckUnitT extends TestCase {
 
     public static junit.framework.Test suite() {
 
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
+        
 
-        // InjectionRegisterJava.register(Car.class, Convertible.class);
-        // InjectionRegisterJava.register(Engine.class, V8Engine.class);
-        // InjectionRegisterJava.register("spare", SpareTire.class);
-        // InjectionRegisterJava.register(Drivers.class, DriversSeat.class);
-
-        RegistrationModuleAnnotation module = new RegistrationModuleAnnotation(){
-            
-            public void registrations() {
-                register(Car.class).with(Convertible.class);
-                register(Engine.class).with(V8Engine.class);
-                register(Tire.class).namned("spare").with(SpareTire.class);
-                register(Seat.class).annotated(Drivers.class).with(DriversSeat.class);
-            }
-        };
-
-        Container container = registerJava.register(module).getContainer();
+        Container container = TckUtil.prepareRegister().getContainer();
 
         final Car car = container.get(Car.class);
         final boolean supportsStatic = false;

@@ -15,7 +15,7 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.ScopeContainer;
-import org.hrodberaht.inject.internal.InjectRuntimeException;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.annotation.scope.DefaultScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.InheritableThreadScopeHandler;
@@ -69,15 +69,15 @@ public class InjectionUtils {
         List<InjectionMetaData> injectionMetaData = new ArrayList<InjectionMetaData>(parameterTypes.length);
 
         for (int i = 0; i < parameterTypes.length; i++) {
-            Class serviceClass = parameterTypes[i];
+            Class serviceDefinition = parameterTypes[i];
             Annotation[] annotations = parameterAnnotation[i];
-            if (InjectionUtils.isProvider(serviceClass)) {
+            if (InjectionUtils.isProvider(serviceDefinition)) {
                 Type serviceType = genericParameterType[i];
-                Class<Object> beanClassFromProvider = InjectionUtils.getClassFromProvider(serviceClass, serviceType);
-
-                addInjectMetaData(injectionMetaData, beanClassFromProvider, annotations, true, annotationInjection);
+                Class<Object> beanClassFromProvider =
+                        InjectionUtils.getClassFromProvider(serviceDefinition, serviceType);
+                addInjectMetaData(injectionMetaData, beanClassFromProvider, annotations, annotationInjection, true);
             } else {
-                addInjectMetaData(injectionMetaData, serviceClass, annotations, false, annotationInjection);
+                addInjectMetaData(injectionMetaData, serviceDefinition, annotations, annotationInjection, false);
             }
 
 
@@ -87,22 +87,26 @@ public class InjectionUtils {
 
     private static void addInjectMetaData(
             List<InjectionMetaData> injectionMetaData,
-            Class serviceClass,
+            Class serviceDefinition,
             Annotation[] annotations,
-            boolean provider,
-            AnnotationInjection annotationInjection) {
-        InjectionKey key = AnnotationQualifierUtil.getQualifierKey(serviceClass, annotations);
+            AnnotationInjection annotationInjection,
+            boolean provider) {
+        InjectionKey key = AnnotationQualifierUtil.getQualifierKey(serviceDefinition, annotations, provider);
         Class serviceImplClass;
         if(key != null){
-            serviceImplClass = annotationInjection.findServiceClass(key);
+            if(!provider){
+                serviceImplClass = annotationInjection.findServiceClassAndRegister(key);
+            }else{
+                serviceImplClass = annotationInjection.findServiceClassAndRegister(InjectionKey.purify(key));
+            }
         }else{
-            serviceImplClass = serviceClass;
+            key = new InjectionKey(serviceDefinition, provider);
+            serviceImplClass = annotationInjection.findServiceClassAndRegister(key);
         }
         injectionMetaData.add(
                 annotationInjection.findInjectionData(
                         serviceImplClass,
-                        key,
-                        provider
+                        key
                 )
         );
     }

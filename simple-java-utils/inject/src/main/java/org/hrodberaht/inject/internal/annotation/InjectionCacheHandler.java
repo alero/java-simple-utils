@@ -14,7 +14,10 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
-import java.util.List;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
+import org.hrodberaht.inject.internal.InjectionKey;
+
+import java.util.Map;
 
 /**
  * Simple Java Utils - Container
@@ -27,25 +30,38 @@ import java.util.List;
 public class InjectionCacheHandler {
 
 
-    private List<InjectionMetaData> injectionMetaDataCache = null;
+    private Map<InjectionKey, InjectionMetaData> injectionMetaDataCache = null;
 
-    public InjectionCacheHandler(List<InjectionMetaData> injectionMetaDataCache) {
+    public InjectionCacheHandler(Map<InjectionKey,InjectionMetaData> injectionMetaDataCache) {
         this.injectionMetaDataCache = injectionMetaDataCache;
     }
 
     public void put(InjectionMetaData injectionMetaData) {
-        injectionMetaDataCache.add(injectionMetaData);
+        if(injectionMetaData.getKey() == null){
+            throw new InjectRuntimeException("injectionMetaData.getKey() is null");
+        }
+        injectionMetaDataCache.put(injectionMetaData.getKey(), injectionMetaData);
     }
 
     public InjectionMetaData find(InjectionMetaData injectionMetaData) {
-
-        for (InjectionMetaData anInjectionMetaDataCache : injectionMetaDataCache) {
-            InjectionMetaData singleton = anInjectionMetaDataCache;
-            if (injectionMetaData.canInject(singleton) && injectionMetaData.isProvider() == singleton.isProvider()) {
-                return singleton;
+        if(injectionMetaData.getKey() == null){
+            throw new InjectRuntimeException("injectionMetaData.getKey() is null");
+        }
+        InjectionMetaData foundMetaData = injectionMetaDataCache.get(injectionMetaData.getKey());
+        if(foundMetaData != null){
+            return foundMetaData;
+        }
+        // Try to find similar Injection's that can handle the injection.
+        // Will search with isAssignableFrom as final way
+        for (InjectionMetaData anInjectionMetaDataCache : injectionMetaDataCache.values()) {
+            InjectionMetaData metaData = anInjectionMetaDataCache;
+            if (injectionMetaData.canInject(metaData)) {
+                return metaData;
             }
         }
+
         return null;
+
     }
 
 }

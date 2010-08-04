@@ -28,7 +28,7 @@ import org.hrodberaht.inject.register.RegistrationModule;
 public interface RegistrationInjectionContainer {
     
     void register(InjectionKey key, Class service,
-                  SimpleInjection.Scope scope, SimpleInjection.RegisterType type);
+                  SimpleInjection.Scope scope, SimpleInjection.RegisterType type, boolean throwError);
     void register(RegistrationModule... modules);
 
 

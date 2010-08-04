@@ -37,7 +37,7 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
     public InjectionRegisterJava register(
             String namedService, Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
         container.register(
-                new InjectionKey(namedService, serviceDefinition)
+                new InjectionKey(namedService, serviceDefinition, false)
                 , service, scope, SimpleInjection.RegisterType.NORMAL
         );
         return this;

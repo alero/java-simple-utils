@@ -42,11 +42,11 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
 
     public InjectionKey getInjectionKey() {
         if(annotation != null){
-            return new InjectionKey(annotation, theInterface);
+            return new InjectionKey(annotation, theInterface, false);
         }else if(name != null){
-            return new InjectionKey(name, theInterface);
+            return new InjectionKey(name, theInterface, false);
         }
-        return new InjectionKey(theInterface);
+        return new InjectionKey(theInterface, false);
     }
 
     public Class getService() {

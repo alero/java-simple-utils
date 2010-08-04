@@ -32,8 +32,7 @@ import java.util.List;
 public class InjectionMetaData {
 
     private InjectionKey key;
-    private Class serviceClass;
-    private boolean provider = false;
+    private Class serviceClass;    
     private boolean preDefined = false;
 
     private ScopeHandler scopeHandler;
@@ -43,10 +42,9 @@ public class InjectionMetaData {
     private List<InjectionPoint> injectionPoints;
 
 
-    public InjectionMetaData(Class serviceClass, InjectionKey key, boolean provider) {
+    public InjectionMetaData(Class serviceClass, InjectionKey key) {
         this.serviceClass = serviceClass;
         this.key = key;
-        this.provider = provider;
     }
 
     public InjectionKey getKey() {
@@ -81,11 +79,6 @@ public class InjectionMetaData {
 
     public List<InjectionPoint> getInjectionPoints() {
         return injectionPoints;
-    }
-
-
-    public boolean isProvider() {
-        return provider;
     }
 
     public boolean isPreDefined() {
@@ -132,15 +125,15 @@ public class InjectionMetaData {
             return true;
         }
 
-        if (serviceClass.equals(bean.getServiceClass())
-                && !hasQualifier(key)) {
+        if (serviceClass.equals(bean.serviceClass)
+                && !hasQualifier(key) && !hasQualifier(bean.key)) {
             return true;
         }
 
-        if (serviceClass.isAssignableFrom(bean.getServiceClass())) {
-            if (key == null && bean.getKey() == null) {
+        if (serviceClass.isAssignableFrom(bean.serviceClass)) {
+            if (key == null && bean.key == null) {
                 return true;
-            } else if (key != null && key.equals(bean.getKey())) {
+            } else if (key != null && key.equals(bean.key)) {
                 return true;
             }
         }

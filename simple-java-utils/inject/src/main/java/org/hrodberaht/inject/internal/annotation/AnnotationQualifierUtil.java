@@ -14,7 +14,7 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.internal.InjectRuntimeException;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.internal.InjectionKey;
 
 import javax.inject.Named;
@@ -37,12 +37,12 @@ public class AnnotationQualifierUtil {
 
     private static final Class<Qualifier> QUALIFIER = Qualifier.class;
 
-    public static InjectionKey getQualifierKey(Class owner, Annotation[] annotations) {
+    public static InjectionKey getQualifierKey(Class owner, Annotation[] annotations, boolean provider) {
         final List<InjectionKey> qualifierAnnotations = new ArrayList<InjectionKey>();
 
         for (final Annotation annotation : annotations) {
             if (annotation.annotationType().isAnnotationPresent(QUALIFIER)) {
-                qualifierAnnotations.add(getQualifier(owner, annotation));
+                qualifierAnnotations.add(getQualifier(owner, annotation, provider));
             }
         }
         if (qualifierAnnotations.size() == 0) {
@@ -55,16 +55,16 @@ public class AnnotationQualifierUtil {
         return qualifierAnnotations.get(0);
     }
 
-    private static InjectionKey getQualifier(Class owner, Annotation annotation) {
+    private static InjectionKey getQualifier(Class owner, Annotation annotation, boolean provider) {
         if (annotation instanceof Named) {
             Named named = (Named) annotation;
             String value = named.value();
             if (isEmpty(value)) {
                 throw new InjectRuntimeException("Named qualifier annotation used without a value " + owner);
             }
-            return new InjectionKey(value, owner);
+            return new InjectionKey(value, owner, provider);
         } else {
-            return new InjectionKey(annotation.annotationType(), owner);
+            return new InjectionKey(annotation.annotationType(), owner, provider);
         }
     }
 

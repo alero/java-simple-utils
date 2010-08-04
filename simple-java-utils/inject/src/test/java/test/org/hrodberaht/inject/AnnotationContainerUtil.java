@@ -14,17 +14,17 @@
 
 package test.org.hrodberaht.inject;
 
-import org.atinject.tck.auto.Car;
-import org.atinject.tck.auto.Convertible;
-import org.atinject.tck.auto.Drivers;
-import org.atinject.tck.auto.DriversSeat;
-import org.atinject.tck.auto.Engine;
-import org.atinject.tck.auto.Seat;
-import org.atinject.tck.auto.Tire;
-import org.atinject.tck.auto.V8Engine;
-import org.atinject.tck.auto.accessories.SpareTire;
-import org.hrodberaht.inject.Container;
-import org.hrodberaht.inject.InjectionRegisterJava;
+import org.hrodberaht.inject.InjectionRegisterModule;
+import org.hrodberaht.inject.InjectionRegisterScan;
+import org.hrodberaht.inject.register.InjectionRegister;
+import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
+import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
+import test.org.hrodberaht.inject.testservices.annotated.TestDriverManager;
+import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleAnnotated;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Simple Java Utils
@@ -36,18 +36,38 @@ import org.hrodberaht.inject.InjectionRegisterJava;
  */
 public class AnnotationContainerUtil {
 
-    public static Container prepareRegister() {
-        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+    public static InjectionRegisterModule prepareVolvoRegister(){
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
         registerJava.activateContainerJavaXInject();
+        registerJava.register(new RegisterModuleAnnotated());
+        return registerJava;
+    }
 
-        registerJava.register(Car.class, Convertible.class);
-        registerJava.register(Engine.class, V8Engine.class);
-        // InjectionRegisterJava.register(Cupholder.class);
-        registerJava.register("spare", Tire.class, SpareTire.class);
-        // InjectionRegisterJava.register(FuelTank.class);
-        // InjectionRegisterJava.register(Seat.class);
-        registerJava.register(Drivers.class, Seat.class, DriversSeat.class);
+    public static InjectionRegister prepareLargeVolvoRegister(){
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerJavaXInject();
+        registerJava.register(new RegisterModuleAnnotated());
+        InjectionRegisterScan registerScan = new InjectionRegisterScan(registerJava);
+        registerScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices.largepackage");
+        return registerJava;
+    }
 
-        return registerJava.getContainer();
+    public static void assertVolvo(Volvo car){
+
+        assertNotNull(car.getSpareTire());
+        assertNotNull(car.getSpareVindShield());
+        assertNotNull(car.getVindShield());
+        assertNotNull(car.getDriver());
+        assertNotNull(car.getBackLeft());
+        assertNotNull(car.getBackRight());
+        assertNotNull(car.getFrontLeft());
+        assertNotNull(car.getFrontRight());
+
+        assertTrue(car.getSpareTire() instanceof SpareTire);
+        assertTrue(car.getSpareVindShield() instanceof SpareVindShield);        
+
+        TestDriverManager manager = car.getDriverManager();
+        assertTrue(manager.getCar() instanceof Volvo);
+        assertTrue(manager.getTire() instanceof SpareTire);
     }
 }

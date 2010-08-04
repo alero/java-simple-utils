@@ -28,8 +28,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     SuiteJsr330TckUnitT.class,
-    SimpleContainerUnitT.class,    
-    AnnotationContinerPerformanceUnitT.class,
+    SimpleContainerUnitT.class,        
     AnnotationContainerUnitT.class,
     ContainerScanUnitT.class,
     ScopeThreadUnitT.class,

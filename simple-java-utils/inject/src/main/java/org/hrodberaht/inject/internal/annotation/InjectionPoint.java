@@ -14,7 +14,7 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.internal.InjectRuntimeException;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.internal.InjectionKey;
 
 import java.lang.annotation.Annotation;
@@ -70,7 +70,9 @@ public class InjectionPoint {
 
     private void invokeMethod(Object service, Object[] serviceDependency) {
         final boolean originalAccessible = method.isAccessible();
-        method.setAccessible(true);
+        if(!originalAccessible){
+            method.setAccessible(true);
+        }
 
         try {
             method.invoke(service, serviceDependency);
@@ -79,20 +81,25 @@ public class InjectionPoint {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } finally {
-            method.setAccessible(originalAccessible);
+            // Do not reset the accessible as multi-thread calls
+            // will have problems with singletons and this way of doing it 
+            // method.setAccessible(originalAccessible);
         }
     }
 
     private void invokeField(Object service, Object serviceDependency) {
         final boolean originalAccessible = field.isAccessible();
-        field.setAccessible(true);
-
+        if(!originalAccessible){
+            field.setAccessible(true);
+        }
         try {
             field.set(service, serviceDependency);
         } catch (final IllegalAccessException e) {
             throw new InjectRuntimeException(e);
         } finally {
-            field.setAccessible(originalAccessible);
+            // Do not reset the accessible as multi-thread calls
+            // will have problems with singletons and this way of doing it
+            // field.setAccessible(originalAccessible);
         }
     }
 
@@ -113,16 +120,22 @@ public class InjectionPoint {
         if (InjectionUtils.isProvider(fieldBeanClass)) {
             final Type genericType = field.getGenericType();
             final Class beanClassFromProvider = InjectionUtils.getClassFromProvider(field, genericType);
-            InjectionKey key = AnnotationQualifierUtil.getQualifierKey(beanClassFromProvider, field.getAnnotations());
+            InjectionKey key = AnnotationQualifierUtil.getQualifierKey(beanClassFromProvider, field.getAnnotations(), true);
             if(key != null){
-                Class serviceImpl = annotationInjection.findServiceClass(key);
-                return annotationInjection.findInjectionData(serviceImpl, key, true);
+
+                Class serviceImpl = annotationInjection.findServiceClassAndRegister(InjectionKey.purify(key));
+                return annotationInjection.findInjectionData(serviceImpl, key);
             }else{
-                return annotationInjection.findInjectionData(beanClassFromProvider, key, true);    
+                key = new InjectionKey(beanClassFromProvider, true);
+                return annotationInjection.findInjectionData(beanClassFromProvider, key);
             }
         } else {
-            InjectionKey qualifier = AnnotationQualifierUtil.getQualifierKey(fieldBeanClass, field.getAnnotations());
-            return annotationInjection.findInjectionData(fieldBeanClass, qualifier, false);
+            InjectionKey qualifier = AnnotationQualifierUtil.getQualifierKey(fieldBeanClass, field.getAnnotations(), false);
+            if(qualifier == null){
+                qualifier = new InjectionKey(fieldBeanClass, false);
+            }
+            Class serviceClass = annotationInjection.findServiceClassAndRegister(qualifier);
+            return annotationInjection.findInjectionData(serviceClass, qualifier);
         }
     }
 }

@@ -1,5 +1,7 @@
 package org.hrodberaht.inject.internal.annotation.creator;
 
+import org.hrodberaht.inject.internal.stats.Statistics;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -15,6 +17,7 @@ public class InstanceCreatorDefault implements InstanceCreator {
     
     public Object createInstance(Constructor constructor, Object... parameters) {
         try {
+            Statistics.addNewInstanceCount();
             return constructor.newInstance(parameters);
             
         } catch (InstantiationException e) {

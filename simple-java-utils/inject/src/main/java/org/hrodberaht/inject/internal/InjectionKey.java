@@ -15,19 +15,24 @@ public class InjectionKey {
     private Class<? extends Annotation> annotation;
     private String name;
     private Class serviceDefinition;
+    // is the service a javax.inject.Provider
+    private Boolean provider = false;
 
-    public InjectionKey(String name, Class serviceDefinition) {
+    public InjectionKey(String name, Class serviceDefinition, boolean provider) {
         this.name = name;
         this.serviceDefinition = serviceDefinition;
+        this.provider = provider;
     }
 
-    public InjectionKey(Class<? extends Annotation> annotation, Class serviceDefinition) {
+    public InjectionKey(Class<? extends Annotation> annotation, Class serviceDefinition, boolean provider) {
         this.annotation = annotation;
         this.serviceDefinition = serviceDefinition;
+        this.provider = provider;
     }
 
-    public InjectionKey(Class serviceDefinition) {
+    public InjectionKey(Class serviceDefinition, boolean provider) {
         this.serviceDefinition = serviceDefinition;
+        this.provider = provider;
     }
 
     public Class<? extends Annotation> getAnnotation() {
@@ -53,6 +58,10 @@ public class InjectionKey {
 
         InjectionKey that = (InjectionKey) o;
 
+        if(this.provider != that.provider){
+            return false;
+        }
+
         if (annotation != null ? !annotation.equals(that.annotation) : that.annotation != null){
             return false;
         }
@@ -70,6 +79,7 @@ public class InjectionKey {
     @Override
     public int hashCode() {
         int result = annotation != null ? annotation.hashCode() : 0;
+        result = 31 * result + provider.hashCode();
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (serviceDefinition != null ? serviceDefinition.hashCode() : 0);
         return result;
@@ -83,5 +93,21 @@ public class InjectionKey {
             return annotation.getName();
         }
         return null;        
+    }
+
+    public boolean isProvider() {
+        return provider;
+    }
+
+    /**
+     * Makes a clone that is not marked as a Provider for implementation search 
+     * @param key
+     * @return
+     */
+    public static InjectionKey purify(InjectionKey key) {
+        InjectionKey injectionKey = new InjectionKey(key.getServiceDefinition(), false);
+        injectionKey.annotation = key.annotation;
+        injectionKey.name = key.name;
+        return injectionKey;
     }
 }

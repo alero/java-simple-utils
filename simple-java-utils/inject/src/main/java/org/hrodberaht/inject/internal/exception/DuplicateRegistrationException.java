@@ -12,7 +12,7 @@
  *   ~ See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.hrodberaht.inject.internal;
+package org.hrodberaht.inject.internal.exception;
 
 import java.text.MessageFormat;
 
@@ -24,33 +24,33 @@ import java.text.MessageFormat;
  * @version 1.0
  * @since 1.0
  */
-public class InjectRuntimeException extends RuntimeException{
+public class DuplicateRegistrationException extends RuntimeException{
     private Object[] args = null;
 
 
-    public InjectRuntimeException(String message) {
+    public DuplicateRegistrationException(String message) {
         super(message);
     }
 
-    public InjectRuntimeException(String message, Throwable e) {
+    public DuplicateRegistrationException(String message, Throwable e) {
         super(message, e);
     }
 
-    public InjectRuntimeException(Throwable e) {
+    public DuplicateRegistrationException(Throwable e) {
         super(e);
     }
 
-    public InjectRuntimeException(String message, Object... args) {
+    public DuplicateRegistrationException(String message, Object... args) {
         super(message);
         this.args = args;
     }
 
-    public InjectRuntimeException(String message, Throwable e, Object... args) {
+    public DuplicateRegistrationException(String message, Throwable e, Object... args) {
         super(message, e);
         this.args = args;
     }
 
-    public InjectRuntimeException(Throwable e, Object... args) {
+    public DuplicateRegistrationException(Throwable e, Object... args) {
         super(e);
         this.args = args;
     }
@@ -58,7 +58,7 @@ public class InjectRuntimeException extends RuntimeException{
     @Override
     public String toString() {
         if(args != null){
-            return InjectRuntimeException.class.getName()
+            return DuplicateRegistrationException.class.getName()
                     +": "+ MessageFormat.format(super.getMessage(), args);
         }
         return super.toString();

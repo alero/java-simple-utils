@@ -16,6 +16,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -25,6 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Simple Java Utils - Container
@@ -42,8 +44,7 @@ public class AnnotationInjection {
     private SimpleInjection container;
 
 
-
-    public AnnotationInjection(List<InjectionMetaData> injectionMetaDataCache
+    public AnnotationInjection(Map<InjectionKey, InjectionMetaData> injectionMetaDataCache
             , SimpleInjection container
             , AnnotationInjectionContainer injectionContainer) {
         injectionCacheHandler = new InjectionCacheHandler(injectionMetaDataCache);
@@ -53,25 +54,27 @@ public class AnnotationInjection {
 
     /**
      * Creates an instance for a service, uses {@link #findInjectionData}
+     *
      * @param service
+     * @param key
      * @return a created object according to its bound scope {@link javax.inject.Scope}
      */
-    public Object createInstance(Class service) {
+    public Object createInstance(Class<Object> service, InjectionKey key) {
         InjectionMetaData injectionMetaData =
-                findInjectionData(service, null, InjectionUtils.isProvider(service));
+                findInjectionData(service, key);
         return callConstructor(injectionMetaData);
     }
 
     /**
      * Will create a predefined service for later resolve.
      * Sets the predefined attribute in the InjectionMetaData to true
+     *
      * @param service
      * @param key
-     * @param provider
      * @return a predefined services, not cached.
      */
-    public InjectionMetaData createInjectionMetaData(Class service, InjectionKey key, boolean provider) {
-        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key, provider);
+    public InjectionMetaData createInjectionMetaData(Class service, InjectionKey key) {
+        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key);
         Constructor constructor = InjectionUtils.findConstructor(service);
         injectionMetaData.setConstructor(constructor);
         injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
@@ -82,6 +85,7 @@ public class AnnotationInjection {
 
     /**
      * Checks the registry for the service class using a key, not nullsafe.
+     *
      * @param key the key to find a serviceclass for
      * @return the found service class, null not accepted
      */
@@ -90,34 +94,50 @@ public class AnnotationInjection {
     }
 
     /**
+     * Checks the registry for the service class using a key, not nullsafe.
+     *
+     * @param key the key to find a serviceclass for
+     * @return the found service class, null not accepted
+     */
+    public Class findServiceClassAndRegister(InjectionKey key) {
+        try {
+            return this.injectionContainer.findServiceRegister(key.getServiceDefinition(), key).getService();
+        } catch (DuplicateRegistrationException e) {
+            return this.injectionContainer.findService(key);       
+        }
+    }
+
+    /**
      * Search for injectiondata in the cache, if not found creates new injection data from scratch.
+     *
      * @param service the service implementation to create
-     * @param key the injection key (named or annotated service definition)
-     * @param provider is the service a javax.inject.Provider
+     * @param key     the injection key (named or annotated service definition)
      * @return a cached injection meta data, is not protected from manipulation
      */
-    public InjectionMetaData findInjectionData(Class service, InjectionKey key, boolean provider) {
+    public InjectionMetaData findInjectionData(Class service, InjectionKey key) {
         InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(
-                new InjectionMetaData(service, key, provider));
+                new InjectionMetaData(service, key));
         if (cachedInjectionMetaData != null) {
-            if (cachedInjectionMetaData.isPreDefined()) {
+            if (cachedInjectionMetaData.isPreDefined() && !cachedInjectionMetaData.getKey().isProvider()) {
                 resolvePredefinedService(cachedInjectionMetaData);
             }
             return cachedInjectionMetaData;
         }
 
-        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key, provider);
+        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key);
         injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
         injectionCacheHandler.put(injectionMetaData);
-        Constructor constructor = InjectionUtils.findConstructor(service);
-        injectionMetaData.setConstructor(constructor);
-        resolveService(injectionMetaData);
+        if (!injectionMetaData.getKey().isProvider()) {
+            Constructor constructor = InjectionUtils.findConstructor(service);
+            injectionMetaData.setConstructor(constructor);
+            resolveService(injectionMetaData);
+        }
         return injectionMetaData;
     }
 
     @SuppressWarnings(value = "unchecked")
-    private InjectionMetaData findInjectionData(InjectionMetaData metaData, boolean provider) {
-        return findInjectionData(metaData.getServiceClass(), metaData.getKey(), provider);
+    private InjectionMetaData findInjectionData(InjectionMetaData metaData) {
+        return findInjectionData(metaData.getServiceClass(), metaData.getKey());
     }
 
     /**
@@ -125,8 +145,8 @@ public class AnnotationInjection {
      * @return
      */
     private Object innerCreateInstance(InjectionMetaData dependency) {
-        if (dependency.isProvider()) {
-            InjectionMetaData injectionMetaData = findInjectionData(dependency, false);
+        if (dependency.getKey().isProvider()) {
+            InjectionMetaData injectionMetaData = findInjectionData(dependency);
             return new InjectionProvider(container, injectionMetaData.getServiceClass());
         }
         return createInstance(dependency);
@@ -134,6 +154,7 @@ public class AnnotationInjection {
 
     /**
      * Resolves/finds all injection needs (constructors and members)
+     *
      * @param injectionMetaData the service ready for resolving
      */
     private void resolveService(InjectionMetaData injectionMetaData) {
@@ -145,6 +166,7 @@ public class AnnotationInjection {
 
     /**
      * Will resolve the service and set the predefined to false
+     *
      * @param cachedInjectionMetaData a predefined service
      */
     private void resolvePredefinedService(InjectionMetaData cachedInjectionMetaData) {
@@ -156,7 +178,9 @@ public class AnnotationInjection {
     public void injectDependencies(Object service) {
 
         InjectionMetaData injectionMetaData =
-                findInjectionData(service.getClass(), null, InjectionUtils.isProvider(service.getClass()));
+                findInjectionData(service.getClass(),
+                        new InjectionKey(service.getClass(), false)
+                );
 
         injectFromInjectionPoints(service, injectionMetaData);
     }
@@ -190,6 +214,7 @@ public class AnnotationInjection {
 
     /**
      * Finds all injection points for a class analysing fields and methods
+     *
      * @param service the class to analyze
      * @return found injection points
      */
@@ -234,17 +259,11 @@ public class AnnotationInjection {
         return InjectionUtils.findDependencies(parameterTypes, genericParameterTypes, parameterAnnotations, this);
     }
 
-    @SuppressWarnings(value = "unchecked")
+
     private Object createInstance(InjectionMetaData metaData) {
-        return createInstance(metaData.getServiceClass(), null);
+        return createInstance(metaData.getServiceClass(), metaData.getKey());
     }
 
-    private Object createInstance(Class<Object> service, InjectionKey key) {
-        InjectionMetaData injectionMetaData =
-                findInjectionData(service, key, InjectionUtils.isProvider(service));
-
-        return callConstructor(injectionMetaData);
-    }
 
     private Object callConstructor(InjectionMetaData injectionMetaData) {
 
