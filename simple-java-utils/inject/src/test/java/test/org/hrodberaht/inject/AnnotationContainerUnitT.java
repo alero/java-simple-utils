@@ -26,6 +26,7 @@ import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Spare;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
 import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
+import test.org.hrodberaht.inject.testservices.annotated.SpecialSpareTire;
 import test.org.hrodberaht.inject.testservices.annotated.TestDriverManager;
 import test.org.hrodberaht.inject.testservices.annotated.Tire;
 import test.org.hrodberaht.inject.testservices.annotated.VindShield;
@@ -164,8 +165,7 @@ public class AnnotationContainerUnitT {
         registerJava.activateContainerJavaXInject();
         registerJava.register(new RegisterModuleAnnotated());
         // The override (of a default) registration
-        final SpareTire aTire = new SpareTire();
-        aTire.setBrand("Goodyear");
+        final SpareTire aTire = new SpecialSpareTire("Goodyear");        
         registerJava.register(
                 new RegistrationModuleAnnotation() {
                     @Override
