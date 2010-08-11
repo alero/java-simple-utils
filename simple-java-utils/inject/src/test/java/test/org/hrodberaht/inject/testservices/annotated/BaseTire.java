@@ -9,5 +9,13 @@ package test.org.hrodberaht.inject.testservices.annotated;
  * @since 1.0
  */
 public abstract class BaseTire {
-    
+    private String brand;
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 }

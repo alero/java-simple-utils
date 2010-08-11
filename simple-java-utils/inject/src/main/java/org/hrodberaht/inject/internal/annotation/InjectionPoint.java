@@ -16,6 +16,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.stats.Statistics;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -76,6 +77,7 @@ public class InjectionPoint {
 
         try {
             method.invoke(service, serviceDependency);
+            Statistics.addInjectMethodCount();
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -94,6 +96,7 @@ public class InjectionPoint {
         }
         try {
             field.set(service, serviceDependency);
+            Statistics.addInjectMethodCount();
         } catch (final IllegalAccessException e) {
             throw new InjectRuntimeException(e);
         } finally {

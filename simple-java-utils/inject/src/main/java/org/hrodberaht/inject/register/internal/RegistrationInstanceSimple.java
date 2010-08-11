@@ -1,6 +1,5 @@
 package org.hrodberaht.inject.register.internal;
 
-import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.SimpleInjection;
 
 /**
@@ -15,7 +14,7 @@ public class RegistrationInstanceSimple extends RegistrationInstanceAnnotation<R
         implements RegistrationExtended {
 
     private SimpleInjection.RegisterType registerType = SimpleInjection.RegisterType.NORMAL;
-    private SimpleInjection.Scope scope = null; // No default scope for registration
+
 
 
     public RegistrationInstanceSimple(Class theInterface) {
@@ -27,16 +26,10 @@ public class RegistrationInstanceSimple extends RegistrationInstanceAnnotation<R
         return this;
     }
 
-    public RegistrationExtended scopeAs(ScopeContainer.Scope scope) {
-        this.scope = scope;
-        return this;
-    }
+
 
     public SimpleInjection.RegisterType getRegisterType() {
         return registerType;
     }
 
-    public ScopeContainer.Scope getScope() {
-        return scope;
-    }
 }

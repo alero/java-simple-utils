@@ -15,7 +15,9 @@ import java.lang.annotation.Annotation;
  */
 public interface RegistrationExtended extends Registration{
     RegistrationExtended annotated(Class<? extends Annotation> annotation);
-    RegistrationExtended namned(String named);
+    RegistrationExtended named(String named);
     RegistrationExtended registerTypeAs(SimpleInjection.RegisterType registerType);
     RegistrationExtended scopeAs(ScopeContainer.Scope scope);
+
+
 }

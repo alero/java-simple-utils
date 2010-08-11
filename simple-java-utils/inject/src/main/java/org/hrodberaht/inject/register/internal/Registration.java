@@ -12,6 +12,7 @@ import java.lang.annotation.Annotation;
  */
 public interface Registration {
     Registration annotated(Class<? extends Annotation> annotation);
-    Registration namned(String named);
+    Registration named(String named);
     void with(Class theService);
+    void withInstance(Object aTire);
 }

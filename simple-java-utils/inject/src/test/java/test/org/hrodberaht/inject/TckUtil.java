@@ -46,7 +46,7 @@ public class TckUtil {
             public void registrations() {
                 register(Car.class).with(Convertible.class);
                 register(Engine.class).with(V8Engine.class);
-                register(Tire.class).namned("spare").with(SpareTire.class);
+                register(Tire.class).named("spare").with(SpareTire.class);
                 register(Seat.class).annotated(Drivers.class).with(DriversSeat.class);
             }
         };

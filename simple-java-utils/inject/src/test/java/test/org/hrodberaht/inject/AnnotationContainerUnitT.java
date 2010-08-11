@@ -20,6 +20,7 @@ import org.hrodberaht.inject.InjectContainer;
 import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.InjectionRegisterScan;
 import org.hrodberaht.inject.register.InjectionRegister;
+import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Spare;
@@ -32,6 +33,7 @@ import test.org.hrodberaht.inject.testservices.annotated.Volvo;
 import test.org.hrodberaht.inject.testservices.regmodules.OverridesRegisterModuleAnnotated;
 import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleAnnotated;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -154,7 +156,34 @@ public class AnnotationContainerUnitT {
 
     }
 
+    @Test
+    public void testInstanceRegisterSupport() {
 
+        // The regular (default/basic) registration
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerJavaXInject();
+        registerJava.register(new RegisterModuleAnnotated());
+        // The override (of a default) registration
+        final SpareTire aTire = new SpareTire();
+        aTire.setBrand("Goodyear");
+        registerJava.register(
+                new RegistrationModuleAnnotation() {
+                    @Override
+                    public void registrations() {
+                        register(Tire.class).annotated(Spare.class).withInstance(aTire);
+                    }
+                }
+        );
+
+
+        Container container = registerJava.getContainer();
+        Car car = container.get(Car.class);
+
+        assertTrue(car.getSpareTire() instanceof SpareTire);
+        assertEquals("Goodyear", car.getSpareTire().getBrand());
+        assertTrue(car.getSpareVindShield() instanceof SpareVindShield);
+
+    }
 
 
 }

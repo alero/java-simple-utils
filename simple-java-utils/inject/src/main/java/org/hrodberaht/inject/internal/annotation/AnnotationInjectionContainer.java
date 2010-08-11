@@ -20,6 +20,7 @@ import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
 import org.hrodberaht.inject.internal.ServiceRegister;
+import org.hrodberaht.inject.internal.annotation.scope.SingletonScopeHandler;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.register.RegistrationModule;
@@ -170,7 +171,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
         if (key.getAnnotation() != null) {
             instance.annotated(key.getAnnotation());
         } else if (key.getName() != null) {
-            instance.namned(key.getName());
+            instance.named(key.getName());
         }
 
         return createAnStoreRegistration(instance, key, null);
@@ -198,17 +199,31 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
 
     private ServiceRegister createServiceRegister(
             RegistrationInstanceSimple instance, InjectionMetaData injectionMetaData) {
-        return new ServiceRegister(
-                instance.getService(),
-                null,
-                getAnnotationScope(injectionMetaData),
-                SimpleInjection.RegisterType.NORMAL
-        );
+        if(instance.getTheInstance() == null){
+            return new ServiceRegister(
+                    instance.getService(),
+                    null,
+                    getAnnotationScope(injectionMetaData),
+                    SimpleInjection.RegisterType.NORMAL
+            );
+        } else {
+            return new ServiceRegister(
+                    instance.getService(),
+                    instance.getTheInstance(),
+                    SimpleInjection.Scope.SINGLETON,
+                    SimpleInjection.RegisterType.NORMAL
+            );
+        }
     }
 
     private InjectionMetaData createInjectionMetaData(RegistrationInstanceSimple instance, InjectionKey key) {
         InjectionMetaData injectionMetaData = createInjectionMetaData(instance.getService(), key);
-        if (instance.getScope() != null) {
+        if(instance.getTheInstance() != null){
+            SingletonScopeHandler scopeHandler = new SingletonScopeHandler();
+            scopeHandler.addScope(instance.getTheInstance());
+            injectionMetaData.setScopeHandler(scopeHandler);   
+        }
+        else if (instance.getScope() != null) {
             // replaces the injection data scope handler
             injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(instance.getScope()));
         }
