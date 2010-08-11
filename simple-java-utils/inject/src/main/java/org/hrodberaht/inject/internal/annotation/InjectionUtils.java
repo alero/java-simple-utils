@@ -125,7 +125,7 @@ public class InjectionUtils {
             try {
                 return beanClass.getDeclaredConstructor();
             } catch (NoSuchMethodException e) {
-                throw new InjectRuntimeException(e);
+                return null;
             }
         } else if (annotatedConstructors.size() > 1) {
             throw new InjectRuntimeException(

@@ -253,6 +253,9 @@ public class AnnotationInjection {
     }
 
     private List<InjectionMetaData> findDependencies(Constructor constructor) {
+        if(constructor == null){
+            return null;
+        }
         Class[] parameterTypes = constructor.getParameterTypes();
         Type[] genericParameterTypes = constructor.getGenericParameterTypes();
         Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
@@ -268,6 +271,11 @@ public class AnnotationInjection {
     private Object callConstructor(InjectionMetaData injectionMetaData) {
 
         List<InjectionMetaData> dependencies = injectionMetaData.getConstructorDependencies();
+        if(dependencies == null){ // no constructor was able to be defined, hopefully a scoped one is provided.
+            Object service = injectionMetaData.createInstance();
+            autoWireBean(service, injectionMetaData);
+            return service;
+        }
         Object[] servicesForConstructor = new Object[dependencies.size()];
 
         for (int i = 0; i < dependencies.size(); i++) {

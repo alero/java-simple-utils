@@ -94,9 +94,9 @@ public class InjectionMetaData {
     }
 
 
-    public Object createInstance(Object[] parameters) {
-        final boolean originalAccessible = constructor.isAccessible();
-        if(!originalAccessible){
+    public Object createInstance(Object... parameters) {
+        final boolean originalAccessible = constructor != null && constructor.isAccessible();
+        if(!originalAccessible && constructor != null){
             constructor.setAccessible(true);
         }
         try {
@@ -109,9 +109,10 @@ public class InjectionMetaData {
             scopeHandler.addScope(newInstance);
             return newInstance;
         } finally {
-            if (!originalAccessible) {
+            // Not thread safe
+            /*if (!originalAccessible) {
                 constructor.setAccessible(originalAccessible);
-            }
+            }*/
         }
     }
 
