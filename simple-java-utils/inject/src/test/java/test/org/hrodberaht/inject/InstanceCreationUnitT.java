@@ -22,6 +22,7 @@ import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Tire;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
 
+import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 
 import static org.junit.Assert.assertEquals;
@@ -41,7 +42,7 @@ public class InstanceCreationUnitT {
     @Test
     public void testConstructors() throws InterruptedException {
 
-        Constructor constructor = Volvo.class.getConstructors()[1];
+        Constructor constructor = getAnnotatedConstructor();
 
         Car aCar = createCar(constructor, new InstanceCreatorCGLIB());
         Car aCar2 = createCar(constructor, new InstanceCreatorDefault());
@@ -58,5 +59,14 @@ public class InstanceCreationUnitT {
         Tire spareTire = new Tire();        
         return (Volvo) instanceCreator.createInstance(constructor, spareTire);
 
+    }
+
+    public Constructor getAnnotatedConstructor() {
+        for(Constructor constructor:Volvo.class.getConstructors()){
+            if(constructor.isAnnotationPresent(Inject.class)){
+                return constructor;
+            }
+        }
+        throw new IllegalAccessError("Bad call");
     }
 }

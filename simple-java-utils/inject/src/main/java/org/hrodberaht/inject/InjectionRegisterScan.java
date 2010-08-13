@@ -166,7 +166,7 @@ public class InjectionRegisterScan extends InjectionRegisterBase<InjectionRegist
             List<File> dirs = new ArrayList<File>();
             while (resources.hasMoreElements()) {
                 URL resource = resources.nextElement();
-                dirs.add(new File(resource.getFile()));
+                dirs.add(new File(resource.getFile().replaceAll("%20"," ")));
             }
 
             for (File directory : dirs) {
