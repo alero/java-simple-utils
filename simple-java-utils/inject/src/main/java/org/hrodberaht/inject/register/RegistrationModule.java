@@ -12,4 +12,7 @@ import java.util.Collection;
  */
 public interface RegistrationModule<T> {
     Collection<T> getRegistrations();
+    
+    void postRegistration();
+    void preRegistration();
 }

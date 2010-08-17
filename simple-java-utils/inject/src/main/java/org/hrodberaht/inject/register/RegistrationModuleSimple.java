@@ -34,4 +34,12 @@ public abstract class RegistrationModuleSimple implements RegistrationModule{
     }
 
     public abstract void registrations();
+
+    public void postRegistration() {
+        // Not a forced method
+    }
+
+    public void preRegistration() {
+        // Not a forced method
+    }
 }

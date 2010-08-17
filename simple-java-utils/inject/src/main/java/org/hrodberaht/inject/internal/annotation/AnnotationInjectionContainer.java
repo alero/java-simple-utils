@@ -109,10 +109,12 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     public synchronized void register(RegistrationModule... modules) {
         for (RegistrationModule module : modules) {
             RegistrationModuleAnnotation aModule = (RegistrationModuleAnnotation) module;
+            aModule.preRegistration();
             for (RegistrationInstanceSimple instance : aModule.getRegistrations()) {
                 InjectionKey key = instance.getInjectionKey();
                 createAnStoreRegistration(instance, key, aModule);
             }
+            aModule.postRegistration();
         }
     }
 

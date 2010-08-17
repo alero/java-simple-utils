@@ -9,6 +9,6 @@ package org.hrodberaht.inject.register;
  * @since 1.0
  */
 public abstract class RegistrationModuleAnnotation extends RegistrationModuleSimple   {
-
+    
 
 }
