@@ -1,5 +1,7 @@
 package org.hrodberaht.inject.register.internal;
 
+import org.hrodberaht.inject.register.InjectionFactory;
+
 import java.lang.annotation.Annotation;
 
 /**
@@ -14,5 +16,6 @@ public interface Registration {
     Registration annotated(Class<? extends Annotation> annotation);
     Registration named(String named);
     void with(Class theService);
-    void withInstance(Object aTire);
+    void withInstance(Object aSingleton);
+    void withFactory(InjectionFactory aFactory);
 }

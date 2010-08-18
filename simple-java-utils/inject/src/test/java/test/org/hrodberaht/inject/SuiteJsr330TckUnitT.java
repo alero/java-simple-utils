@@ -42,6 +42,5 @@ public class SuiteJsr330TckUnitT extends TestCase {
         final boolean supportsPrivate = true;
 
         return Tck.testsFor(car, supportsStatic, supportsPrivate);
-
     }
 }

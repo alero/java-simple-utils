@@ -3,6 +3,7 @@ package org.hrodberaht.inject.register.internal;
 import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.register.InjectionFactory;
 
 import java.lang.annotation.Annotation;
 
@@ -17,11 +18,16 @@ import java.lang.annotation.Annotation;
 public class RegistrationInstanceAnnotation<T extends Registration> implements Registration {
 
     protected Class theInterface;
+
+    // Producers
     protected Class theService;
     protected Object theInstance;
+    private InjectionFactory theFactory;
+
     protected String name;
     protected Class<? extends Annotation> annotation;
     protected SimpleInjection.Scope scope = null; // No default scope for registration
+
 
     public RegistrationInstanceAnnotation(Class theInterface) {
         this.theInterface = theInterface;
@@ -50,12 +56,22 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
         this.scope = ScopeContainer.Scope.SINGLETON;
     }
 
+    public void withFactory(InjectionFactory aFactory) {
+        this.theFactory = aFactory;
+        this.theService = theFactory.getClass().getComponentType();
+        this.scope = ScopeContainer.Scope.NEW;
+    }
+
     public Class getService() {
         return theService;
     }
 
     public Object getTheInstance() {
         return theInstance;
+    }
+
+    public InjectionFactory getTheFactory() {
+        return theFactory;
     }
 
     public T scopeAs(ScopeContainer.Scope scope) {
@@ -76,4 +92,6 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
         }
         return new InjectionKey(theInterface, false);
     }
+
+
 }

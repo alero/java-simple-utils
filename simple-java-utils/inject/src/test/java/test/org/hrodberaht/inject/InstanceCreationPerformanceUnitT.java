@@ -38,7 +38,7 @@ public class InstanceCreationPerformanceUnitT {
 
     @Test(timeout = 10000)
     public void testPerformance() throws InterruptedException {
-        Constructor constructor = Volvo.class.getConstructors()[1];
+        Constructor constructor = Volvo.class.getConstructors()[0];
 
 
         // warmup

@@ -30,4 +30,5 @@ public interface Car {
 
     VindShield getSpareVindShield();
 
+    TestDriver getDriver();
 }

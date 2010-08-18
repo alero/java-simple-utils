@@ -20,6 +20,7 @@ import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
 import org.hrodberaht.inject.internal.ServiceRegister;
+import org.hrodberaht.inject.internal.annotation.scope.FactoryScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.SingletonScopeHandler;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
@@ -224,6 +225,9 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
             SingletonScopeHandler scopeHandler = new SingletonScopeHandler();
             scopeHandler.addScope(instance.getTheInstance());
             injectionMetaData.setScopeHandler(scopeHandler);   
+        }else if(instance.getTheFactory() != null){
+            FactoryScopeHandler scopeHandler = new FactoryScopeHandler(instance.getTheFactory());
+            injectionMetaData.setScopeHandler(scopeHandler);
         }
         else if (instance.getScope() != null) {
             // replaces the injection data scope handler

@@ -41,6 +41,8 @@ public class Volvo implements Car{
 
     @Inject TestDriverManager driverManager;
 
+    private String information = null;
+
     @Inject
     public Volvo(@Spare Tire spareTire) {
         this.spareTire = spareTire;
@@ -87,5 +89,13 @@ public class Volvo implements Car{
 
     public VindShield getVindShield() {
         return vindShield;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
     }
 }

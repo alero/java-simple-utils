@@ -22,15 +22,7 @@ import org.hrodberaht.inject.InjectionRegisterScan;
 import org.hrodberaht.inject.register.InjectionRegister;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 import org.junit.Test;
-import test.org.hrodberaht.inject.testservices.annotated.Car;
-import test.org.hrodberaht.inject.testservices.annotated.Spare;
-import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
-import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
-import test.org.hrodberaht.inject.testservices.annotated.SpecialSpareTire;
-import test.org.hrodberaht.inject.testservices.annotated.TestDriverManager;
-import test.org.hrodberaht.inject.testservices.annotated.Tire;
-import test.org.hrodberaht.inject.testservices.annotated.VindShield;
-import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.testservices.annotated.*;
 import test.org.hrodberaht.inject.testservices.regmodules.OverridesRegisterModuleAnnotated;
 import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleAnnotated;
 
@@ -185,5 +177,35 @@ public class AnnotationContainerUnitT {
 
     }
 
+    @Test
+    public void testFactoryRegisterSupport() {
+
+        // The regular (default/basic) registration
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerJavaXInject();
+        registerJava.register(new RegisterModuleAnnotated());
+        // The override (of a default) registration
+        final VolvoFactory aFactory = new VolvoFactory();        
+        registerJava.register(
+                new RegistrationModuleAnnotation() {
+                    @Override
+                    public void registrations() {
+                        register(Car.class).withFactory(aFactory);
+                    }
+                }
+        );
+
+
+        Container container = registerJava.getContainer();
+        Car car = container.get(Car.class);
+
+        // As the factory created the Car it will not be deeper injected.
+        assertFalse(car.getSpareTire() instanceof SpareTire);
+        assertFalse(car.getSpareVindShield() instanceof SpareVindShield);
+
+        // This is information set by the factory though         
+        assertEquals("Made from factory", ((Volvo)car).getInformation());
+
+    }
 
 }

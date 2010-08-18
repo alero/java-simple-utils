@@ -75,9 +75,11 @@ public class AnnotationInjection {
      */
     public InjectionMetaData createInjectionMetaData(Class service, InjectionKey key) {
         InjectionMetaData injectionMetaData = new InjectionMetaData(service, key);
-        Constructor constructor = InjectionUtils.findConstructor(service);
-        injectionMetaData.setConstructor(constructor);
-        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
+        if(service != null){
+            Constructor constructor = InjectionUtils.findConstructor(service);
+            injectionMetaData.setConstructor(constructor);
+            injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
+        }
         injectionMetaData.setPreDefined(true);
         injectionCacheHandler.put(injectionMetaData);
         return injectionMetaData;
@@ -220,6 +222,9 @@ public class AnnotationInjection {
      */
     private List<InjectionPoint> findAllInjectionPoints(Class service) {
         List<InjectionPoint> injectionPoints = new ArrayList<InjectionPoint>();
+        if(service == null){
+            return injectionPoints;    
+        }
         List<Method> allMethods = ReflectionUtils.findMethods(service);
         List<Member> allMembers = ReflectionUtils.findMembers(service);
         for (Member member : allMembers) {

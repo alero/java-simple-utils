@@ -74,7 +74,7 @@ public class AnnotationContinerPerformanceUnitT {
         final Container container = registerVolvo.getContainer();
 
         Collection<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 100; i++) {
             threads.add(
                     new Thread() {
                         @Override

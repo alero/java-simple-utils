@@ -13,6 +13,6 @@ import org.hrodberaht.inject.scope.ThreadScope;
 @ThreadScope
 public class TestDriver {
 
-    private String name;
+    public String name;
 
 }
