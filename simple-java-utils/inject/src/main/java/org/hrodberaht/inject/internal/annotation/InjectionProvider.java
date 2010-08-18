@@ -15,6 +15,7 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
+import org.hrodberaht.inject.internal.InjectionKey;
 
 import javax.inject.Provider;
 
@@ -28,16 +29,23 @@ import javax.inject.Provider;
  */
 public class InjectionProvider implements Provider {
 
-    private Class serviceClass;    
+    private InjectionKey injectionKey;
     private SimpleInjection injection;
 
-    public InjectionProvider(SimpleInjection injection, Class serviceClass) {
-        this.serviceClass = serviceClass;
+    public InjectionProvider(SimpleInjection injection, InjectionKey injectionKey) {
+        this.injectionKey = injectionKey;
         this.injection = injection;
     }
     
     @SuppressWarnings(value = "unchecked")
     public Object get() {
-        return injection.get(serviceClass);
+        if(injectionKey.getAnnotation() != null){
+            return injection.get(injectionKey.getServiceDefinition(), injectionKey.getAnnotation());
+        }else if(injectionKey.getName() != null){
+            return injection.get(injectionKey.getServiceDefinition(), injectionKey.getName());
+        }
+        return injection.get(injectionKey.getServiceDefinition());
+
+
     }
 }

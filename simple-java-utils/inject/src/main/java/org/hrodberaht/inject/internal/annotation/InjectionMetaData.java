@@ -126,6 +126,10 @@ public class InjectionMetaData {
             return true;
         }
 
+        if(bean.key.isProvider() != this.key.isProvider()){
+            return false;            
+        }
+
         if (serviceClass.equals(bean.serviceClass)
                 && !hasQualifier(key) && !hasQualifier(bean.key)) {
             return true;

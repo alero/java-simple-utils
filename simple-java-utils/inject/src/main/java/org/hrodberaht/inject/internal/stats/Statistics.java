@@ -49,7 +49,7 @@ public class Statistics {
 
     public static void addNewInstanceCount() {
         if (enabled) {
-            newInstanceCount.incrementAndGet();
+            Statistics.newInstanceCount.incrementAndGet();
         }
     }
 

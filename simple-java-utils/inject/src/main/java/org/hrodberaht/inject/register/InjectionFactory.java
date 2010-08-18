@@ -8,5 +8,6 @@ package org.hrodberaht.inject.register;
  * To change this template use File | Settings | File Templates.
  */
 public interface InjectionFactory<T> {
-    T getObject();    
+    T getInstance();
+    Class getInstanceType();
 }

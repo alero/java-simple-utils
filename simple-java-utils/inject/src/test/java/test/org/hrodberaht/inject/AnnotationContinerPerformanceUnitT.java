@@ -93,6 +93,9 @@ public class AnnotationContinerPerformanceUnitT {
         }
 
         System.out.println("Created objects: "+Statistics.getNewInstanceCount());
+        System.out.println("Injected field count: "+Statistics.getInjectFieldCount());
+        System.out.println("Injected method count: "+Statistics.getInjectMethodCount());
+        System.out.println("Injected construct count: "+Statistics.getInjectConstructorCount());
 
     }
 
@@ -106,7 +109,7 @@ public class AnnotationContinerPerformanceUnitT {
     }
 
     private void runThreadContainerGet(Container container) {
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 20000; i++) {
             Volvo car = container.get(Volvo.class);
             AnnotationContainerUtil.assertVolvo(car);
         }

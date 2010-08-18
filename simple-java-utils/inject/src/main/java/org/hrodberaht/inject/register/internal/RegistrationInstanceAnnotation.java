@@ -6,6 +6,7 @@ import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.register.InjectionFactory;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 
 /**
  * Simple Java Utils - Container
@@ -58,9 +59,10 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
 
     public void withFactory(InjectionFactory aFactory) {
         this.theFactory = aFactory;
-        this.theService = theFactory.getClass().getComponentType();
+        this.theService = theFactory.getInstanceType();
         this.scope = ScopeContainer.Scope.NEW;
     }
+
 
     public Class getService() {
         return theService;
@@ -85,9 +87,9 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
 
 
     public InjectionKey getInjectionKey() {
-        if(annotation != null){
+        if (annotation != null) {
             return new InjectionKey(annotation, theInterface, false);
-        }else if(name != null){
+        } else if (name != null) {
             return new InjectionKey(name, theInterface, false);
         }
         return new InjectionKey(theInterface, false);

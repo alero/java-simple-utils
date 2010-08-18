@@ -96,12 +96,12 @@ public class InjectionPoint {
         }
         try {
             field.set(service, serviceDependency);
-            Statistics.addInjectMethodCount();
+            Statistics.addInjectFieldCount();
         } catch (final IllegalAccessException e) {
             throw new InjectRuntimeException(e);
         } finally {
             // Do not reset the accessible as multi-thread calls
-            // will have problems with singletons and this way of doing it
+            // will have serious access problems (it will be closed by this call when the next one comes)
             // field.setAccessible(originalAccessible);
         }
     }

@@ -17,6 +17,7 @@ package org.hrodberaht.inject.internal.annotation;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
+import org.hrodberaht.inject.internal.stats.Statistics;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -120,8 +121,10 @@ public class AnnotationInjection {
         InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(
                 new InjectionMetaData(service, key));
         if (cachedInjectionMetaData != null) {
-            if (cachedInjectionMetaData.isPreDefined() && !cachedInjectionMetaData.getKey().isProvider()) {
-                resolvePredefinedService(cachedInjectionMetaData);
+            if (cachedInjectionMetaData.isPreDefined()) {
+                if(!cachedInjectionMetaData.getKey().isProvider()){
+                    resolvePredefinedService(cachedInjectionMetaData);
+                }                
             }
             return cachedInjectionMetaData;
         }
@@ -148,8 +151,8 @@ public class AnnotationInjection {
      */
     private Object innerCreateInstance(InjectionMetaData dependency) {
         if (dependency.getKey().isProvider()) {
-            InjectionMetaData injectionMetaData = findInjectionData(dependency);
-            return new InjectionProvider(container, injectionMetaData.getServiceClass());
+            // InjectionMetaData injectionMetaData = findInjectionData(dependency);
+            return new InjectionProvider(container, dependency.getKey());
         }
         return createInstance(dependency);
     }
@@ -287,6 +290,7 @@ public class AnnotationInjection {
             InjectionMetaData dependency = dependencies.get(i);
             Object bean = innerCreateInstance(dependency);
             servicesForConstructor[i] = bean;
+            Statistics.addInjectConstructorCount();
         }
         Object service = injectionMetaData.createInstance(servicesForConstructor);
         autoWireBean(service, injectionMetaData);

@@ -10,9 +10,13 @@ import org.hrodberaht.inject.register.InjectionFactory;
  * To change this template use File | Settings | File Templates.
  */
 public class VolvoFactory implements InjectionFactory<Volvo> {
-    public Volvo getObject() {
+    public Volvo getInstance() {
         Volvo volvo = new Volvo();
         volvo.setInformation("Made from factory");
         return volvo;
+    }
+
+    public Class getInstanceType(){
+        return Volvo.class;
     }
 }

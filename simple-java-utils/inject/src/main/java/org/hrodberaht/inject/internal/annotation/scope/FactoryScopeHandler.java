@@ -19,7 +19,7 @@ public class FactoryScopeHandler implements ScopeHandler{
     }
 
     public Object getInstance() {
-        return injectionFactory.getObject();
+        return injectionFactory.getInstance();
     }
 
     public void addScope(Object instance) {

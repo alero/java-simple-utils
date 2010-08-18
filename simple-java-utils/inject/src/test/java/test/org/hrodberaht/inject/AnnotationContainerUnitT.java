@@ -199,13 +199,44 @@ public class AnnotationContainerUnitT {
         Container container = registerJava.getContainer();
         Car car = container.get(Car.class);
 
-        // As the factory created the Car it will not be deeper injected.
-        assertFalse(car.getSpareTire() instanceof SpareTire);
-        assertFalse(car.getSpareVindShield() instanceof SpareVindShield);
+        // After the factory created the Car it will be deeper injected.
+        assertTrue(car.getSpareTire() instanceof SpareTire);
+        assertTrue(car.getSpareVindShield() instanceof SpareVindShield);
 
         // This is information set by the factory though         
         assertEquals("Made from factory", ((Volvo)car).getInformation());
 
     }
 
+
+    @Test
+    public void testFactoryProviderRegisterSupport() {
+
+        // The regular (default/basic) registration
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerJavaXInject();
+        registerJava.register(new RegisterModuleAnnotated());
+        // The override (of a default) registration
+        final VolvoFactory aFactory = new VolvoFactory();
+        registerJava.register(
+                new RegistrationModuleAnnotation() {
+                    @Override
+                    public void registrations() {
+                        register(Car.class).withFactory(aFactory);
+                    }
+                }
+        );
+
+
+        Container container = registerJava.getContainer();
+        TestDriverManager driverManager = container.get(TestDriverManager.class);
+
+        // After the factory created the Car it will be deeper injected.
+        assertTrue(driverManager.getCar() instanceof Volvo);
+        assertTrue(driverManager.getTire() instanceof SpareTire);
+
+        // This is information set by the factory though
+        assertEquals("Made from factory", ((Volvo)driverManager.getCar()).getInformation());
+
+    }
 }
