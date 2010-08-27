@@ -53,8 +53,13 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
         return (T) this;
     }
 
-    public T activateContainerDefault() {
+    public T activateContainerSimple() {
         container.setContainerSimpleInjection();
+        return (T) this;
+    }
+
+    public T activateContainerDefault() {
+        container.setContainerInjectAnnotationCompliantMode();
         return (T) this;
     }
 

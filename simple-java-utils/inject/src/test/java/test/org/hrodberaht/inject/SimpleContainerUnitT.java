@@ -48,7 +48,7 @@ public class SimpleContainerUnitT {
 
     @Test
     public void testNothingRegistered() {
-        Container container = new InjectionRegisterJava().getContainer();
+        Container container = new InjectionRegisterJava().activateContainerSimple().getContainer();
         try {
             AnyService anyService = container.get(AnyService.class);
             assertEquals(null, "Should not be called");
@@ -73,6 +73,7 @@ public class SimpleContainerUnitT {
     @Test
     public void testNamedNothingServiceWrapping() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerSimple();
         registerJava.register("myAnyService", AnyService.class, AnyServiceDoNothingImpl.class);
         Container container = registerJava.getContainer();
 
@@ -94,6 +95,7 @@ public class SimpleContainerUnitT {
     @Test
     public void testSomethingServiceNewObjectSupport() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerSimple();
         registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class, SimpleInjection.Scope.SINGLETON);
         ScopeContainer container = registerJava.getScopedContainer();
 
@@ -111,6 +113,7 @@ public class SimpleContainerUnitT {
     @Test
     public void testSomethingServiceSingletonObjectSupport() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerSimple();
         registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
         ScopeContainer container = registerJava.getScopedContainer();
 
@@ -128,6 +131,7 @@ public class SimpleContainerUnitT {
     @Test
     public void testReRegisterSupport() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerSimple();
         registerJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
         registerJava.overrideRegister(AnyService.class, AnyServiceDoSomethingImpl.class);
 
@@ -142,6 +146,7 @@ public class SimpleContainerUnitT {
     @Test
     public void testDefaultRegisterSupport() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerSimple();
         registerJava.registerDefault(AnyService.class, AnyServiceDoNothingImpl.class);
         registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
         Container container = registerJava.getContainer();
@@ -155,6 +160,7 @@ public class SimpleContainerUnitT {
     @Test(expected = DuplicateRegistrationException.class)
     public void testFinalRegisterSupport() {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerSimple();
         registerJava.finalRegister(AnyService.class, AnyServiceDoNothingImpl.class);
         registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
 
@@ -165,6 +171,7 @@ public class SimpleContainerUnitT {
 
         try {
             InjectionRegisterJava registerJava = new InjectionRegisterJava();
+            registerJava.activateContainerSimple();
             registerJava.register(AnyService.class, AnyServiceDoNothingImpl.class);
             registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
             assertEquals("Not suppose to execute this", "So fail");
@@ -182,6 +189,7 @@ public class SimpleContainerUnitT {
     public void testRegisterModule() {
 
         InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerSimple();
         registerJava.register(new RegistrationModuleSimple() {
             public void registrations() {
                 register(AnyService.class).annotated(DoNothing.class).with(AnyServiceDoNothingImpl.class);
@@ -204,6 +212,7 @@ public class SimpleContainerUnitT {
     public void testAdvancedRegisterModule() {
 
         InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.activateContainerSimple();
         registerJava.register(new RegistrationModuleSimple() {
             public void registrations() {
                 register(AnyService.class)
@@ -247,6 +256,7 @@ public class SimpleContainerUnitT {
 
     private Container registerSingle(Class serviceDefinition, Class aService) {
         InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        registerJava.activateContainerSimple();
         registerJava.register(serviceDefinition, aService);
         Container injection = registerJava.getContainer();
         return injection;

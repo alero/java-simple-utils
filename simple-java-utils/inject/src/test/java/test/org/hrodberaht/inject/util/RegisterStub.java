@@ -16,8 +16,7 @@ import test.org.hrodberaht.inject.testservices.annotated.Tire;
 public class RegisterStub {
 
     public static InjectionRegisterScan createAnnotatedScanRegister() {
-        InjectionRegisterScan register = new InjectionRegisterScan();
-        register.activateContainerJavaXInject();
+        InjectionRegisterScan register = new InjectionRegisterScan();        
         register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
         register.register(Spare.class, Tire.class, SpareTire.class);
         return register;

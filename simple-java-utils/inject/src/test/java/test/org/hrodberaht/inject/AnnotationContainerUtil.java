@@ -38,14 +38,12 @@ public class AnnotationContainerUtil {
 
     public static InjectionRegisterModule prepareVolvoRegister(){
         InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
         registerJava.register(new RegisterModuleAnnotated());
         return registerJava;
     }
 
     public static InjectionRegister prepareLargeVolvoRegister(){
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();        
         registerJava.register(new RegisterModuleAnnotated());
         InjectionRegisterScan registerScan = new InjectionRegisterScan(registerJava);
         registerScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices.largepackage");

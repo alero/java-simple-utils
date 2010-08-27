@@ -86,8 +86,7 @@ public class AnnotationContainerUnitT {
     @Test
     public void testOverrideModuleSupport() {
 
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();       
 
         // This is normally done in a more dynamic way.
         // Its intended to support advances inheritance support for registrations
@@ -117,8 +116,7 @@ public class AnnotationContainerUnitT {
         // Its intended to give advanced inheritance like support for registrations
 
         // The regular (default/basic) registration
-        InjectionRegisterScan registerScan = new InjectionRegisterScan();
-        registerScan.activateContainerJavaXInject();
+        InjectionRegisterScan registerScan = new InjectionRegisterScan();        
         registerScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
         InjectionRegisterModule registerJava = new InjectionRegisterModule(registerScan);
         // The override (of a default) registration
@@ -153,8 +151,7 @@ public class AnnotationContainerUnitT {
     public void testInstanceRegisterSupport() {
 
         // The regular (default/basic) registration
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();        
         registerJava.register(new RegisterModuleAnnotated());
         // The override (of a default) registration
         final SpareTire aTire = new SpecialSpareTire("Goodyear");        
@@ -182,7 +179,6 @@ public class AnnotationContainerUnitT {
 
         // The regular (default/basic) registration
         InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
         registerJava.register(new RegisterModuleAnnotated());
         // The override (of a default) registration
         final VolvoFactory aFactory = new VolvoFactory();        
@@ -213,8 +209,7 @@ public class AnnotationContainerUnitT {
     public void testFactoryProviderRegisterSupport() {
 
         // The regular (default/basic) registration
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();        
         registerJava.register(new RegisterModuleAnnotated());
         // The override (of a default) registration
         final VolvoFactory aFactory = new VolvoFactory();
