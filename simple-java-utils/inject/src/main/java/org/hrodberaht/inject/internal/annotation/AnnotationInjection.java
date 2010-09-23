@@ -18,14 +18,11 @@ import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.stats.Statistics;
+import org.hrodberaht.inject.spi.InjectionPointFinder;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +40,7 @@ public class AnnotationInjection {
     private InjectionCacheHandler injectionCacheHandler;
     private AnnotationInjectionContainer injectionContainer;
     private SimpleInjection container;
-
+    private InjectionFinder injectionFinder = InjectionPointFinder.getInjectionFinder();
 
     public AnnotationInjection(Map<InjectionKey, InjectionMetaData> injectionMetaDataCache
             , SimpleInjection container
@@ -165,7 +162,10 @@ public class AnnotationInjection {
     private void resolveService(InjectionMetaData injectionMetaData) {
         injectionMetaData.setConstructorDependencies(findDependencies(injectionMetaData.getConstructor()));
         injectionMetaData.setInjectionPoints(
-                findAllInjectionPoints(injectionMetaData.getServiceClass())
+                injectionFinder.findInjectionPoints(injectionMetaData.getServiceClass(), this)
+        );
+        injectionMetaData.setPostConstructMethod(
+                injectionFinder.findPostConstruct(injectionMetaData.getServiceClass())
         );
     }
 
@@ -217,48 +217,6 @@ public class AnnotationInjection {
         injectFromInjectionPoints(service, injectionMetaData);
     }
 
-    /**
-     * Finds all injection points for a class analysing fields and methods
-     *
-     * @param service the class to analyze
-     * @return found injection points
-     */
-    private List<InjectionPoint> findAllInjectionPoints(Class service) {
-        List<InjectionPoint> injectionPoints = new ArrayList<InjectionPoint>();
-        if(service == null){
-            return injectionPoints;    
-        }
-        List<Method> allMethods = ReflectionUtils.findMethods(service);
-        List<Member> allMembers = ReflectionUtils.findMembers(service);
-        for (Member member : allMembers) {
-            if (member instanceof Field) {
-                Field field = (Field) member;
-                if (fieldNeedsInjection(field)) {
-                    injectionPoints.add(new InjectionPoint(field, this));
-                }
-            } else if (member instanceof Method) {
-                Method method = (Method) member;
-                if (methodNeedsInjection(method) &&
-                        // This makes sure that overridden methods are not injected
-                        !ReflectionUtils.isOverridden(method, allMethods)) {
-                    injectionPoints.add(new InjectionPoint(method, this));
-                }
-            } else {
-                throw new UnsupportedOperationException("Unsupported member: " + member);
-            }
-        }
-        return injectionPoints;
-    }
-
-    private boolean methodNeedsInjection(Method method) {
-        return !ReflectionUtils.isStatic(method) && method.isAnnotationPresent(InjectionUtils.INJECT);
-    }
-
-    private boolean fieldNeedsInjection(Field field) {
-        return !ReflectionUtils.isStatic(field)
-                && !ReflectionUtils.isFinal(field)
-                && field.isAnnotationPresent(InjectionUtils.INJECT);
-    }
 
     private List<InjectionMetaData> findDependencies(Constructor constructor) {
         if(constructor == null){
@@ -298,4 +256,7 @@ public class AnnotationInjection {
     }
 
 
+    public void postCreateAnnotations(Object service) {
+        //To change body of created methods use File | Settings | File Templates.
+    }
 }

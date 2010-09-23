@@ -17,7 +17,6 @@ package org.hrodberaht.inject;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.ServiceRegister;
 import org.hrodberaht.inject.internal.ServiceRegisterNamed;
-import org.hrodberaht.inject.internal.ServiceRegisterRegular;
 import org.hrodberaht.inject.register.InjectionRegister;
 
 import java.lang.annotation.Annotation;
@@ -197,16 +196,7 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
     }
 
     private void printRegistration(ServiceRegister serviceRegister) {
-        if(serviceRegister instanceof ServiceRegisterRegular){
-            ServiceRegisterRegular regular = (ServiceRegisterRegular)serviceRegister;
-
-            System.out.println("serviceDefinition:     "+regular.getServiceDefinition().getName());
-            System.out.println("serviceImplementation: "+regular.getService().getName());
-            System.out.println("scope:                 "+regular.getScope().name());
-            System.out.println("registrationType:      "+regular.getRegisterType().name());
-
-        }else
-
+        
         if(serviceRegister instanceof ServiceRegisterNamed){
             ServiceRegisterNamed named = (ServiceRegisterNamed)serviceRegister;
             System.out.println("serviceDefinition:     "+named.getKey().getServiceDefinition());

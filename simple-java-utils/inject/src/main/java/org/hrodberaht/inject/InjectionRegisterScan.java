@@ -20,15 +20,12 @@ import org.hrodberaht.inject.register.InjectionRegister;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 /**
  * Simple Java Utils - Container
@@ -72,23 +69,6 @@ public class InjectionRegisterScan extends InjectionRegisterBase<InjectionRegist
             createRegistration(aClazz);
         }
         return this;
-    }
-
-
-    public void registerThirdPartyJar(String... jars) {
-        for (String jar : jars) {
-
-            try {
-                URL u = new URL("jar", "", jar);
-                URLClassLoader jarClassLoader = new URLClassLoader(new URL[]{ u });
-                customClassLoaders.add(new CustomClassLoader(jarClassLoader, CustomClassLoader.ClassLoaderType.JAR));
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
     }
 
     public void setDetailedScanLogging(boolean detailedScanLogging) {
@@ -206,43 +186,6 @@ public class InjectionRegisterScan extends InjectionRegisterBase<InjectionRegist
         }
         return classes;
     }
-
-    private ArrayList<Class> findJarFiles(String packageName, ClassLoader classLoader) {
-        ArrayList<Class> classes = new ArrayList<Class>();
-        try {
-
-            assert classLoader != null;
-            URLClassLoader urlClassLoader = (URLClassLoader)classLoader;
-            String path = packageName.replace('.', '/');
-            URL[] resources = urlClassLoader.getURLs();
-            List<JarFile> dirs = new ArrayList<JarFile>();
-            for (URL resource:resources) {
-                dirs.add(new JarFile(resource.getFile()));
-            }
-
-            for (JarFile directory : dirs) {
-                classes.addAll(findJarClasses(directory, packageName));
-            }
-        } catch (IOException e) {
-            throw new InjectRuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new InjectRuntimeException(e);
-        }
-        return classes;
-    }
-
-    private static List<Class> findJarClasses(JarFile directory, String packageName) throws ClassNotFoundException {
-        List<Class> classes = new ArrayList<Class>();
-        Enumeration<JarEntry> files = directory.entries();
-        while (files.hasMoreElements()) {
-            JarEntry file = files.nextElement();
-            classes.add(
-                        Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6))
-            );
-        }
-        return classes;
-    }
-
 
 
 

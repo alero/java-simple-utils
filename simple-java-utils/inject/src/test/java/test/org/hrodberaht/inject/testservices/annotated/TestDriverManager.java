@@ -22,7 +22,8 @@ public class TestDriverManager {
     @Inject @Spare    
     Provider<Tire> tireProvider;
 
-    private String name;
+    private String name = null;
+    private String initTextSpecial = null;
 
     public Car getCar() {
         return carProvider.get();
@@ -30,5 +31,14 @@ public class TestDriverManager {
 
     public Tire getTire() {
         return tireProvider.get();
+    }
+
+    @PostConstructInit
+    public void initSpecial(){
+        initTextSpecial = "Initialized special";
+    }
+
+    public String getInitTextSpecial() {
+        return initTextSpecial;
     }
 }

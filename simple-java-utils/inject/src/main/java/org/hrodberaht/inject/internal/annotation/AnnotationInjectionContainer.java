@@ -92,7 +92,8 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     @SuppressWarnings(value = "unchecked")
     public Object createInstance(ServiceRegister serviceRegister, InjectionKey key) {
         AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container, this);
-        return annotationInjection.createInstance(serviceRegister.getService(), key);
+        Object service = annotationInjection.createInstance(serviceRegister.getService(), key);        
+        return service;
     }
 
     public synchronized void register(

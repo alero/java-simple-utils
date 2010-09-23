@@ -14,7 +14,10 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -180,4 +183,13 @@ public class ReflectionUtils {
         return true;
     }
 
+    public static void invoke(Method method, Object object) {
+        try {
+            method.invoke(object);
+        } catch (IllegalAccessException e) {
+            throw new InjectRuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new InjectRuntimeException(e);
+        }
+    }
 }

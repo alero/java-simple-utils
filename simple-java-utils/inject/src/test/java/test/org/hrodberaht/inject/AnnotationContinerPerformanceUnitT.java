@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -74,7 +75,7 @@ public class AnnotationContinerPerformanceUnitT {
         final Container container = registerVolvo.getContainer();
 
         Collection<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
             threads.add(
                     new Thread() {
                         @Override
@@ -92,11 +93,18 @@ public class AnnotationContinerPerformanceUnitT {
             waitForIt(thread);
         }
 
-        System.out.println("Created objects: "+Statistics.getNewInstanceCount());
-        System.out.println("Injected field count: "+Statistics.getInjectFieldCount());
-        System.out.println("Injected method count: "+Statistics.getInjectMethodCount());
-        System.out.println("Injected construct count: "+Statistics.getInjectConstructorCount());
-
+        System.out.println(
+                MessageFormat.format("Created objects: {0}",Statistics.getNewInstanceCount())
+        );
+        System.out.println(
+                MessageFormat.format("Injected field count: {0}",Statistics.getInjectFieldCount())
+        );
+        System.out.println(
+                MessageFormat.format("Injected method count: {0}",Statistics.getInjectMethodCount())
+        );
+        System.out.println(
+                MessageFormat.format("Injected construct count: {0}",Statistics.getInjectConstructorCount())
+        );        
     }
 
     private void waitForIt(Thread thread) {
@@ -109,7 +117,7 @@ public class AnnotationContinerPerformanceUnitT {
     }
 
     private void runThreadContainerGet(Container container) {
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 25000; i++) {
             Volvo car = container.get(Volvo.class);
             AnnotationContainerUtil.assertVolvo(car);
         }

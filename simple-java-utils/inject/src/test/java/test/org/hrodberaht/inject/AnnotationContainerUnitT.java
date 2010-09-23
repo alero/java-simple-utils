@@ -19,15 +19,36 @@ import org.hrodberaht.inject.Container;
 import org.hrodberaht.inject.InjectContainer;
 import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.InjectionRegisterScan;
+import org.hrodberaht.inject.internal.annotation.DefaultInjectionPointFinder;
+import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 import org.hrodberaht.inject.register.InjectionRegister;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
+import org.hrodberaht.inject.spi.InjectionInstanceCreator;
+import org.hrodberaht.inject.spi.InjectionPointFinder;
 import org.junit.Test;
-import test.org.hrodberaht.inject.testservices.annotated.*;
+import test.org.hrodberaht.inject.testservices.annotated.Car;
+import test.org.hrodberaht.inject.testservices.annotated.Injected;
+import test.org.hrodberaht.inject.testservices.annotated.PostConstructInit;
+import test.org.hrodberaht.inject.testservices.annotated.Spare;
+import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
+import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
+import test.org.hrodberaht.inject.testservices.annotated.SpecialSpareTire;
+import test.org.hrodberaht.inject.testservices.annotated.TestDriverManager;
+import test.org.hrodberaht.inject.testservices.annotated.Tire;
+import test.org.hrodberaht.inject.testservices.annotated.VindShield;
+import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.testservices.annotated.VolvoFactory;
 import test.org.hrodberaht.inject.testservices.regmodules.OverridesRegisterModuleAnnotated;
 import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleAnnotated;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -86,7 +107,7 @@ public class AnnotationContainerUnitT {
     @Test
     public void testOverrideModuleSupport() {
 
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();       
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
 
         // This is normally done in a more dynamic way.
         // Its intended to support advances inheritance support for registrations
@@ -116,7 +137,7 @@ public class AnnotationContainerUnitT {
         // Its intended to give advanced inheritance like support for registrations
 
         // The regular (default/basic) registration
-        InjectionRegisterScan registerScan = new InjectionRegisterScan();        
+        InjectionRegisterScan registerScan = new InjectionRegisterScan();
         registerScan.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
         InjectionRegisterModule registerJava = new InjectionRegisterModule(registerScan);
         // The override (of a default) registration
@@ -147,14 +168,95 @@ public class AnnotationContainerUnitT {
 
     }
 
+
+    @Test
+    public void testPostConstruct() {
+
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
+        Container container = registerJava.getContainer();
+        Volvo aCar = (Volvo) container.get(Car.class);
+        
+        assertEquals("Initialized", aCar.getInitText());
+
+    }
+
+    @Test
+    public void testCustomInstanceCreator() {
+
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
+        Container container = registerJava.getContainer();
+        final Tire specialTire = new Tire();
+        InjectionInstanceCreator.changeInstanceCreator(
+                new InstanceCreator(){
+                    public Object createInstance(
+                            Constructor constructor, Object... parameters) {
+                        try {
+                            if(constructor.getDeclaringClass().isAssignableFrom(Tire.class)
+                                    && parameters.length == 0){
+                                return specialTire;
+                            }
+                            return constructor.newInstance(parameters);
+                        } catch (InstantiationException e) {
+
+                        } catch (IllegalAccessException e) {
+
+                        } catch (InvocationTargetException e) {
+
+                        }
+                        return null;
+                    }
+                }
+        );
+        Volvo aCar = (Volvo) container.get(Car.class);
+        assertEquals("Initialized", aCar.getInitText());
+        assertTrue(specialTire == aCar.getBackLeft());
+        InjectionInstanceCreator.resetInstanceCreator();
+    }
+
+    @Test
+    public void testCustomAnnotationsSupport() {
+
+        DefaultInjectionPointFinder finder = new DefaultInjectionPointFinder() {
+            @Override
+            protected boolean hasInjectAnnotationOnMethod(Method method) {
+                return method.isAnnotationPresent(Injected.class) ||
+                        super.hasInjectAnnotationOnMethod(method);
+            }
+
+            @Override
+            protected boolean hasInjectAnnotationOnField(Field field) {
+                return field.isAnnotationPresent(Injected.class) ||
+                        super.hasInjectAnnotationOnField(field);
+            }
+
+            @Override
+            protected boolean hasPostConstructAnnotation(Method method) {
+                return method.isAnnotationPresent(PostConstructInit.class) ||
+                        super.hasPostConstructAnnotation(method);
+            }
+        };
+        InjectionPointFinder.setInjectionFinder(finder);
+
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
+        Container container = registerJava.getContainer();
+
+        Volvo aCar = (Volvo) container.get(Car.class);
+        assertNotNull("getSpecialInjectField is null", aCar.getSpecialInjectField());
+        assertNotNull("getSpecialInjectMethod is null", aCar.getSpecialInjectMethod());
+        assertEquals("Initialized", aCar.getInitText());
+        assertEquals("Initialized special", aCar.getDriverManager().getInitTextSpecial());
+
+        InjectionPointFinder.resetInjectionFinderToDefault();
+    }
+
     @Test
     public void testInstanceRegisterSupport() {
 
         // The regular (default/basic) registration
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();        
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
         registerJava.register(new RegisterModuleAnnotated());
         // The override (of a default) registration
-        final SpareTire aTire = new SpecialSpareTire("Goodyear");        
+        final SpareTire aTire = new SpecialSpareTire("Goodyear");
         registerJava.register(
                 new RegistrationModuleAnnotation() {
                     @Override
@@ -181,7 +283,7 @@ public class AnnotationContainerUnitT {
         InjectionRegisterModule registerJava = new InjectionRegisterModule();
         registerJava.register(new RegisterModuleAnnotated());
         // The override (of a default) registration
-        final VolvoFactory aFactory = new VolvoFactory();        
+        final VolvoFactory aFactory = new VolvoFactory();
         registerJava.register(
                 new RegistrationModuleAnnotation() {
                     @Override
@@ -200,7 +302,7 @@ public class AnnotationContainerUnitT {
         assertTrue(car.getSpareVindShield() instanceof SpareVindShield);
 
         // This is information set by the factory though         
-        assertEquals("Made from factory", ((Volvo)car).getInformation());
+        assertEquals("Made from factory", ((Volvo) car).getInformation());
 
     }
 
@@ -209,7 +311,7 @@ public class AnnotationContainerUnitT {
     public void testFactoryProviderRegisterSupport() {
 
         // The regular (default/basic) registration
-        InjectionRegisterModule registerJava = new InjectionRegisterModule();        
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
         registerJava.register(new RegisterModuleAnnotated());
         // The override (of a default) registration
         final VolvoFactory aFactory = new VolvoFactory();
@@ -231,7 +333,7 @@ public class AnnotationContainerUnitT {
         assertTrue(driverManager.getTire() instanceof SpareTire);
 
         // This is information set by the factory though
-        assertEquals("Made from factory", ((Volvo)driverManager.getCar()).getInformation());
+        assertEquals("Made from factory", ((Volvo) driverManager.getCar()).getInformation());
 
     }
 }

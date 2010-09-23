@@ -14,6 +14,8 @@
 
 package test.org.hrodberaht.inject.testservices.annotated;
 
+import org.hrodberaht.inject.annotation.PostConstruct;
+
 import javax.inject.Inject;
 
 /**
@@ -43,14 +45,30 @@ public class Volvo implements Car{
 
     private String information = null;
 
+    private String initText = null;
+    private String initTextSpecial = null;
+
+    @Injected Tire specialInjectField;
+    Tire specialInjectMethod;
+
     @Inject
     public Volvo(@Spare Tire spareTire) {
         this.spareTire = spareTire;
     }
 
+    @Injected
+    public void setSpecialInjectMethod(Tire specialInjectMethod){
+        this.specialInjectMethod = specialInjectMethod;    
+    }
+
     public Volvo() {        
     }
-    
+
+    @PostConstruct
+    public void init(){
+        initText = "Initialized";   
+    }
+
     public String brand() {
         return "volvo";
     }
@@ -97,5 +115,21 @@ public class Volvo implements Car{
 
     public void setInformation(String information) {
         this.information = information;
+    }
+
+    public String getInitText() {
+        return initText;
+    }
+
+    public String getInitTextSpecial() {
+        return initTextSpecial;
+    }
+
+    public Tire getSpecialInjectField() {
+        return specialInjectField;
+    }
+
+    public Tire getSpecialInjectMethod() {
+        return specialInjectMethod;
     }
 }

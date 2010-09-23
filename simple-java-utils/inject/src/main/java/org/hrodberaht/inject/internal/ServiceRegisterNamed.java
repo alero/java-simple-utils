@@ -25,10 +25,6 @@ public class ServiceRegisterNamed extends ServiceRegister{
         super.setOverriddenService(aService.getOverriddenService());
     }
 
-    public ServiceRegisterNamed(Class aService) {
-        super(aService);
-    }
-
     public InjectionKey getKey() {
         return key;
     }

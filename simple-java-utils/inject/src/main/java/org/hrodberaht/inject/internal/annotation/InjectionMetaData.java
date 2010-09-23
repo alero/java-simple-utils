@@ -19,6 +19,7 @@ import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -40,6 +41,7 @@ public class InjectionMetaData {
     private Constructor constructor;
     private List<InjectionMetaData> constructorDependencies;
     private List<InjectionPoint> injectionPoints;
+    private Method postConstruct;
 
 
     public InjectionMetaData(Class serviceClass, InjectionKey key) {
@@ -107,6 +109,9 @@ public class InjectionMetaData {
 
             Object newInstance = InstanceCreatorFactory.getInstance().createInstance(constructor, parameters);
             scopeHandler.addScope(newInstance);
+            if(postConstruct != null){
+                ReflectionUtils.invoke(postConstruct, newInstance);                
+            }
             return newInstance;
         } finally {
             // Not thread safe
@@ -158,5 +163,9 @@ public class InjectionMetaData {
 
     public SimpleInjection.Scope getScope() {
         return scopeHandler.getScope();
+    }
+
+    public void setPostConstructMethod(Method postConstruct) {
+        this.postConstruct = postConstruct;                                    
     }
 }
