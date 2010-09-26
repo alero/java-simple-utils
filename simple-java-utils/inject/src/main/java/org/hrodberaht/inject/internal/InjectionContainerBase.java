@@ -56,7 +56,8 @@ public abstract class InjectionContainerBase {
         return new InjectionKey(serviceDefinition, false);
     }
 
-    protected Object instantiateService(SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister, InjectionKey key) {
+    protected Object instantiateService(
+            SimpleInjection.Scope forcedScope, ServiceRegister serviceRegister, InjectionKey key) {
         if (forcedScope == null && serviceRegister.getScope() == SimpleInjection.Scope.NEW) {
             return createInstance(serviceRegister, key);
         } else if (SimpleInjection.Scope.NEW == forcedScope) {

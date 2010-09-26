@@ -4,9 +4,9 @@ import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.register.InjectionFactory;
+import org.hrodberaht.inject.register.VariableInjectionFactory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
 
 /**
  * Simple Java Utils - Container
@@ -24,6 +24,7 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
     protected Class theService;
     protected Object theInstance;
     private InjectionFactory theFactory;
+    private VariableInjectionFactory theVariableFactory;
 
     protected String name;
     protected Class<? extends Annotation> annotation;
@@ -63,6 +64,12 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
         this.scope = ScopeContainer.Scope.NEW;
     }
 
+    public void withVariableFactory(VariableInjectionFactory variableInjectionFactory){
+        this.theVariableFactory = variableInjectionFactory;
+        this.name = VariableInjectionFactory.SERVICE_NAME;
+        this.scope = ScopeContainer.Scope.NEW;
+    }
+
 
     public Class getService() {
         return theService;
@@ -74,6 +81,10 @@ public class RegistrationInstanceAnnotation<T extends Registration> implements R
 
     public InjectionFactory getTheFactory() {
         return theFactory;
+    }
+
+    public VariableInjectionFactory getTheVariableFactory() {
+        return theVariableFactory;
     }
 
     public T scopeAs(ScopeContainer.Scope scope) {

@@ -11,4 +11,6 @@ package org.hrodberaht.inject;
 public interface InjectContainer extends Container {
 
     public void injectDependencies(Object service);
+
+    <T,K> T get(Class<T> service, K variable);
 }

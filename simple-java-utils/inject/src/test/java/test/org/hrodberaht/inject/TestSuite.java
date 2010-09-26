@@ -16,6 +16,8 @@ package test.org.hrodberaht.inject;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import test.org.hrodberaht.inject.annotation.AnnotationContainerUnitT;
+import test.org.hrodberaht.inject.annotation.AnnotationVariableProviderUnitT;
 
 /**
  * Simple Java Utils
@@ -31,7 +33,8 @@ import org.junit.runners.Suite;
     SimpleContainerUnitT.class,        
     AnnotationContainerUnitT.class,
     ContainerScanUnitT.class,
-    ScopeThreadUnitT.class,        
+    ScopeThreadUnitT.class,
+    AnnotationVariableProviderUnitT.class,
     InstanceCreationUnitT.class
 })
 public class TestSuite {

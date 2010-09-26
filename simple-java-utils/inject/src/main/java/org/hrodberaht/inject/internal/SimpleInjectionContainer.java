@@ -51,6 +51,10 @@ public class SimpleInjectionContainer extends InjectionContainerBase
         return (T) instantiateService(forcedScope, serviceRegister, null);
     }
 
+    public <T, K> T getService(Class<T> service, K variable) {
+        return null;
+    }
+
 
     public void register(
             InjectionKey key, Class service, SimpleInjection.Scope scope,

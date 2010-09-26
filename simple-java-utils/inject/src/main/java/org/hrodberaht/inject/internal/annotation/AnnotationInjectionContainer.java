@@ -22,10 +22,12 @@ import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
 import org.hrodberaht.inject.internal.ServiceRegister;
 import org.hrodberaht.inject.internal.annotation.scope.FactoryScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.SingletonScopeHandler;
+import org.hrodberaht.inject.internal.annotation.scope.VariableFactoryScopeHandler;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.register.RegistrationModule;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
+import org.hrodberaht.inject.register.VariableInjectionFactory;
 import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 
 import java.lang.annotation.Annotation;
@@ -72,6 +74,19 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
         return (T) instantiateService(forcedScope, serviceRegister, key);
     }
 
+    @SuppressWarnings(value = "unchecked")
+    public <T, K> T getService(Class<T> service, K variable) {
+        InjectionKey key = getNamedKey(VariableInjectionFactory.SERVICE_NAME, service);
+        ServiceRegister serviceRegister = findServiceRegister(service, key);
+        return (T) instantiateService(variable, serviceRegister, key);
+    }
+
+    @SuppressWarnings(value = "unchecked")
+    private Object instantiateService(Object variable, ServiceRegister serviceRegister, InjectionKey key) {
+        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container, this);
+        return annotationInjection.createInstance(serviceRegister.getService(), key, variable);     
+    }
+
     /**
      * Will find the service register but also perform registration where applicable
      * @param service
@@ -92,8 +107,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     @SuppressWarnings(value = "unchecked")
     public Object createInstance(ServiceRegister serviceRegister, InjectionKey key) {
         AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container, this);
-        Object service = annotationInjection.createInstance(serviceRegister.getService(), key);        
-        return service;
+        return annotationInjection.createInstance(serviceRegister.getService(), key);
     }
 
     public synchronized void register(
@@ -229,6 +243,9 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
         }else if(instance.getTheFactory() != null){
             FactoryScopeHandler scopeHandler = new FactoryScopeHandler(instance.getTheFactory());
             injectionMetaData.setScopeHandler(scopeHandler);
+        }else if(instance.getTheVariableFactory() != null){
+            VariableFactoryScopeHandler scopeHandler = new VariableFactoryScopeHandler(instance.getTheVariableFactory());
+            injectionMetaData.setScopeHandler(scopeHandler);
         }
         else if (instance.getScope() != null) {
             // replaces the injection data scope handler
@@ -244,7 +261,6 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
 
 
     private SimpleInjection.Scope getAnnotationScope(InjectionMetaData injectionMetaData) {
-
         return injectionMetaData.getScope();
     }
 

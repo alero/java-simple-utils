@@ -20,4 +20,5 @@ public interface RegistrationExtended extends Registration{
     RegistrationExtended scopeAs(ScopeContainer.Scope scope);
 
 
+
 }

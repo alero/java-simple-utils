@@ -88,6 +88,9 @@ public class SimpleInjection implements Container, ScopeContainer, InjectContain
         }
         return injectionContainer.getService(service, null, qualifier);
     }
+    public <T,K> T get(Class<T> service, K variable) {
+        return injectionContainer.getService(service, variable);
+    }
 
     /**
      * Will retrieve a service and force the scope to {@link SimpleInjection.Scope#NEW}
@@ -156,5 +159,6 @@ public class SimpleInjection implements Container, ScopeContainer, InjectContain
         }
 
     }
+
 
 }

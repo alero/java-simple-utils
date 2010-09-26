@@ -12,7 +12,7 @@
  *   ~ See the License for the specific language governing permissions and limitations under the License.
  */
 
-package test.org.hrodberaht.inject;
+package test.org.hrodberaht.inject.annotation;
 
 import org.atinject.tck.Tck;
 import org.atinject.tck.auto.Car;
@@ -23,6 +23,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import test.org.hrodberaht.inject.PerformanceTests;
+import test.org.hrodberaht.inject.TckUtil;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
 
 import java.text.MessageFormat;
@@ -45,15 +47,15 @@ public class AnnotationContinerPerformanceUnitT {
     @Before
     public void init() {
         registerVolvo = AnnotationContainerUtil.prepareLargeVolvoRegister();
-        Statistics.setEnabled(true);
+        // Statistics.setEnabled(true);
     }
 
     @After
     public void destroy(){
-        Statistics.setEnabled(false);
+        // Statistics.setEnabled(false);
     }
 
-    @Test(timeout = 10000)
+    @Test(timeout = 100000)
     public void testPerformance() {
         Container container = TckUtil.prepareRegister().getContainer();
         for (int i = 0; i < 10000; i++) {
@@ -75,7 +77,7 @@ public class AnnotationContinerPerformanceUnitT {
         final Container container = registerVolvo.getContainer();
 
         Collection<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 10; i++) {
             threads.add(
                     new Thread() {
                         @Override
@@ -117,7 +119,7 @@ public class AnnotationContinerPerformanceUnitT {
     }
 
     private void runThreadContainerGet(Container container) {
-        for (int i = 0; i < 25000; i++) {
+        for (int i = 0; i < 2500; i++) {
             Volvo car = container.get(Volvo.class);
             AnnotationContainerUtil.assertVolvo(car);
         }

@@ -12,29 +12,33 @@
  *   ~ See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.hrodberaht.inject.internal;
+package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
-
-import java.lang.annotation.Annotation;
-import java.util.Collection;
+import org.hrodberaht.inject.annotation.VariableProvider;
+import org.hrodberaht.inject.internal.InjectionKey;
 
 /**
  * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
- *         2010-maj-29 12:48:43
+ *         2010-maj-29 00:46:09
  * @version 1.0
  * @since 1.0
  */
-public interface InjectionContainer {
+public class VariableInjectionProvider implements VariableProvider {
 
-    <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier);
-    <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier);
-    <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope);
+    private InjectionKey injectionKey;
+    private SimpleInjection injection;
 
-
-    Collection<ServiceRegister> getServiceRegister();
-
-    <T, K> T getService(Class<T> service, K variable);
+    public VariableInjectionProvider(SimpleInjection injection, InjectionKey injectionKey) {
+        this.injectionKey = injectionKey;
+        this.injection = injection;
+    }
+    
+    @SuppressWarnings(value = "unchecked")
+    public Object get(Object variable) {
+        
+        return injection.get(injectionKey.getServiceDefinition(), variable);
+    }
 }

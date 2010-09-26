@@ -18,6 +18,7 @@ import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.stats.Statistics;
+import org.hrodberaht.inject.register.VariableInjectionFactory;
 import org.hrodberaht.inject.spi.InjectionPointFinder;
 
 import java.lang.annotation.Annotation;
@@ -53,13 +54,20 @@ public class AnnotationInjection {
     /**
      * Creates an instance for a service, uses {@link #findInjectionData}
      *
-     * @param service
+     * @param serviceDefinition
      * @param key
      * @return a created object according to its bound scope {@link javax.inject.Scope}
      */
-    public Object createInstance(Class<Object> service, InjectionKey key) {
+    public Object createInstance(Class<Object> serviceDefinition, InjectionKey key) {
         InjectionMetaData injectionMetaData =
-                findInjectionData(service, key);
+                findInjectionData(serviceDefinition, key);
+        return callConstructor(injectionMetaData);
+    }
+
+    public Object createInstance(Class serviceDefinition, InjectionKey key, Object variable) {
+        InjectionMetaData variableInjectionMetaData = findInjectionData(serviceDefinition, key);
+        Class serviceClass = variableInjectionMetaData.createVariableInstance(variable);        
+        InjectionMetaData injectionMetaData = findInjectionData(serviceClass, new InjectionKey(serviceClass, false));
         return callConstructor(injectionMetaData);
     }
 
@@ -148,7 +156,9 @@ public class AnnotationInjection {
      */
     private Object innerCreateInstance(InjectionMetaData dependency) {
         if (dependency.getKey().isProvider()) {
-            // InjectionMetaData injectionMetaData = findInjectionData(dependency);
+            if(VariableInjectionFactory.SERVICE_NAME.equals(dependency.getKey().getName())){
+                return new VariableInjectionProvider(container, dependency.getKey());                                
+            }
             return new InjectionProvider(container, dependency.getKey());
         }
         return createInstance(dependency);
@@ -256,7 +266,4 @@ public class AnnotationInjection {
     }
 
 
-    public void postCreateAnnotations(Object service) {
-        //To change body of created methods use File | Settings | File Templates.
-    }
 }

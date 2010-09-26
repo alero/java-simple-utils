@@ -14,9 +14,10 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.internal.stats.Statistics;
+import org.hrodberaht.inject.register.VariableInjectionFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -125,11 +126,14 @@ public class InjectionPoint {
             final Class beanClassFromProvider = InjectionUtils.getClassFromProvider(field, genericType);
             InjectionKey key = AnnotationQualifierUtil.getQualifierKey(beanClassFromProvider, field.getAnnotations(), true);
             if(key != null){
-
                 Class serviceImpl = annotationInjection.findServiceClassAndRegister(InjectionKey.purify(key));
                 return annotationInjection.findInjectionData(serviceImpl, key);
             }else{
-                key = new InjectionKey(beanClassFromProvider, true);
+                if(InjectionUtils.isVariableProvider(fieldBeanClass)){
+                    key = new InjectionKey(VariableInjectionFactory.SERVICE_NAME, beanClassFromProvider, true);
+                }else {
+                    key = new InjectionKey(beanClassFromProvider, true);
+                }
                 return annotationInjection.findInjectionData(beanClassFromProvider, key);
             }
         } else {

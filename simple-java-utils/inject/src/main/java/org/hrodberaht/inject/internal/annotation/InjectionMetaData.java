@@ -17,6 +17,8 @@ package org.hrodberaht.inject.internal.annotation;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
+import org.hrodberaht.inject.internal.annotation.scope.VariableScopeHandler;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -33,7 +35,7 @@ import java.util.List;
 public class InjectionMetaData {
 
     private InjectionKey key;
-    private Class serviceClass;    
+    private Class serviceClass;
     private boolean preDefined = false;
 
     private ScopeHandler scopeHandler;
@@ -52,7 +54,6 @@ public class InjectionMetaData {
     public InjectionKey getKey() {
         return key;
     }
-
 
 
     public void setScopeHandler(ScopeHandler scopeHandler) {
@@ -95,22 +96,33 @@ public class InjectionMetaData {
         return serviceClass;
     }
 
+    public Class createVariableInstance(Object variable) {
+        Class scopedInstanceClass = ((VariableScopeHandler)scopeHandler).getInstanceClass(variable);
+        if (scopedInstanceClass != null) {
+            return scopedInstanceClass;
+        }
+        throw new InjectRuntimeException("createVariableInstance failed for class {0} variable {1}"
+                , serviceClass, variable);
+
+    }
 
     public Object createInstance(Object... parameters) {
+        Object scopedInstance = scopeHandler.getInstance();
+        if (scopedInstance != null) {
+            return scopedInstance;
+        }
+        
         final boolean originalAccessible = constructor != null && constructor.isAccessible();
-        if(!originalAccessible && constructor != null){
+        if (!originalAccessible && constructor != null) {
             constructor.setAccessible(true);
         }
         try {
-            Object scopedInstance = scopeHandler.getInstance();
-            if (scopedInstance != null) {
-                return scopedInstance;
-            }
+
 
             Object newInstance = InstanceCreatorFactory.getInstance().createInstance(constructor, parameters);
             scopeHandler.addScope(newInstance);
-            if(postConstruct != null){
-                ReflectionUtils.invoke(postConstruct, newInstance);                
+            if (postConstruct != null) {
+                ReflectionUtils.invoke(postConstruct, newInstance);
             }
             return newInstance;
         } finally {
@@ -131,8 +143,8 @@ public class InjectionMetaData {
             return true;
         }
 
-        if(bean.key.isProvider() != this.key.isProvider()){
-            return false;            
+        if (bean.key.isProvider() != this.key.isProvider()) {
+            return false;
         }
 
         if (serviceClass.equals(bean.serviceClass)
@@ -152,9 +164,9 @@ public class InjectionMetaData {
     }
 
     private boolean hasQualifier(InjectionKey key) {
-        if(key == null){
+        if (key == null) {
             return false;
-        }else if(key.getQualifier() == null){
+        } else if (key.getQualifier() == null) {
             return false;
         }
         return true;
@@ -166,6 +178,6 @@ public class InjectionMetaData {
     }
 
     public void setPostConstructMethod(Method postConstruct) {
-        this.postConstruct = postConstruct;                                    
+        this.postConstruct = postConstruct;
     }
 }

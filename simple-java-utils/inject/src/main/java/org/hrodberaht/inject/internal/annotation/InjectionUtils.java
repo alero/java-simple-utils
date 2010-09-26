@@ -15,13 +15,14 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.ScopeContainer;
-import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
+import org.hrodberaht.inject.annotation.VariableProvider;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.annotation.scope.DefaultScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.InheritableThreadScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.SingletonScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.ThreadScopeHandler;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.scope.InheritableThreadScope;
 import org.hrodberaht.inject.scope.ThreadScope;
 
@@ -141,7 +142,11 @@ public class InjectionUtils {
 
 
     public static boolean isProvider(Class service) {
-        return Provider.class.isAssignableFrom(service);
+        return Provider.class.isAssignableFrom(service) || VariableProvider.class.isAssignableFrom(service);
+    }
+
+    public static boolean isVariableProvider(Class service) {
+        return VariableProvider.class.isAssignableFrom(service);
     }
 
     public static boolean isSingleton(Class beanClass) {

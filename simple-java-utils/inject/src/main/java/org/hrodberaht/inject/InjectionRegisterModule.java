@@ -1,8 +1,5 @@
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.internal.ServiceRegister;
-import org.hrodberaht.inject.internal.ServiceRegisterNamed;
-import org.hrodberaht.inject.internal.ServiceRegisterRegular;
 import org.hrodberaht.inject.register.InjectionRegister;
 import org.hrodberaht.inject.register.RegistrationModule;
 
