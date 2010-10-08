@@ -126,7 +126,7 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
         return this;
     }
 
-    protected InjectionRegister overrideRegister(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
+    public InjectionRegister overrideRegister(Class serviceDefinition, Class service, SimpleInjection.Scope scope) {
         container.register(serviceDefinition, service, scope, SimpleInjection.RegisterType.OVERRIDE_NORMAL);
         return this;
     }
