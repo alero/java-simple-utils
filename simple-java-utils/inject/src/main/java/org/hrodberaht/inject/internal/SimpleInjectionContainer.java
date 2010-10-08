@@ -146,6 +146,8 @@ public class SimpleInjectionContainer extends InjectionContainerBase
             throw new InjectRuntimeException("Could not create an instance of {0}", e, serviceRegister.getService());
         }
     }
-
-
+    
+    public Object clone(SimpleInjection injection) throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

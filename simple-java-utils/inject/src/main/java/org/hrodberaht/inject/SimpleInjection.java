@@ -36,7 +36,7 @@ import java.util.Collection;
 public class SimpleInjection implements Container, ScopeContainer, InjectContainer {
 
     
-    private InjectionContainer injectionContainer = new SimpleInjectionContainer();
+    private InjectionContainer injectionContainer = new AnnotationInjectionContainer(this);
 
     public Collection<ServiceRegister> getServiceRegister() {
         return injectionContainer.getServiceRegister();
@@ -160,5 +160,10 @@ public class SimpleInjection implements Container, ScopeContainer, InjectContain
 
     }
 
-
+    @Override
+    public SimpleInjection clone() throws CloneNotSupportedException {
+        SimpleInjection simpleInjection = new SimpleInjection();
+        simpleInjection.injectionContainer = (InjectionContainer) this.injectionContainer.clone(simpleInjection);
+        return simpleInjection;
+    }
 }

@@ -32,9 +32,12 @@ public interface InjectionContainer {
     <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier);
     <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, Class<? extends Annotation> qualifier);
     <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope);
-
+    <T, K> T getService(Class<T> service, K variable);
 
     Collection<ServiceRegister> getServiceRegister();
 
-    <T, K> T getService(Class<T> service, K variable);
+    
+    
+     Object clone(SimpleInjection simpleInjection) throws CloneNotSupportedException;
+    
 }

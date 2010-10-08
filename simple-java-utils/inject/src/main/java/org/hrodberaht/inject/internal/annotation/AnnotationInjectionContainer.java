@@ -263,6 +263,11 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     private SimpleInjection.Scope getAnnotationScope(InjectionMetaData injectionMetaData) {
         return injectionMetaData.getScope();
     }
-
-
+    
+    public Object clone(SimpleInjection simpleInjection) throws CloneNotSupportedException {
+        AnnotationInjectionContainer annotationInjectionContainer = new AnnotationInjectionContainer(simpleInjection);
+        annotationInjectionContainer.injectionMetaDataCache.putAll(this.injectionMetaDataCache);
+        annotationInjectionContainer.registeredNamedServices.putAll(this.registeredNamedServices);
+        return annotationInjectionContainer;
+    }
 }
