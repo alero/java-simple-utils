@@ -125,12 +125,12 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     public synchronized void register(RegistrationModule... modules) {
         for (RegistrationModule module : modules) {
             RegistrationModuleAnnotation aModule = (RegistrationModuleAnnotation) module;
-            aModule.preRegistration();
+            aModule.preRegistration(container);
             for (RegistrationInstanceSimple instance : aModule.getRegistrations()) {
                 InjectionKey key = instance.getInjectionKey();
                 createAnStoreRegistration(instance, key, aModule);
             }
-            aModule.postRegistration();
+            aModule.postRegistration(container);
         }
     }
 
@@ -205,7 +205,6 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
                                                       InjectionKey key,
                                                       RegistrationModuleAnnotation aModule) {
         InjectionMetaData injectionMetaData = createInjectionMetaData(instance, key);
-
         ServiceRegister register = createServiceRegister(instance, injectionMetaData);
         register.setModule(aModule);
         putServiceIntoRegister(key, register);

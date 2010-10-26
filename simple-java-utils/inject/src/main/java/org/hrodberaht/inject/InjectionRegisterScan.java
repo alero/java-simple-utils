@@ -75,6 +75,19 @@ public class InjectionRegisterScan extends InjectionRegisterBase<InjectionRegist
         this.detailedScanLogging = detailedScanLogging;
     }
 
+    @Override
+    public InjectionRegisterScan clone() {
+        InjectionRegisterScan registerScan = new InjectionRegisterScan();
+        try {
+            registerScan.customClassLoaders.addAll(this.customClassLoaders);
+            registerScan.detailedScanLogging = this.detailedScanLogging;
+            registerScan.container = this.container.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        return registerScan;
+    }
+
     private void createRegistration(Class aClazz) {
         if (
                 !aClazz.isInterface()

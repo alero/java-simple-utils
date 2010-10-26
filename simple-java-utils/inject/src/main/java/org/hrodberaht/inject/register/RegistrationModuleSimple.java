@@ -1,5 +1,6 @@
 package org.hrodberaht.inject.register;
 
+import org.hrodberaht.inject.InjectContainer;
 import org.hrodberaht.inject.register.internal.RegistrationExtended;
 import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 
@@ -35,11 +36,11 @@ public abstract class RegistrationModuleSimple implements RegistrationModule{
 
     public abstract void registrations();
 
-    public void postRegistration() {
+    public void postRegistration(InjectContainer injectContainer) {
         // Not a forced method
     }
 
-    public void preRegistration() {
+    public void preRegistration(InjectContainer injectContainer) {
         // Not a forced method
     }
 }

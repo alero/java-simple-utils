@@ -68,4 +68,15 @@ public class InjectionRegisterJava extends InjectionRegisterBase<InjectionRegist
         return this;
     }
 
+    @Override
+    public InjectionRegisterJava clone() {
+        InjectionRegisterJava registerJava = new InjectionRegisterJava();
+        try {
+            registerJava.container = this.container.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        return registerJava;
+    }
+
 }

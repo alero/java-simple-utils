@@ -16,7 +16,6 @@ package test.org.hrodberaht.inject.annotation;
 
 import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.InjectionRegisterScan;
-import org.hrodberaht.inject.register.InjectionRegister;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
 import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
 import test.org.hrodberaht.inject.testservices.annotated.TestDriverManager;
@@ -42,7 +41,7 @@ public class AnnotationContainerUtil {
         return registerJava;
     }
 
-    public static InjectionRegister prepareLargeVolvoRegister(){
+    public static InjectionRegisterModule prepareLargeVolvoRegister(){
         InjectionRegisterModule registerJava = new InjectionRegisterModule();        
         registerJava.register(new RegisterModuleAnnotated());
         InjectionRegisterScan registerScan = new InjectionRegisterScan(registerJava);

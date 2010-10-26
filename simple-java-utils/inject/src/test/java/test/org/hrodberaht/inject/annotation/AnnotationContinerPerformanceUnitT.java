@@ -52,7 +52,7 @@ public class AnnotationContinerPerformanceUnitT {
 
     @After
     public void destroy(){
-        // Statistics.setEnabled(false);
+        Statistics.setEnabled(false);
     }
 
     @Test(timeout = 100000)
@@ -77,7 +77,7 @@ public class AnnotationContinerPerformanceUnitT {
         final Container container = registerVolvo.getContainer();
 
         Collection<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 500; i++) {
             threads.add(
                     new Thread() {
                         @Override
@@ -119,7 +119,7 @@ public class AnnotationContinerPerformanceUnitT {
     }
 
     private void runThreadContainerGet(Container container) {
-        for (int i = 0; i < 2500; i++) {
+        for (int i = 0; i < 25000; i++) {
             Volvo car = container.get(Volvo.class);
             AnnotationContainerUtil.assertVolvo(car);
         }

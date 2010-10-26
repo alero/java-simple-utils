@@ -36,8 +36,6 @@ public interface InjectionContainer {
 
     Collection<ServiceRegister> getServiceRegister();
 
-    
-    
-     Object clone(SimpleInjection simpleInjection) throws CloneNotSupportedException;
-    
+    Object clone(SimpleInjection simpleInjection) throws CloneNotSupportedException;
+
 }

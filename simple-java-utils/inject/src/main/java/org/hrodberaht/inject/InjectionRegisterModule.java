@@ -45,5 +45,15 @@ public class InjectionRegisterModule extends InjectionRegisterBase<InjectionRegi
 
     }
 
-    
+    @Override
+    public InjectionRegisterModule clone() {
+        InjectionRegisterModule registerModule = new InjectionRegisterModule();
+        registerModule.registeredModules.addAll(this.registeredModules);
+        try {
+            registerModule.container = this.container.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        return registerModule;
+    }
 }

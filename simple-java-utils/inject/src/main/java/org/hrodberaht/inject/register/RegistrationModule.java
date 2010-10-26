@@ -1,5 +1,7 @@
 package org.hrodberaht.inject.register;
 
+import org.hrodberaht.inject.InjectContainer;
+
 import java.util.Collection;
 
 /**
@@ -12,6 +14,6 @@ import java.util.Collection;
  */
 public interface RegistrationModule<T> {
     Collection<T> getRegistrations();
-    void postRegistration();
-    void preRegistration();
+    void postRegistration(InjectContainer injectContainer);
+    void preRegistration(InjectContainer injectContainer);
 }
