@@ -1,6 +1,8 @@
 package test.org.hrodberaht.inject.annotation;
 
+import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.InjectionRegisterModule;
+import org.hrodberaht.inject.InjectionRegisterScan;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,6 +11,8 @@ import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated_extra.Saab;
 
 import java.util.Date;
+
+import static org.junit.Assert.assertFalse;
 
 /**
  * ¤Projectname¤
@@ -29,6 +33,29 @@ public class CloneContainerRegistrationUnitT implements PerformanceTests {
             InjectionRegisterModule registerJavaClone = registerJava.clone();
         }
     }
+
+    @Test
+    public void testCloneJava() throws CloneNotSupportedException {
+        InjectionRegisterJava injectionRegisterJava = new InjectionRegisterJava();
+        InjectionRegisterJava testCloneJava = injectionRegisterJava.clone();
+        assertFalse(testCloneJava == injectionRegisterJava);
+    }
+
+     @Test
+    public void testCloneJavaScan() throws CloneNotSupportedException {
+        InjectionRegisterScan injectionRegisterJava = new InjectionRegisterScan();
+        InjectionRegisterScan testCloneJava = injectionRegisterJava.clone();
+        assertFalse(testCloneJava == injectionRegisterJava);
+    }
+
+    @Test
+    public void testCloneJavaModule() throws CloneNotSupportedException {
+        InjectionRegisterModule injectionRegisterJava = new InjectionRegisterModule();
+        InjectionRegisterModule testCloneJava = injectionRegisterJava.clone();
+        assertFalse(testCloneJava == injectionRegisterJava);
+    }
+
+
 
     @Test(timeout = 500)
     public void testClonePerformance() throws CloneNotSupportedException {
