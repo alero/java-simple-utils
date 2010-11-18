@@ -18,7 +18,6 @@ package org.hrodberaht.i18n.formatter;
 
 import org.hrodberaht.directus.exception.MessageRuntimeException;
 
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 /**
@@ -45,7 +44,7 @@ public class DecimalFormatter extends NumberFormatter {
     public String convertToString(Object obj) {
         if (obj instanceof Double) {
             NumberFormat decimalFormat = NumberFormat.getInstance(locale);
-            decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+            // decimalFormat. (RoundingMode.HALF_UP);
             decimalFormat = fixCharacterJVMErrorsForDecimalFormat(decimalFormat);
             return decimalFormat.format(obj);
         }

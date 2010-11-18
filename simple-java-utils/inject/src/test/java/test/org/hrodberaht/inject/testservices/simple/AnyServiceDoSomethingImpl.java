@@ -28,12 +28,11 @@ public class AnyServiceDoSomethingImpl implements AnyService{
 
     private Collection<String> collection = new ArrayList<String>();  
 
-    @Override
+
     public void doStuff() {
         collection.add("Added something");
     }
 
-    @Override
     public Collection getStuff() {
         return collection;
     }
