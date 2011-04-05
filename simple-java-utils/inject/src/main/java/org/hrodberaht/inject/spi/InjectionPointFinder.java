@@ -4,7 +4,7 @@ import org.hrodberaht.inject.internal.annotation.DefaultInjectionPointFinder;
 import org.hrodberaht.inject.internal.annotation.InjectionFinder;
 
 /**
- * ¤Projectname¤
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-sep-23 20:38:01

@@ -4,7 +4,7 @@ import org.hrodberaht.inject.internal.annotation.InstanceCreatorFactory;
 import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 
 /**
- * Simple Java Utils
+ * Simple Java Utils - Container
  *
  * @author Robert Alexandersson
  *         2010-aug-10 18:10:19

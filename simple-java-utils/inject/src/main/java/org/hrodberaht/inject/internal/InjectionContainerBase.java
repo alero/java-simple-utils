@@ -91,7 +91,7 @@ public abstract class InjectionContainerBase {
                             throw new InjectRuntimeException("Found two Implementations \"{0}\", \"{1}\" " +
                                     "matching the Interface \"{2}\""+
                                     ". This normally occurs when scanning implementations and can be corrected " +
-                                    " by manually registering one of them to the Interface",
+                                    " by manually registering one of them to the active Interface",
                                     foundServiceRegister.getService(),
                                     serviceRegister.getService()
                                     , service);

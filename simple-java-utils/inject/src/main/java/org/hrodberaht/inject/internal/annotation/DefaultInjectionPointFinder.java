@@ -1,6 +1,7 @@
 package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.annotation.PostConstruct;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ¤Projectname¤
+ * ï¿½Projectnameï¿½
  *
  * @author Robert Alexandersson
  *         2010-sep-23 20:34:49
@@ -54,12 +55,20 @@ public class DefaultInjectionPointFinder implements InjectionFinder{
 
     public Method findPostConstruct(Class serviceClass) {
         List<Method> allMethods = ReflectionUtils.findMethods(serviceClass);
+        Method foundMethod = null;
         for (Method method : allMethods) {
             if (methodHasPostConstruct(method)) {
-                return method;
+                if(foundMethod != null){
+                    throw new InjectRuntimeException("Several PostConstruct annotations found, make sure there is only one");
+                }
+                foundMethod = method;
             }
         }
-        return null;
+        return foundMethod;
+    }
+
+    public void extendedInjection(Object service) {
+        // Default does not perform extended injection
     }
 
     /**

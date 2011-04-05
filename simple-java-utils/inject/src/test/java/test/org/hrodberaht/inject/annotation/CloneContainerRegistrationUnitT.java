@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import test.org.hrodberaht.inject.PerformanceTests;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
+import test.org.hrodberaht.inject.testservices.annotated.CarCreatorSingleton;
 import test.org.hrodberaht.inject.testservices.annotated_extra.Saab;
 
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
 import static org.junit.Assert.assertFalse;
 
 /**
- * ¤Projectname¤
+ * ï¿½Projectnameï¿½
  *
  * @author Robert Alexandersson
  *         2010-okt-18 20:45:45
@@ -31,6 +32,7 @@ public class CloneContainerRegistrationUnitT implements PerformanceTests {
         InjectionRegisterModule registerJava = AnnotationContainerUtil.prepareLargeVolvoRegister();
         for(int i=0;i<500;i++){
             InjectionRegisterModule registerJavaClone = registerJava.clone();
+            registerJavaClone.activateContainerJavaXInject();
         }
     }
 
@@ -55,7 +57,19 @@ public class CloneContainerRegistrationUnitT implements PerformanceTests {
         assertFalse(testCloneJava == injectionRegisterJava);
     }
 
+    @Test
+    public void testCloneSingletonService() throws Exception {
+        InjectionRegisterScan registerJava = new InjectionRegisterScan();
+        registerJava.registerBasePackageScan("test.org.hrodberaht.inject.testservices.annotated");
 
+        CarCreatorSingleton carCreatorSingleton = registerJava.getInjectContainer().get(CarCreatorSingleton.class);
+
+        InjectionRegisterScan registerJavaClone = registerJava.clone();
+        CarCreatorSingleton carCreatorSingletonClone = registerJavaClone.getInjectContainer().get(CarCreatorSingleton.class);
+
+        assertFalse(carCreatorSingleton == carCreatorSingletonClone);
+
+    }
 
     @Test(timeout = 500)
     public void testClonePerformance() throws CloneNotSupportedException {

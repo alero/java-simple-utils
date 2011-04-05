@@ -131,6 +131,18 @@ public class TestDateUtil {
     }
 
     @Test
+    public void testDateRollMinutes(){
+        Date aDate = DateUtil.rollMinutes(testDateTime("2010-01-01 14:00:00"), 15);
+        assertEquals(testDateTime("2010-01-01 14:15:00"), aDate);
+    }
+
+    @Test
+    public void testDateRollSeconds(){
+        Date aDate = DateUtil.rollSeconds(testDateTime("2010-01-01 14:00:00"), 30);
+        assertEquals(testDateTime("2010-01-01 14:00:30"), aDate);
+    }
+
+    @Test
     public void testDateParseDateWithPattern(){
         Date aDate = DateUtil.parseDate("2010-01-01", "yyyy-MM-dd");
         assertEquals(testDate("2010-01-01"), aDate);

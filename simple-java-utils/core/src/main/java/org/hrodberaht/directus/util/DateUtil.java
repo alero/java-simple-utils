@@ -235,7 +235,7 @@ public final class DateUtil {
     }
 
     /**
-     * Formats the date according to set pattern, see normal dateformattingrules for pattern
+     * Formats the date according to set pattern, see normal date-formatting-rules for pattern
      *
      * @param date date for formatting
      * @param pattern intended pattern
@@ -249,8 +249,7 @@ public final class DateUtil {
     }
 
     /**
-     * Uses a Calendar.add(Calendar.DAY_OF_YEAR, hours), but is usable from a Date as input.
-     * The date returned is a new instance
+     * Uses a Calendar.add(Calendar.DAY_OF_YEAR, hours), the date returned is a new instance
      *
      * @param date date to roll
      * @param days amount of days to roll
@@ -266,8 +265,7 @@ public final class DateUtil {
     }
 
     /**
-     * Uses a Calendar.add(Calendar.MONTH, hours), but is usable from a Date as input.
-     * The date returned is a new instance
+     * Uses Calendar.add(Calendar.MONTH, hours), the date returned is a new instance
      *
      * @param date date to roll
      * @param months amount of months to roll
@@ -283,8 +281,7 @@ public final class DateUtil {
     }
 
     /**
-     * Uses a Calendar.add(Calendar.HOUR_OF_DAY, hours), but is usable from a Date as input.
-     * The date returned is a new instance
+     * Uses Calendar.add(Calendar.HOUR_OF_DAY, hours), the date returned is a new instance
      *
      * @param date date to roll
      * @param hours amount of hours to roll
@@ -296,6 +293,38 @@ public final class DateUtil {
         Calendar calendar = Calendar.getInstance(locale);
         calendar.setTime(date);
         calendar.add(Calendar.HOUR_OF_DAY, hours);
+        return calendar.getTime();
+    }
+
+    /**
+     * Uses Calendar.add(Calendar.MINUTE, hours), the date returned is a new instance
+     *
+     * @param date date to roll
+     * @param minutes amount of minutes to roll
+     * @return the rolled date
+     *
+     * @see Calendar#add(int, int)
+     */
+    public static Date rollMinutes(Date date, int minutes) {
+        Calendar calendar = Calendar.getInstance(locale);
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar.getTime();
+    }
+
+    /**
+     * Uses Calendar.add(Calendar.SECOND, seconds), the date returned is a new instance
+     *
+     * @param date date to roll
+     * @param seconds amount of seconds to roll
+     * @return the rolled date
+     *
+     * @see Calendar#add(int, int)
+     */
+    public static Date rollSeconds(Date date, int seconds) {
+        Calendar calendar = Calendar.getInstance(locale);
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND, seconds);
         return calendar.getTime();
     }
 
@@ -331,7 +360,7 @@ public final class DateUtil {
      * If all parts of the software uses this instead of "new Date" it will be possible to change time for specific
      *
      * @return the now date (replaces new Date), when used the TestUtilDateUtil class for date manipulation can be used.
-     * @see org.hrodberaht.directus.tdd.TestUtilDateUtil#setNowDate
+     * @see org.hrodberaht.directus.tdd.TestUtilDateUtil#setNowDate(Date)
      */
     public static Date getNow() {
         if (systemOverriddenNow == null) {
@@ -441,6 +470,7 @@ public final class DateUtil {
         LONG_DATE = dateTimeFormat.toLocalizedPattern();
         LONG_DATE_LENGTH = LONG_DATE.length();
     }
+
 
 
 }

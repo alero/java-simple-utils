@@ -17,6 +17,7 @@ package test.org.hrodberaht.inject.testservices.annotated;
 import org.hrodberaht.inject.annotation.PostConstruct;
 
 import javax.inject.Inject;
+import java.util.Date;
 
 /**
  * Simple Java Utils
@@ -51,6 +52,9 @@ public class Volvo implements Car{
     @Injected Tire specialInjectField;
     Tire specialInjectMethod;
 
+    @SpecialResource
+    String someInformation;
+
     @Inject
     public Volvo(@Spare Tire spareTire) {
         this.spareTire = spareTire;
@@ -66,7 +70,12 @@ public class Volvo implements Car{
 
     @PostConstruct
     public void init(){
-        initText = "Initialized";   
+        if(someInformation != null){
+            initText = "Initialized "+someInformation;
+        } else {
+            initText = "Initialized";
+        }
+
     }
 
     public String brand() {

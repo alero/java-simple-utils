@@ -74,4 +74,9 @@ public class ServiceRegister {
     public void setModule(RegistrationModule module) {
         this.module = module;
     }
+
+    @Override
+    public ServiceRegister clone() {
+        return new ServiceRegister(this.service, null, this.scope, this.registerType);
+    }
 }

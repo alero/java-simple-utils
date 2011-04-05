@@ -23,6 +23,7 @@ import org.hrodberaht.inject.spi.InjectionPointFinder;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class AnnotationInjection {
     }
 
     /**
-     * Creates an instance for a service, uses {@link #findInjectionData}
+     * Creates an instance for a service, uses {@link #findInjectionData(Class, InjectionKey)}
      *
      * @param serviceDefinition
      * @param key
@@ -92,9 +93,9 @@ public class AnnotationInjection {
     }
 
     /**
-     * Checks the registry for the service class using a key, not nullsafe.
+     * Checks the registry for the service class using a key, not null-safe.
      *
-     * @param key the key to find a serviceclass for
+     * @param key the key to find a service class for
      * @return the found service class, null not accepted
      */
     public Class findServiceClass(InjectionKey key) {
@@ -102,9 +103,9 @@ public class AnnotationInjection {
     }
 
     /**
-     * Checks the registry for the service class using a key, not nullsafe.
+     * Checks the registry for the service class using a key, not null-safe.
      *
-     * @param key the key to find a serviceclass for
+     * @param key the key to find a service class for
      * @return the found service class, null not accepted
      */
     public Class findServiceClassAndRegister(InjectionKey key) {
@@ -143,11 +144,6 @@ public class AnnotationInjection {
             resolveService(injectionMetaData);
         }
         return injectionMetaData;
-    }
-
-    @SuppressWarnings(value = "unchecked")
-    private InjectionMetaData findInjectionData(InjectionMetaData metaData) {
-        return findInjectionData(metaData.getServiceClass(), metaData.getKey());
     }
 
     /**
@@ -191,18 +187,15 @@ public class AnnotationInjection {
 
 
     public void injectDependencies(Object service) {
-
         InjectionMetaData injectionMetaData =
                 findInjectionData(service.getClass(),
                         new InjectionKey(service.getClass(), false)
                 );
-
         injectFromInjectionPoints(service, injectionMetaData);
     }
 
     private void injectFromInjectionPoints(Object service, InjectionMetaData injectionMetaData) {
         List<InjectionPoint> injectionPoints = injectionMetaData.getInjectionPoints();
-
         for (InjectionPoint injectionPoint : injectionPoints) {
             List<InjectionMetaData> dependencies = injectionPoint.getDependencies();
             Object[] serviceDependencies = new Object[dependencies.size()];
@@ -213,7 +206,6 @@ public class AnnotationInjection {
                 i++;
             }
             injectionPoint.inject(service, serviceDependencies);
-
         }
     }
 
@@ -249,11 +241,9 @@ public class AnnotationInjection {
         List<InjectionMetaData> dependencies = injectionMetaData.getConstructorDependencies();
         if(dependencies == null){ // no constructor was able to be defined, hopefully a scoped one is provided.
             Object service = injectionMetaData.createInstance();
-            autoWireBean(service, injectionMetaData);
-            return service;
+            return autowireAndPostConstruct(injectionMetaData, service);
         }
         Object[] servicesForConstructor = new Object[dependencies.size()];
-
         for (int i = 0; i < dependencies.size(); i++) {
             InjectionMetaData dependency = dependencies.get(i);
             Object bean = innerCreateInstance(dependency);
@@ -261,7 +251,18 @@ public class AnnotationInjection {
             Statistics.addInjectConstructorCount();
         }
         Object service = injectionMetaData.createInstance(servicesForConstructor);
+        return autowireAndPostConstruct(injectionMetaData, service);
+    }
+
+    private Object autowireAndPostConstruct(InjectionMetaData injectionMetaData, Object service) {
         autoWireBean(service, injectionMetaData);
+        // Performance wise this is a bit slow, look into caching the extended injection info injectionMetaData
+        // TODO: for release 1.3 performance enhancements take a look at this
+        injectionFinder.extendedInjection(service);
+        Method postConstruct = injectionMetaData.getPostConstruct();
+        if (postConstruct != null) {
+            ReflectionUtils.invoke(postConstruct, service);
+        }
         return service;
     }
 

@@ -96,6 +96,18 @@ public class InjectionMetaData {
         return serviceClass;
     }
 
+    public SimpleInjection.Scope getScope() {
+        return scopeHandler.getScope();
+    }
+
+    public void setPostConstructMethod(Method postConstruct) {
+        this.postConstruct = postConstruct;
+    }
+
+    public Method getPostConstruct() {
+        return postConstruct;
+    }
+
     public Class createVariableInstance(Object variable) {
         Class scopedInstanceClass = ((VariableScopeHandler)scopeHandler).getInstanceClass(variable);
         if (scopedInstanceClass != null) {
@@ -121,9 +133,6 @@ public class InjectionMetaData {
 
             Object newInstance = InstanceCreatorFactory.getInstance().createInstance(constructor, parameters);
             scopeHandler.addScope(newInstance);
-            if (postConstruct != null) {
-                ReflectionUtils.invoke(postConstruct, newInstance);
-            }
             return newInstance;
         } finally {
             // Not thread safe
@@ -173,11 +182,15 @@ public class InjectionMetaData {
 
     }
 
-    public SimpleInjection.Scope getScope() {
-        return scopeHandler.getScope();
-    }
-
-    public void setPostConstructMethod(Method postConstruct) {
-        this.postConstruct = postConstruct;
+    @Override
+    public InjectionMetaData clone() throws CloneNotSupportedException {
+        InjectionMetaData injectionMetaData = new InjectionMetaData(this.serviceClass, this.key);
+        injectionMetaData.setConstructor(this.constructor);
+        injectionMetaData.setConstructorDependencies(this.constructorDependencies);
+        injectionMetaData.setInjectionPoints(this.injectionPoints);
+        injectionMetaData.setPreDefined(this.preDefined);
+        injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
+        injectionMetaData.setPostConstructMethod(this.postConstruct);
+        return injectionMetaData;
     }
 }

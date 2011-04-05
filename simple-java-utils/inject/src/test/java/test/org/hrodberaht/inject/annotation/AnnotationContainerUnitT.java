@@ -234,6 +234,11 @@ public class AnnotationContainerUnitT {
                 return method.isAnnotationPresent(PostConstructInit.class) ||
                         super.hasPostConstructAnnotation(method);
             }
+
+            @Override
+            public void extendedInjection(Object service) {
+                ExtendedResourceInjection.injectText(service, "Text");
+            }
         };
         InjectionPointFinder.setInjectionFinder(finder);
 
@@ -243,7 +248,7 @@ public class AnnotationContainerUnitT {
         Volvo aCar = (Volvo) container.get(Car.class);
         assertNotNull("getSpecialInjectField is null", aCar.getSpecialInjectField());
         assertNotNull("getSpecialInjectMethod is null", aCar.getSpecialInjectMethod());
-        assertEquals("Initialized", aCar.getInitText());
+        assertEquals("Initialized Text", aCar.getInitText());
         assertEquals("Initialized special", aCar.getDriverManager().getInitTextSpecial());
 
         InjectionPointFinder.resetInjectionFinderToDefault();

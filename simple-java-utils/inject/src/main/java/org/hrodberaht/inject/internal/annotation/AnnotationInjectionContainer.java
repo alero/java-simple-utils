@@ -14,6 +14,7 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
+import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionContainer;
 import org.hrodberaht.inject.internal.InjectionContainerBase;
@@ -265,8 +266,25 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     
     public Object clone(SimpleInjection simpleInjection) throws CloneNotSupportedException {
         AnnotationInjectionContainer annotationInjectionContainer = new AnnotationInjectionContainer(simpleInjection);
+
         annotationInjectionContainer.injectionMetaDataCache.putAll(this.injectionMetaDataCache);
-        annotationInjectionContainer.registeredNamedServices.putAll(this.registeredNamedServices);
+        for(InjectionKey injectionKey:this.injectionMetaDataCache.keySet()){
+            InjectionMetaData injectionMetaData = this.injectionMetaDataCache.get(injectionKey);
+            if(injectionMetaData.getScope() == ScopeContainer.Scope.SINGLETON){
+                annotationInjectionContainer.injectionMetaDataCache.put(injectionKey, injectionMetaData.clone());
+            }else {
+                annotationInjectionContainer.injectionMetaDataCache.put(injectionKey, injectionMetaData);
+            }
+        }
+
+        for(InjectionKey injectionKey:this.registeredNamedServices.keySet()){
+            ServiceRegister serviceRegister = this.registeredNamedServices.get(injectionKey);
+            if(serviceRegister.getScope() == ScopeContainer.Scope.SINGLETON){
+                annotationInjectionContainer.registeredNamedServices.put(injectionKey, serviceRegister.clone());
+            }else {
+                annotationInjectionContainer.registeredNamedServices.put(injectionKey, serviceRegister);
+            }
+        }
         return annotationInjectionContainer;
     }
 }
