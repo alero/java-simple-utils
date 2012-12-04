@@ -16,6 +16,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.annotation.scope.ObjectAndScope;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.VariableScopeHandler;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
@@ -118,10 +119,10 @@ public class InjectionMetaData {
 
     }
 
-    public Object createInstance(Object... parameters) {
+    public ObjectAndScope createInstance(Object... parameters) {
         Object scopedInstance = scopeHandler.getInstance();
         if (scopedInstance != null) {
-            return scopedInstance;
+            return new ObjectAndScope(scopedInstance, false);
         }
         
         final boolean originalAccessible = constructor != null && constructor.isAccessible();
@@ -133,7 +134,7 @@ public class InjectionMetaData {
 
             Object newInstance = InstanceCreatorFactory.getInstance().createInstance(constructor, parameters);
             scopeHandler.addScope(newInstance);
-            return newInstance;
+            return new ObjectAndScope(newInstance, true);
         } finally {
             // Not thread safe
             /*if (!originalAccessible) {

@@ -16,6 +16,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.annotation.scope.ObjectAndScope;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.stats.Statistics;
 import org.hrodberaht.inject.register.VariableInjectionFactory;
@@ -240,8 +241,11 @@ public class AnnotationInjection {
 
         List<InjectionMetaData> dependencies = injectionMetaData.getConstructorDependencies();
         if(dependencies == null){ // no constructor was able to be defined, hopefully a scoped one is provided.
-            Object service = injectionMetaData.createInstance();
-            return autowireAndPostConstruct(injectionMetaData, service);
+            ObjectAndScope service = injectionMetaData.createInstance();
+            if(service.isInNeedOfInitialization()){
+                return autowireAndPostConstruct(injectionMetaData, service.getInstance());
+            }
+            return service.getInstance();
         }
         Object[] servicesForConstructor = new Object[dependencies.size()];
         for (int i = 0; i < dependencies.size(); i++) {
@@ -250,8 +254,11 @@ public class AnnotationInjection {
             servicesForConstructor[i] = bean;
             Statistics.addInjectConstructorCount();
         }
-        Object service = injectionMetaData.createInstance(servicesForConstructor);
-        return autowireAndPostConstruct(injectionMetaData, service);
+        ObjectAndScope service = injectionMetaData.createInstance(servicesForConstructor);
+        if(service.isInNeedOfInitialization()){
+            return autowireAndPostConstruct(injectionMetaData, service.getInstance());
+        }
+        return service.getInstance();
     }
 
     private Object autowireAndPostConstruct(InjectionMetaData injectionMetaData, Object service) {

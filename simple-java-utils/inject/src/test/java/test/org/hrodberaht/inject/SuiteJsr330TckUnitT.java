@@ -33,8 +33,6 @@ public class SuiteJsr330TckUnitT extends TestCase {
 
     public static junit.framework.Test suite() {
 
-        
-
         Container container = TckUtil.prepareRegister().getContainer();
 
         final Car car = container.get(Car.class);
