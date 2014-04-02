@@ -19,4 +19,8 @@ public class VolvoFactory implements InjectionFactory<Volvo> {
     public Class getInstanceType(){
         return Volvo.class;
     }
+
+    public boolean newObjectOnInstance() {
+        return true;
+    }
 }

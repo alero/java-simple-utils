@@ -15,11 +15,11 @@
 package org.hrodberaht.inject;
 
 import org.hrodberaht.inject.internal.InjectionContainer;
+import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
 import org.hrodberaht.inject.internal.ServiceRegister;
 import org.hrodberaht.inject.internal.SimpleInjectionContainer;
 import org.hrodberaht.inject.internal.annotation.AnnotationInjectionContainer;
-import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.register.RegistrationModule;
 
 import java.lang.annotation.Annotation;

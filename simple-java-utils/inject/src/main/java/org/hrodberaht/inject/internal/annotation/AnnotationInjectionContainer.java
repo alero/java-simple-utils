@@ -48,9 +48,14 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
 
     private Map<InjectionKey, InjectionMetaData> injectionMetaDataCache = new ConcurrentHashMap<InjectionKey, InjectionMetaData>();
     private SimpleInjection container;
+    private InjectionFinder injectionFinder;
 
     public AnnotationInjectionContainer(SimpleInjection container) {
         this.container = container;
+    }
+
+    public InjectionFinder getInjectionFinder() {
+        return injectionFinder;
     }
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
@@ -126,6 +131,9 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     public synchronized void register(RegistrationModule... modules) {
         for (RegistrationModule module : modules) {
             RegistrationModuleAnnotation aModule = (RegistrationModuleAnnotation) module;
+            if( aModule.getInjectionFinder() != null){
+                this.injectionFinder = aModule.getInjectionFinder();
+            }
             aModule.preRegistration(container);
             for (RegistrationInstanceSimple instance : aModule.getRegistrations()) {
                 InjectionKey key = instance.getInjectionKey();
@@ -287,4 +295,6 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
         }
         return annotationInjectionContainer;
     }
+
+
 }

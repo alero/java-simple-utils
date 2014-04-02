@@ -20,6 +20,7 @@ import org.hrodberaht.inject.InjectContainer;
 import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.InjectionRegisterScan;
 import org.hrodberaht.inject.internal.annotation.DefaultInjectionPointFinder;
+import org.hrodberaht.inject.internal.annotation.InjectionFinder;
 import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 import org.hrodberaht.inject.register.InjectionRegister;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
@@ -38,6 +39,7 @@ import test.org.hrodberaht.inject.testservices.annotated.Tire;
 import test.org.hrodberaht.inject.testservices.annotated.VindShield;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
 import test.org.hrodberaht.inject.testservices.annotated.VolvoFactory;
+import test.org.hrodberaht.inject.testservices.regmodules.CustomInjectionPointFinder;
 import test.org.hrodberaht.inject.testservices.regmodules.OverridesRegisterModuleAnnotated;
 import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleAnnotated;
 
@@ -118,7 +120,7 @@ public class AnnotationContainerUnitT {
         // The override (of a default) registration
         registerJava.register(new OverridesRegisterModuleAnnotated());
 
-        registerJava.printRegistration();
+        registerJava.printRegistration(System.out);
 
         Container container = registerJava.getContainer();
         Tire spareTire = container.get(Tire.class, Spare.class);
@@ -143,7 +145,7 @@ public class AnnotationContainerUnitT {
         // The override (of a default) registration
         registerJava.register(new RegisterModuleAnnotated());
 
-        registerJava.printRegistration();
+        registerJava.printRegistration(System.out);
 
         Container container = registerJava.getContainer();
         Car car = container.get(Car.class);
@@ -216,33 +218,26 @@ public class AnnotationContainerUnitT {
     @Test
     public void testCustomAnnotationsSupport() {
 
-        DefaultInjectionPointFinder finder = new DefaultInjectionPointFinder() {
-            @Override
-            protected boolean hasInjectAnnotationOnMethod(Method method) {
-                return method.isAnnotationPresent(Injected.class) ||
-                        super.hasInjectAnnotationOnMethod(method);
-            }
-
-            @Override
-            protected boolean hasInjectAnnotationOnField(Field field) {
-                return field.isAnnotationPresent(Injected.class) ||
-                        super.hasInjectAnnotationOnField(field);
-            }
-
-            @Override
-            protected boolean hasPostConstructAnnotation(Method method) {
-                return method.isAnnotationPresent(PostConstructInit.class) ||
-                        super.hasPostConstructAnnotation(method);
-            }
-
-            @Override
-            public void extendedInjection(Object service) {
-                ExtendedResourceInjection.injectText(service, "Text");
-            }
-        };
+        InjectionFinder finder = new CustomInjectionPointFinder();
         InjectionPointFinder.setInjectionFinder(finder);
 
         InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegister();
+        Container container = registerJava.getContainer();
+
+        Volvo aCar = (Volvo) container.get(Car.class);
+        assertNotNull("getSpecialInjectField is null", aCar.getSpecialInjectField());
+        assertNotNull("getSpecialInjectMethod is null", aCar.getSpecialInjectMethod());
+        assertEquals("Initialized Text", aCar.getInitText());
+        assertEquals("Initialized special", aCar.getDriverManager().getInitTextSpecial());
+
+        InjectionPointFinder.resetInjectionFinderToDefault();
+    }
+
+    @Test
+    public void testCustomAnnotationsSupportUsingNonStaticSupport() {
+
+
+        InjectionRegister registerJava = AnnotationContainerUtil.prepareVolvoRegisterWithFinder();
         Container container = registerJava.getContainer();
 
         Volvo aCar = (Volvo) container.get(Car.class);
@@ -328,7 +323,6 @@ public class AnnotationContainerUnitT {
                     }
                 }
         );
-
 
         Container container = registerJava.getContainer();
         TestDriverManager driverManager = container.get(TestDriverManager.class);

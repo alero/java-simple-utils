@@ -15,6 +15,7 @@
 package org.hrodberaht.inject;
 
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
+import org.hrodberaht.inject.internal.util.InjectionLogger;
 import org.hrodberaht.inject.register.InjectionRegister;
 
 import java.io.File;
@@ -97,9 +98,9 @@ public class InjectionRegisterScan extends InjectionRegisterBase<InjectionRegist
             try{
                 container.register(aClazz, aClazz, null, SimpleInjection.RegisterType.NORMAL);
             }catch(InjectRuntimeException e){
-                System.out.println("Hrodberaht Injection: Silently failed to register class = "+aClazz);
+                InjectionLogger.info("Hrodberaht Injection: Silently failed to register class = " + aClazz);
                 if(detailedScanLogging){
-                    e.printStackTrace(System.err);       
+                    InjectionLogger.error(e);
                 }
             }
         }

@@ -1,6 +1,7 @@
 package org.hrodberaht.inject.register;
 
 import org.hrodberaht.inject.InjectContainer;
+import org.hrodberaht.inject.internal.annotation.InjectionFinder;
 import org.hrodberaht.inject.register.internal.RegistrationExtended;
 import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 
@@ -17,6 +18,8 @@ import java.util.Map;
  * @since 1.0
  */
 public abstract class RegistrationModuleSimple implements RegistrationModule{
+
+    private InjectionFinder injectionFinderImplementation;
     protected Map<RegistrationInstanceSimple, RegistrationInstanceSimple>
             registrations = new HashMap<RegistrationInstanceSimple, RegistrationInstanceSimple>();
 
@@ -24,10 +27,18 @@ public abstract class RegistrationModuleSimple implements RegistrationModule{
         registrations();
     }
 
+    protected void registerInjectionFinder(InjectionFinder injectionFinder) {
+        this.injectionFinderImplementation = injectionFinder;
+    }
+
     public RegistrationExtended register(Class anyThing) {
         RegistrationInstanceSimple instance = new RegistrationInstanceSimple(anyThing);
         registrations.put(instance, instance);
         return instance;
+    }
+
+    public InjectionFinder getInjectionFinder() {
+        return injectionFinderImplementation;
     }
 
     public Collection<RegistrationInstanceSimple> getRegistrations() {

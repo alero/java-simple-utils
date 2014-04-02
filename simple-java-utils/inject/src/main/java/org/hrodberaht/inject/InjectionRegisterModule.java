@@ -3,6 +3,7 @@ package org.hrodberaht.inject;
 import org.hrodberaht.inject.register.InjectionRegister;
 import org.hrodberaht.inject.register.RegistrationModule;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -33,15 +34,15 @@ public class InjectionRegisterModule extends InjectionRegisterBase<InjectionRegi
         return this;
     }
 
-    public void printRegistration() {
+    public void printRegistration(PrintStream writer) {
 
-        System.out.println("--------- InjectionRegisterModule Information Printer --------------");
-        System.out.println("The following modules has been appended in order");
+        writer.println("--------- InjectionRegisterModule Information Printer --------------");
+        writer.println("The following modules has been appended in order");
         for(RegistrationModule module:registeredModules){
-            System.out.println("Module: "+module.getClass().getName());       
+            writer.println("Module: "+module.getClass().getName());
         }
 
-        super.printRegistration();
+        super.printRegistration(writer);
 
     }
 

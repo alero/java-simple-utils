@@ -19,6 +19,7 @@ import org.hrodberaht.inject.internal.ServiceRegister;
 import org.hrodberaht.inject.internal.ServiceRegisterNamed;
 import org.hrodberaht.inject.register.InjectionRegister;
 
+import java.io.PrintStream;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
@@ -170,48 +171,48 @@ public abstract class InjectionRegisterBase<T extends InjectionRegister> impleme
         return this;
     }
 
-    public void printRegistration(){
-        System.out.println("\nThe current results in the container is as follows: ");
+    public void printRegistration(PrintStream writer){
+        writer.println("\nThe current results in the container is as follows: ");
 
 
         Collection<ServiceRegister> registers = container.getServiceRegister();
 
         for(ServiceRegister serviceRegister:registers){
 
-            printRegistration(serviceRegister);
+            printRegistration(serviceRegister, writer);
             if(serviceRegister.getOverriddenService() != null){
-                System.out.print("-- Overrides service ");
+                writer.print("-- Overrides service ");
                 if(serviceRegister.getOverriddenService().getModule() != null){
-                    System.out.println("from module:"
+                    writer.println("from module:"
                         +serviceRegister.getOverriddenService().getModule().getClass().getName());
                 }else {
-                    System.out.println("");
+                    writer.println("");
                 }
-                printRegistration(serviceRegister.getOverriddenService());
+                printRegistration(serviceRegister.getOverriddenService(), writer);
             }
-            System.out.println("\n");
+            writer.println("\n");
         }
 
-        System.out.println("--------- InjectionRegisterModule Information Printer is Done ----------  ");
+        writer.println("--------- InjectionRegisterModule Information Printer is Done ----------  ");
     }
 
-    private void printRegistration(ServiceRegister serviceRegister) {
+    private void printRegistration(ServiceRegister serviceRegister, PrintStream writer) {
         
         if(serviceRegister instanceof ServiceRegisterNamed){
             ServiceRegisterNamed named = (ServiceRegisterNamed)serviceRegister;
-            System.out.println("serviceDefinition:     "+named.getKey().getServiceDefinition());
-            System.out.println("   with qualifier:     "+named.getKey().getQualifier());
-            System.out.println("   is type safe:       "+(named.getKey().getAnnotation() == null ? "false" : "true"));
-            System.out.println("serviceImplementation: "+named.getService().getName());
-            System.out.println("scope:                 "+named.getScope().name());
-            System.out.println("registrationType:      "+named.getRegisterType().name());
+            writer.println("serviceDefinition:     "+named.getKey().getServiceDefinition());
+            writer.println("   with qualifier:     "+named.getKey().getQualifier());
+            writer.println("   is type safe:       "+(named.getKey().getAnnotation() == null ? "false" : "true"));
+            writer.println("serviceImplementation: "+named.getService().getName());
+            writer.println("scope:                 "+named.getScope().name());
+            writer.println("registrationType:      "+named.getRegisterType().name());
 
         }
 
         else {
-            System.out.println("serviceImplementation: "+serviceRegister.getService().getName());
-            System.out.println("scope:                 "+serviceRegister.getScope().name());
-            System.out.println("registrationType:      "+serviceRegister.getRegisterType().name());
+            writer.println("serviceImplementation: "+serviceRegister.getService().getName());
+            writer.println("scope:                 "+serviceRegister.getScope().name());
+            writer.println("registrationType:      "+serviceRegister.getRegisterType().name());
         }
     }
 

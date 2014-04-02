@@ -21,6 +21,8 @@ public interface InjectionRegisterScanInterface {
 
     InjectContainer getInjectContainer();
 
+    void setInjectContainer(InjectContainer injectContainer);
+
     InjectionRegisterScanInterface clone();
 
 

@@ -13,6 +13,6 @@ import org.hrodberaht.inject.SimpleInjection;
 public interface ScopeHandler {
     Object getInstance();    
     void addScope(Object instance);
-
     SimpleInjection.Scope getScope();
+    boolean isInstanceCreated();
 }

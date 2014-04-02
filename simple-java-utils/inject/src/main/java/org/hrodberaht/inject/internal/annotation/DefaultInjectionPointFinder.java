@@ -2,6 +2,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.annotation.PostConstruct;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
+import org.hrodberaht.inject.spi.ContainerConfig;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -19,6 +20,14 @@ import java.util.List;
  */
 public class DefaultInjectionPointFinder implements InjectionFinder{
 
+    private ContainerConfig containerConfig;
+
+    public DefaultInjectionPointFinder() {
+    }
+
+    public DefaultInjectionPointFinder(ContainerConfig containerConfig) {
+        this.containerConfig = containerConfig;
+    }
 
     /**
      * Finds all injection points for a class analysing fields and methods
@@ -69,6 +78,10 @@ public class DefaultInjectionPointFinder implements InjectionFinder{
 
     public void extendedInjection(Object service) {
         // Default does not perform extended injection
+    }
+
+    public ContainerConfig getContainerConfig() {
+        return containerConfig;
     }
 
     /**

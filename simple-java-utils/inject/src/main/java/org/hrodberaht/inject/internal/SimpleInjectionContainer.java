@@ -17,8 +17,8 @@ package org.hrodberaht.inject.internal;
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
-import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 import org.hrodberaht.inject.register.RegistrationModule;
+import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 
 import java.lang.annotation.Annotation;
 

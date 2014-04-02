@@ -1,5 +1,7 @@
 package org.hrodberaht.inject.internal.annotation;
 
+import org.hrodberaht.inject.spi.ContainerConfig;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -18,4 +20,5 @@ public interface InjectionFinder {
 
     void extendedInjection(Object service);
 
+    ContainerConfig getContainerConfig();
 }

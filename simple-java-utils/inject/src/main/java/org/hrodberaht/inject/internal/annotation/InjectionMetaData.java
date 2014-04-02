@@ -122,7 +122,11 @@ public class InjectionMetaData {
     public ObjectAndScope createInstance(Object... parameters) {
         Object scopedInstance = scopeHandler.getInstance();
         if (scopedInstance != null) {
-            return new ObjectAndScope(scopedInstance, false);
+            if(scopeHandler.isInstanceCreated()){
+                return new ObjectAndScope(scopedInstance, true);
+            } {
+                return new ObjectAndScope(scopedInstance, false);
+            }
         }
         
         final boolean originalAccessible = constructor != null && constructor.isAccessible();

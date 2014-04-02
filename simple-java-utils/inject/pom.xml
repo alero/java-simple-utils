@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.4.1</version>
     </parent>
     <groupId>org.hrodberaht</groupId>
     <artifactId>inject</artifactId>
     <packaging>jar</packaging>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4.1</version>
     <name>Simple Utils Injection</name>
     <description>The Injection project for simpler java development</description>
 
@@ -109,6 +109,18 @@
                     </excludes>
                 </configuration>
             </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
         </plugins>
     </build>
 

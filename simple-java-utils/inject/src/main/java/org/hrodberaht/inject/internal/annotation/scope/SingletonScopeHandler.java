@@ -25,4 +25,8 @@ public class SingletonScopeHandler implements ScopeHandler{
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.SINGLETON;
     }
+
+    public boolean isInstanceCreated() {
+        return false;
+    }
 }

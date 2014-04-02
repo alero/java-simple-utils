@@ -29,4 +29,8 @@ public class FactoryScopeHandler implements ScopeHandler{
     public ScopeContainer.Scope getScope() {
         return ScopeContainer.Scope.NEW;
     }
+
+    public boolean isInstanceCreated() {
+        return injectionFactory.newObjectOnInstance();
+    }
 }

@@ -25,4 +25,8 @@ public class ThreadScopeHandler implements ScopeHandler{
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.THREAD;
     }
+
+    public boolean isInstanceCreated() {
+        return false;
+    }
 }

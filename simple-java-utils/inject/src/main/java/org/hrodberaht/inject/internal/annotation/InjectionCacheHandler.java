@@ -14,8 +14,8 @@
 
 package org.hrodberaht.inject.internal.annotation;
 
-import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 
 import java.util.Map;
 

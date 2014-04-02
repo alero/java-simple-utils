@@ -33,7 +33,7 @@ public class ScopeThreadUnitT {
     public void testThreadScope() {
         InjectionRegisterScan register = RegisterStub.createAnnotatedScanRegister();
         Container container = register.getContainer();
-        register.printRegistration();
+        register.printRegistration(System.out);
         Volvo aCar = (Volvo) container.get(Car.class);
 
         Volvo aSecondCar = (Volvo) container.get(Car.class);

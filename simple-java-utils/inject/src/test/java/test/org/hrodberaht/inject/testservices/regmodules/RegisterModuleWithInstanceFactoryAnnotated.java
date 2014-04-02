@@ -4,7 +4,6 @@ import org.hrodberaht.inject.ScopeContainer;
 import org.hrodberaht.inject.internal.annotation.InjectionFinder;
 import org.hrodberaht.inject.register.InjectionFactory;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
-import org.hrodberaht.inject.spi.InjectionPointFinder;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Spare;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
@@ -22,13 +21,18 @@ import test.org.hrodberaht.inject.testservices.annotated.Volvo;
  * @version 1.0
  * @since 1.0
  */
-public class RegisterModuleAnnotated extends RegistrationModuleAnnotation {
+public class RegisterModuleWithInstanceFactoryAnnotated extends RegistrationModuleAnnotation {
 
     @Override
     public void registrations() {
+        InjectionFinder injectionFinder = new CustomInjectionPointFinder();
+        registerInjectionFinder(injectionFinder);
+
         register(Car.class).with(Volvo.class);
         register(Tire.class).annotated(Spare.class).with(SpareTire.class);
         register(VindShield.class).annotated(Spare.class).with(SpareVindShield.class);
         register(TestDriver.class).scopeAs(ScopeContainer.Scope.SINGLETON).with(TestDriver.class);
     }
+
+
 }

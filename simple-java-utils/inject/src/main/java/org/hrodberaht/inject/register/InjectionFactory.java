@@ -10,4 +10,5 @@ package org.hrodberaht.inject.register;
 public interface InjectionFactory<T> {
     T getInstance();
     Class getInstanceType();
+    boolean newObjectOnInstance();
 }

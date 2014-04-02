@@ -34,4 +34,8 @@ public class VariableFactoryScopeHandler implements VariableScopeHandler {
     public ScopeContainer.Scope getScope() {
         return null;
     }
+
+    public boolean isInstanceCreated() {
+        return true;
+    }
 }

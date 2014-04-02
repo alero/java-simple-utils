@@ -26,4 +26,8 @@ public class InheritableThreadScopeHandler implements ScopeHandler{
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.INHERITABLE_THREAD;
     }
+
+    public boolean isInstanceCreated() {
+        return false;
+    }
 }

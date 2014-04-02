@@ -9,7 +9,7 @@ import test.org.hrodberaht.inject.testservices.annotated_extra.Saab;
 import test.org.hrodberaht.inject.testservices.annotated_extra.SaabManufacturer;
 
 /**
- * ¤Projectname¤
+ * ï¿½Projectnameï¿½
  *
  * @author Robert Alexandersson
  *         2010-sep-26 21:53:03

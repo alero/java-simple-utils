@@ -1,7 +1,7 @@
 package org.hrodberaht.inject.internal.annotation.scope;
 
 /**
- * ¤Projectname¤
+ * Projectname
  *
  * @author Robert Alexandersson
  *         2010-sep-26 22:03:48

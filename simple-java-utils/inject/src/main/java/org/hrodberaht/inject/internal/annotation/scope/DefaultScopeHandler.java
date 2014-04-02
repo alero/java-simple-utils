@@ -17,7 +17,6 @@ public class DefaultScopeHandler implements ScopeHandler{
         return null;
     }
 
-
     public void addScope(Object instance) {
 
     }
@@ -25,4 +24,10 @@ public class DefaultScopeHandler implements ScopeHandler{
     public SimpleInjection.Scope getScope() {
         return SimpleInjection.Scope.NEW;
     }
+
+    public boolean isInstanceCreated() {
+        return true;
+    }
+
+
 }

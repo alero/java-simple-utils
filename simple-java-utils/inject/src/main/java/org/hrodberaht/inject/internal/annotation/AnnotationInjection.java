@@ -51,6 +51,10 @@ public class AnnotationInjection {
         injectionCacheHandler = new InjectionCacheHandler(injectionMetaDataCache);
         this.container = container;
         this.injectionContainer = injectionContainer;
+        InjectionFinder injectionFinderFromContainer = injectionContainer.getInjectionFinder();
+        if(injectionFinderFromContainer != null){
+            this.injectionFinder = injectionFinderFromContainer;
+        }
     }
 
     /**

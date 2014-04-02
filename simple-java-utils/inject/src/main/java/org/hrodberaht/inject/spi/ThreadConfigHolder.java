@@ -1,16 +1,17 @@
 package org.hrodberaht.inject.spi;
 
 /**
- * Qmatic Booking Module
+ * Injection
  *
  * @author Robert Alexandersson
  *         2011-05-22 17:43
  * @created 1.0
  * @since 1.0
  */
+@Deprecated
 public class ThreadConfigHolder {
 
-    private static final ThreadLocal<ContainerConfig> threadLocal = new ThreadLocal<ContainerConfig>();
+    private static final InheritableThreadLocal<ContainerConfig> threadLocal = new InheritableThreadLocal<ContainerConfig>();
 
 
     public static ContainerConfig get(){

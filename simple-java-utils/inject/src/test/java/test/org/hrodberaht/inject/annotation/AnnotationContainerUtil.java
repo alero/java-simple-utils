@@ -16,11 +16,15 @@ package test.org.hrodberaht.inject.annotation;
 
 import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.InjectionRegisterScan;
+import org.hrodberaht.inject.internal.annotation.InjectionFinder;
+import org.hrodberaht.inject.register.InjectionRegister;
+import org.hrodberaht.inject.spi.InjectionPointFinder;
 import test.org.hrodberaht.inject.testservices.annotated.SpareTire;
 import test.org.hrodberaht.inject.testservices.annotated.SpareVindShield;
 import test.org.hrodberaht.inject.testservices.annotated.TestDriverManager;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
 import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleAnnotated;
+import test.org.hrodberaht.inject.testservices.regmodules.RegisterModuleWithInstanceFactoryAnnotated;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -66,5 +70,11 @@ public class AnnotationContainerUtil {
         TestDriverManager manager = car.getDriverManager();
         assertTrue(manager.getCar() instanceof Volvo);
         assertTrue(manager.getTire() instanceof SpareTire);
+    }
+
+    public static InjectionRegister prepareVolvoRegisterWithFinder() {
+        InjectionRegisterModule registerJava = new InjectionRegisterModule();
+        registerJava.register(new RegisterModuleWithInstanceFactoryAnnotated());
+        return registerJava;
     }
 }
