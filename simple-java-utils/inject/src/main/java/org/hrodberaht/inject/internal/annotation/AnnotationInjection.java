@@ -16,6 +16,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 import org.hrodberaht.inject.internal.annotation.scope.ObjectAndScope;
 import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.stats.Statistics;
@@ -44,6 +45,7 @@ public class AnnotationInjection {
     private AnnotationInjectionContainer injectionContainer;
     private SimpleInjection container;
     private InjectionFinder injectionFinder = InjectionPointFinder.getInjectionFinder();
+    private InstanceCreator instanceCreator = InstanceCreatorFactory.getInstance();
 
     public AnnotationInjection(Map<InjectionKey, InjectionMetaData> injectionMetaDataCache
             , SimpleInjection container
@@ -54,6 +56,10 @@ public class AnnotationInjection {
         InjectionFinder injectionFinderFromContainer = injectionContainer.getInjectionFinder();
         if(injectionFinderFromContainer != null){
             this.injectionFinder = injectionFinderFromContainer;
+        }
+        InstanceCreator instanceCreatorFromContainer = injectionContainer.getInstanceCreator();
+        if(instanceCreatorFromContainer != null){
+            this.instanceCreator = instanceCreatorFromContainer;
         }
     }
 
@@ -86,7 +92,7 @@ public class AnnotationInjection {
      * @return a predefined services, not cached.
      */
     public InjectionMetaData createInjectionMetaData(Class service, InjectionKey key) {
-        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key);
+        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key, instanceCreator);
         if(service != null){
             Constructor constructor = InjectionUtils.findConstructor(service);
             injectionMetaData.setConstructor(constructor);
@@ -130,7 +136,7 @@ public class AnnotationInjection {
      */
     public InjectionMetaData findInjectionData(Class service, InjectionKey key) {
         InjectionMetaData cachedInjectionMetaData = injectionCacheHandler.find(
-                new InjectionMetaData(service, key));
+                new InjectionMetaData(service, key, instanceCreator));
         if (cachedInjectionMetaData != null) {
             if (cachedInjectionMetaData.isPreDefined()) {
                 if(!cachedInjectionMetaData.getKey().isProvider()){
@@ -140,7 +146,7 @@ public class AnnotationInjection {
             return cachedInjectionMetaData;
         }
 
-        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key);
+        InjectionMetaData injectionMetaData = new InjectionMetaData(service, key, instanceCreator);
         injectionMetaData.setScopeHandler(InjectionUtils.getScopeHandler(injectionMetaData.getServiceClass()));
         injectionCacheHandler.put(injectionMetaData);
         if (!injectionMetaData.getKey().isProvider()) {
@@ -278,4 +284,23 @@ public class AnnotationInjection {
     }
 
 
+    public void injectExtendedDependencies(Object service) {
+        /*InjectionMetaData injectionMetaData =
+                findInjectionData(service.getClass(),
+                        new InjectionKey(service.getClass(), false)
+                );
+        List<InjectionPoint> injectionPoints = injectionMetaData.getInjectionPoints();
+        for (InjectionPoint injectionPoint : injectionPoints) {
+            List<InjectionMetaData> dependencies = injectionPoint.getDependencies();
+            Object[] serviceDependencies = new Object[dependencies.size()];
+            int i = 0;
+            // for (InjectionMetaData dependence : dependencies) {
+                // Object serviceDependence = innerCreateInstance(dependence);
+                //  serviceDependencies[i] = serviceDependence;
+                //i++;
+            //}
+            injectionFinder.extendedInjection(service); // inject services that are pre-created
+            injectionPoint.inject(service, serviceDependencies);
+        } */
+    }
 }

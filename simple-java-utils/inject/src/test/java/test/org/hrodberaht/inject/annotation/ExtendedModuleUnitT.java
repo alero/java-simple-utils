@@ -4,7 +4,7 @@ import org.hrodberaht.inject.register.ExtendedModule;
 import org.junit.Test;
 
 /**
- * ¤Projectname¤
+ * ï¿½Projectnameï¿½
  *
  * @author Robert Alexandersson
  *         2010-nov-01 22:57:48

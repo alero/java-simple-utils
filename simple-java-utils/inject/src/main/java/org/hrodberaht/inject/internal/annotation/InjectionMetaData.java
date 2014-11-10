@@ -16,6 +16,7 @@ package org.hrodberaht.inject.internal.annotation;
 
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.InjectionKey;
+import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 import org.hrodberaht.inject.internal.annotation.scope.ObjectAndScope;
 import org.hrodberaht.inject.internal.annotation.scope.ScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.VariableScopeHandler;
@@ -45,11 +46,12 @@ public class InjectionMetaData {
     private List<InjectionMetaData> constructorDependencies;
     private List<InjectionPoint> injectionPoints;
     private Method postConstruct;
+    private InstanceCreator instanceCreator;
 
-
-    public InjectionMetaData(Class serviceClass, InjectionKey key) {
+    public InjectionMetaData(Class serviceClass, InjectionKey key, InstanceCreator instanceCreator) {
         this.serviceClass = serviceClass;
         this.key = key;
+        this.instanceCreator = instanceCreator;
     }
 
     public InjectionKey getKey() {
@@ -136,7 +138,7 @@ public class InjectionMetaData {
         try {
 
 
-            Object newInstance = InstanceCreatorFactory.getInstance().createInstance(constructor, parameters);
+            Object newInstance = instanceCreator.createInstance(constructor, parameters);
             scopeHandler.addScope(newInstance);
             return new ObjectAndScope(newInstance, true);
         } finally {
@@ -189,7 +191,7 @@ public class InjectionMetaData {
 
     @Override
     public InjectionMetaData clone() throws CloneNotSupportedException {
-        InjectionMetaData injectionMetaData = new InjectionMetaData(this.serviceClass, this.key);
+        InjectionMetaData injectionMetaData = new InjectionMetaData(this.serviceClass, this.key, this.instanceCreator);
         injectionMetaData.setConstructor(this.constructor);
         injectionMetaData.setConstructorDependencies(this.constructorDependencies);
         injectionMetaData.setInjectionPoints(this.injectionPoints);

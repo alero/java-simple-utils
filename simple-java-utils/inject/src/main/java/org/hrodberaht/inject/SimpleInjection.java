@@ -33,7 +33,7 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public class SimpleInjection implements Container, ScopeContainer, InjectContainer {
+public class SimpleInjection implements Container, ScopeContainer, InjectContainer, ExtendedInjection {
 
     
     private InjectionContainer injectionContainer = new AnnotationInjectionContainer(this);
@@ -68,7 +68,7 @@ public class SimpleInjection implements Container, ScopeContainer, InjectContain
      * @return an instance of the interface requested will be created/fetched and returned from the internal register
      */
     public <T> T get(Class<T> service, String qualifier) {
-        if(qualifier == null || "".equals(qualifier)){
+        if(qualifier == null || "".equals(qualifier)) {
             return injectionContainer.getService(service, null);
         }
         return injectionContainer.getService(service, null, qualifier);
@@ -158,6 +158,16 @@ public class SimpleInjection implements Container, ScopeContainer, InjectContain
                     +injectionContainer.getClass().getName());
         }
 
+    }
+
+    public void injectExtendedDependencies(Object service) {
+        if(injectionContainer instanceof AnnotationInjectionContainer) {
+            AnnotationInjectionContainer annotationContainer = (AnnotationInjectionContainer) injectionContainer;
+            annotationContainer.extendedInjectDependencies(service);
+        } else {
+            throw new IllegalAccessError("Method not supported by InjectionContainer typed: "
+                    +injectionContainer.getClass().getName());
+        }
     }
 
     @Override

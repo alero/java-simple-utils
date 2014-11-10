@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.hrodberaht.directus</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.4.1</version>
+        <version>1.4.2-SNAPSHOT</version>
     </parent>
+
     <groupId>org.hrodberaht</groupId>
     <artifactId>inject</artifactId>
     <packaging>jar</packaging>
-    <version>1.4.1</version>
     <name>Simple Utils Injection</name>
     <description>The Injection project for simpler java development</description>
 
@@ -35,7 +35,12 @@
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
-
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>

@@ -21,6 +21,7 @@ import org.hrodberaht.inject.internal.InjectionContainerBase;
 import org.hrodberaht.inject.internal.InjectionKey;
 import org.hrodberaht.inject.internal.RegistrationInjectionContainer;
 import org.hrodberaht.inject.internal.ServiceRegister;
+import org.hrodberaht.inject.internal.annotation.creator.InstanceCreator;
 import org.hrodberaht.inject.internal.annotation.scope.FactoryScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.SingletonScopeHandler;
 import org.hrodberaht.inject.internal.annotation.scope.VariableFactoryScopeHandler;
@@ -49,6 +50,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
     private Map<InjectionKey, InjectionMetaData> injectionMetaDataCache = new ConcurrentHashMap<InjectionKey, InjectionMetaData>();
     private SimpleInjection container;
     private InjectionFinder injectionFinder;
+    private InstanceCreator instanceCreator;
 
     public AnnotationInjectionContainer(SimpleInjection container) {
         this.container = container;
@@ -56,6 +58,10 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
 
     public InjectionFinder getInjectionFinder() {
         return injectionFinder;
+    }
+
+    public InstanceCreator getInstanceCreator() {
+        return instanceCreator;
     }
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
@@ -134,6 +140,9 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
             if( aModule.getInjectionFinder() != null){
                 this.injectionFinder = aModule.getInjectionFinder();
             }
+            if( aModule.getInstanceCreator() != null){
+                this.instanceCreator = aModule.getInstanceCreator();
+            }
             aModule.preRegistration(container);
             for (RegistrationInstanceSimple instance : aModule.getRegistrations()) {
                 InjectionKey key = instance.getInjectionKey();
@@ -158,6 +167,12 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
         AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container, this);
         annotationInjection.injectDependencies(service);
     }
+
+    public void extendedInjectDependencies(Object service) {
+        AnnotationInjection annotationInjection = new AnnotationInjection(injectionMetaDataCache, container, this);
+        annotationInjection.injectExtendedDependencies(service);
+    }
+
 
     @SuppressWarnings(value = "unchecked")
     private <T> T getQualifiedService(Class<T> service, SimpleInjection.Scope forcedScope, InjectionKey key) {
@@ -295,6 +310,7 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
         }
         return annotationInjectionContainer;
     }
+
 
 
 }
