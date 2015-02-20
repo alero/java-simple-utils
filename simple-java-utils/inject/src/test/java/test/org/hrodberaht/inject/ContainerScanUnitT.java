@@ -15,13 +15,20 @@
 package test.org.hrodberaht.inject;
 
 import org.hrodberaht.inject.Container;
+import org.hrodberaht.inject.InjectContainer;
 import org.hrodberaht.inject.InjectionRegisterJava;
+import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.InjectionRegisterScan;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
+import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
+import org.hrodberaht.inject.register.RegistrationModuleAnnotationScanner;
 import org.junit.Ignore;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.testservices.annotated_extra.CarWrapper;
+import test.org.hrodberaht.inject.testservices.annotated_extra.Manufacturer;
+import test.org.hrodberaht.inject.testservices.annotated_extra.SaabManufacturer;
 import test.org.hrodberaht.inject.testservices.simple.AnyService;
 import test.org.hrodberaht.inject.testservices.simple.AnyServiceDoNothingImpl;
 import test.org.hrodberaht.inject.testservices.simple.AnyServiceDoSomethingImpl;
@@ -136,6 +143,35 @@ public class ContainerScanUnitT {
 
         AnyService anyService = container.get(AnyService.class);
         assertTrue(anyService instanceof AnyServiceDoSomethingImpl);
+
+    }
+
+    @Test
+    public void testScanningAndRegisterAScanningModule() {
+
+        InjectionRegisterModule injectionRegisterModule = new InjectionRegisterModule();
+        RegistrationModuleAnnotationScanner propertiesModule = new RegistrationModuleAnnotationScanner(){
+
+            public void scan(){
+                this.scanAndRegister("test.org.hrodberaht.inject.testservices.annotated_extra");
+            }
+        };
+        injectionRegisterModule.register(propertiesModule);
+
+        InjectionRegisterScan register = new InjectionRegisterScan(injectionRegisterModule);
+        // Tests scanning and exclusion of single class
+        register.registerBasePackageScan("test.org.hrodberaht.inject.testservices.simple");
+
+        InjectionRegisterJava registerJava = new InjectionRegisterJava(register);
+        registerJava.register(AnyService.class, AnyServiceDoSomethingImpl.class);
+
+        Container container = register.getContainer();
+
+        AnyService anyService = container.get(AnyService.class);
+        assertTrue(anyService instanceof AnyServiceDoSomethingImpl);
+
+        Manufacturer manufacturer = container.get(Manufacturer.class);
+        assertTrue(manufacturer instanceof SaabManufacturer);
 
     }
 

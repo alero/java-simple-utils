@@ -72,7 +72,7 @@ public class SimpleInjectionContainer extends InjectionContainerBase
     }
 
     @SuppressWarnings(value = "unchecked")
-    public void register(RegistrationModule... modules) {
+    public void register(SimpleInjection simpleInjection, RegistrationModule... modules) {
         for (RegistrationModule<RegistrationInstanceSimple> module : modules) {
             module.preRegistration(null);
             for (RegistrationInstanceSimple instance : module.getRegistrations()) {

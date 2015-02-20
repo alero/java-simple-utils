@@ -29,6 +29,7 @@ import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.register.RegistrationModule;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
+import org.hrodberaht.inject.register.RegistrationModuleAnnotationScanner;
 import org.hrodberaht.inject.register.VariableInjectionFactory;
 import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
 
@@ -134,9 +135,12 @@ public class AnnotationInjectionContainer extends InjectionContainerBase
         register(key, service, scope);
     }
 
-    public synchronized void register(RegistrationModule... modules) {
+    public synchronized void register(SimpleInjection simpleInjection, RegistrationModule... modules) {
         for (RegistrationModule module : modules) {
             RegistrationModuleAnnotation aModule = (RegistrationModuleAnnotation) module;
+            if(aModule instanceof RegistrationModuleAnnotationScanner){
+                ((RegistrationModuleAnnotationScanner)aModule).setSimpleInjection(simpleInjection);
+            }
             if( aModule.getInjectionFinder() != null){
                 this.injectionFinder = aModule.getInjectionFinder();
             }

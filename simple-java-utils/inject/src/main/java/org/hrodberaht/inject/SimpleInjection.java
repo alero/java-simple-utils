@@ -33,13 +33,17 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public class SimpleInjection implements Container, ScopeContainer, InjectContainer, ExtendedInjection {
+public class SimpleInjection implements Container, ScopeContainer, InjectContainer, ExtendedInjection, ExtendedAnnotationInjection {
 
     
     private InjectionContainer injectionContainer = new AnnotationInjectionContainer(this);
 
     public Collection<ServiceRegister> getServiceRegister() {
         return injectionContainer.getServiceRegister();
+    }
+
+    public AnnotationInjectionContainer getAnnotatedContainer() {
+        return (AnnotationInjectionContainer)injectionContainer;
     }
 
     public enum RegisterType {
@@ -132,7 +136,7 @@ public class SimpleInjection implements Container, ScopeContainer, InjectContain
     public void register(RegistrationModule... modules) {
         if(injectionContainer instanceof RegistrationInjectionContainer){
             RegistrationInjectionContainer container = (RegistrationInjectionContainer)injectionContainer;
-            container.register(modules);
+            container.register(this, modules);
         }
     }
     

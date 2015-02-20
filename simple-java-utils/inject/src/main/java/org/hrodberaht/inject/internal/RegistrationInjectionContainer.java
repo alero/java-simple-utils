@@ -29,7 +29,7 @@ public interface RegistrationInjectionContainer {
     
     void register(InjectionKey key, Class service,
                   SimpleInjection.Scope scope, SimpleInjection.RegisterType type, boolean throwError);
-    void register(RegistrationModule... modules);
+    void register(SimpleInjection simpleInjection, RegistrationModule... modules);
 
 
 }
