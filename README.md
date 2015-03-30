@@ -22,24 +22,26 @@ All projects are synced to Maven2 Central and can be used directly.
 The google group can be found at http://groups.google.com/group/injectcontainer
 
 Injection
-
+````
 <dependency>
     <groupId>org.hrodberaht</groupId>
     <artifactId>inject</artifactId>
     <version>1.2.0</version>
 </dependency>
-
+````
 Java Utilities
-
+````
 <dependency>
     <groupId>org.hrodberaht.directus</groupId>
     <artifactId>core</artifactId>
     <version>1.2.0</version>
 </dependency>
+````
 I18n (Formatters and LocalProfile?)
-
+````
 <dependency>
     <groupId>org.hrodberaht</groupId>
     <artifactId>i18n</artifactId>
     <version>1.2.0</version>
 </dependency>
+````
