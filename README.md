@@ -1,5 +1,6 @@
 # java-simple-utils
-Automatically exported from code.google.com/p/java-simple-utils
+
+Web site at http://alero.github.io/java-simple-utils 
 
 A small project that is a collection of the following mini frameworks.
 
