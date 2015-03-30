@@ -13,9 +13,9 @@ A small project that is a collection of the following mini frameworks.
 
 - IoC, a very minimalistic Container. Has been created as its own project called Injection and now supports Injection with compatability with the JSR-330 Specification (http://jcp.org/en/jsr/detail?id=330) and Implementation (http://code.google.com/p/atinject/). See wiki
 
-Injection Extensions can be found at this project place http://code.google.com/p/injection-extensions/
+Injection Extensions can be found at this project place https://github.com/alero/injection-extensions
 
-Maven Report for the latest release can be found here. http://java-simple-utils.googlecode.com/svn/reporting/index.html
+Maven Report for the latest release can be found here. ADD LINK!
 
 All projects are synced to Maven2 Central and can be used directly.
 
