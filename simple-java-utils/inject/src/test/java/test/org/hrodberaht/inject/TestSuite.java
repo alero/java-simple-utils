@@ -30,12 +30,12 @@ import test.org.hrodberaht.inject.annotation.CloneContainerRegistrationUnitT;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    SuiteJsr330TckUnitT.class,
-    SimpleContainerUnitT.class,        
+        SimpleContainerUnitT.class,
     AnnotationContainerUnitT.class,
     ContainerScanUnitT.class,
     ScopeThreadUnitT.class,
     AnnotationVariableProviderUnitT.class,
+        AnnotationContainerUnitT.class,
     InstanceCreationUnitT.class,
     CloneContainerRegistrationUnitT.class
 })

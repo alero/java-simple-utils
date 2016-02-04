@@ -36,17 +36,18 @@ import java.util.List;
  * @since 1.0
  */
 public class InjectionPoint {
-    private enum InjectionPointType{ METHOD, FIELD }
+    public enum InjectionPointType {METHOD, FIELD}
 
     private List<InjectionMetaData> dependencies;
     private InjectionPointType type;
     private Field field;
     private Method method;
+    private Boolean accessible = null;
 
     public InjectionPoint(Field field, AnnotationInjection annotationInjection) {
         type = InjectionPointType.FIELD;
         this.field = field;
-        dependencies = new ArrayList<InjectionMetaData>(1);
+        dependencies = new ArrayList<>(1);
         dependencies.add(findDependency(field, annotationInjection));
     }
 
@@ -56,24 +57,29 @@ public class InjectionPoint {
         dependencies = findDependencies(method, annotationInjection);
     }
 
+    public InjectionPointType getType() {
+        return type;
+    }
 
     public List<InjectionMetaData> getDependencies() {
         return dependencies;
     }
 
-    public void inject(Object service, Object[] serviceDependencies) {
-        if(type == InjectionPointType.FIELD){
-            invokeField(service, serviceDependencies[0]);
-        }else{
-            invokeMethod(service, serviceDependencies); 
-        }
-
+    public void injectField(Object service, Object serviceDependencies) {
+        invokeField(service, serviceDependencies);
     }
 
-    private void invokeMethod(Object service, Object[] serviceDependency) {
-        final boolean originalAccessible = method.isAccessible();
-        if(!originalAccessible){
-            method.setAccessible(true);
+    public void inject(Object service, Object... serviceDependencies) {
+        invokeMethod(service, serviceDependencies);
+    }
+
+    private void invokeMethod(Object service, Object... serviceDependency) {
+        if (accessible == null) {
+            final boolean originalAccessible = method.isAccessible();
+            if (!originalAccessible) {
+                method.setAccessible(true);
+            }
+            accessible = true;
         }
 
         try {
@@ -91,9 +97,12 @@ public class InjectionPoint {
     }
 
     private void invokeField(Object service, Object serviceDependency) {
-        final boolean originalAccessible = field.isAccessible();
-        if(!originalAccessible){
-            field.setAccessible(true);
+        if (accessible == null) {
+            final boolean originalAccessible = field.isAccessible();
+            if (!originalAccessible) {
+                field.setAccessible(true);
+            }
+            accessible = true;
         }
         try {
             field.set(service, serviceDependency);

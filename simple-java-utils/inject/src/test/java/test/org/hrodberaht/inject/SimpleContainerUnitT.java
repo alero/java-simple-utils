@@ -54,7 +54,8 @@ public class SimpleContainerUnitT {
             assertEquals(null, "Should not be called");
         } catch (InjectRuntimeException e) {
             assertEquals(
-                    "Service interface " + AnyService.class.getName() +
+                    "Service interface "
+                            + AnyService.class.getName() +
                             " not registered in SimpleInjection"
                     , e.getMessage());
         }
@@ -67,6 +68,15 @@ public class SimpleContainerUnitT {
         AnyService anyService = container.get(AnyService.class);
 
         assertEquals(null, anyService.getStuff());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testNothingServiceError() {
+        Container container = registerSingle(AnyService.class, AnyServiceDoNothingImpl.class);
+
+        AnyService anyService = container.get(AnyService.class);
+
+        anyService.doStuff();
     }
 
 

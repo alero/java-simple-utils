@@ -1,8 +1,8 @@
 package org.hrodberaht.inject;
 
-import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
-import org.hrodberaht.inject.internal.util.InjectionLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.List;
  * Created by alexbrob on 2015-01-05.
  */
 public class ClassScanner {
-
+    private static final Logger LOG = LoggerFactory.getLogger(ClassScanner.class);
 
     private Collection<CustomClassLoader> customClassLoaders = new ArrayList<CustomClassLoader>();
     private boolean detailedScanLogging = false;
@@ -40,8 +40,6 @@ public class ClassScanner {
      *
      * @param packageName The base package
      * @return The classes
-     * @throws ClassNotFoundException
-     * @throws java.io.IOException
      */
     public Class[] getClasses(String packageName) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -65,9 +63,9 @@ public class ClassScanner {
             try{
                 container.register(aClazz, aClazz, null, SimpleInjection.RegisterType.NORMAL);
             }catch(InjectRuntimeException e){
-                InjectionLogger.info("Hrodberaht Injection: Silently failed to register class = " + aClazz);
+                LOG.info("Hrodberaht Injection: Silently failed to register class = " + aClazz);
                 if(detailedScanLogging){
-                    InjectionLogger.error(e);
+                    LOG.error("Failed registering a class = " + aClazz, e);
                 }
             }
         }

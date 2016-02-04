@@ -39,7 +39,7 @@ public class InjectionMetaData {
     private InjectionKey key;
     private Class serviceClass;
     private boolean preDefined = false;
-
+    private Boolean accessible = null;
     private ScopeHandler scopeHandler;
 
     private Constructor constructor;
@@ -96,11 +96,11 @@ public class InjectionMetaData {
     }
 
     public Class getServiceClass() {
-        return serviceClass;
+        return this.serviceClass;
     }
 
     public SimpleInjection.Scope getScope() {
-        return scopeHandler.getScope();
+        return this.scopeHandler.getScope();
     }
 
     public void setPostConstructMethod(Method postConstruct) {
@@ -108,7 +108,7 @@ public class InjectionMetaData {
     }
 
     public Method getPostConstruct() {
-        return postConstruct;
+        return this.postConstruct;
     }
 
     public Class createVariableInstance(Object variable) {
@@ -130,10 +130,12 @@ public class InjectionMetaData {
                 return new ObjectAndScope(scopedInstance, false);
             }
         }
-        
-        final boolean originalAccessible = constructor != null && constructor.isAccessible();
-        if (!originalAccessible && constructor != null) {
-            constructor.setAccessible(true);
+        if (accessible == null) {
+            final boolean originalAccessible = constructor != null && constructor.isAccessible();
+            if (!originalAccessible && constructor != null) {
+                constructor.setAccessible(true);
+            }
+            accessible = true;
         }
         try {
 

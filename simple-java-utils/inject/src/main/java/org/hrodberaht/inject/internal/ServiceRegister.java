@@ -16,8 +16,12 @@ package org.hrodberaht.inject.internal;
 
 import org.hrodberaht.inject.SimpleInjection;
 import org.hrodberaht.inject.register.RegistrationModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ServiceRegister {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceRegister.class);
 
     private Class service;
     private Object singleton;
@@ -33,6 +37,15 @@ public class ServiceRegister {
         this.singleton = singleton;
         this.scope = scope;
         this.registerType = registerType;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("ServiceRegister for" +
+                    " service=" + service.getName() +
+                    " singleton=" + singleton +
+                    " scope=" + scope +
+                    " registerType=" + registerType +
+                    ""
+            );
+        }
     }
 
     public ServiceRegister(Class aService) {

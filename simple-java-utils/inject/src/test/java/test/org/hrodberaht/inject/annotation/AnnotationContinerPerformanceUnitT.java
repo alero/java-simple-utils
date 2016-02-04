@@ -26,8 +26,10 @@ import org.junit.experimental.categories.Category;
 import test.org.hrodberaht.inject.PerformanceTests;
 import test.org.hrodberaht.inject.TckUtil;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
+import test.org.hrodberaht.inject.util.PerformanceStatistics;
 
 import java.text.MessageFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -43,41 +45,49 @@ import java.util.Collection;
 public class AnnotationContinerPerformanceUnitT {
 
     private InjectionRegister registerVolvo;
+    final int threadCount = 100;
+    final int threadIterations = 10000;
 
     @Before
     public void init() {
         registerVolvo = AnnotationContainerUtil.prepareLargeVolvoRegister();
-        // Statistics.setEnabled(true);
+        Statistics.setEnabled(true);
     }
 
     @After
     public void destroy(){
+
         Statistics.setEnabled(false);
     }
 
-    @Test(timeout = 100000)
+    @Test(timeout = 10000)
     public void testPerformance() {
         Container container = TckUtil.prepareRegister().getContainer();
-        for (int i = 0; i < 10000; i++) {
-            Car car = container.get(Car.class);
+        PerformanceStatistics performanceStatistics = new PerformanceStatistics("testPerformance");
+        for (int i = 0; i < threadIterations; i++) {
             // This does loads of fetching from the container, will stress test it a lot.
             // Form what i could see on the Cobertura report each rotation give about 100 calls.
             // meaning these 1 000 iterations will test about 100 000 calls to the SimpleInjection.getInnerContainer method.
 
-            // On my machine an 10 000 Intel i7 820 this takes about 2 seconds using 1 of 4 CPU's at 75%.
-            // This is not strange as this test is not threaded in any way. 
-            Tck.testsFor(car, false, true);
+            // On my machine an Intel i7 820 this takes about 2 seconds using 1 of 4 CPU's at 75%.
+            // This is not strange as this test is not threaded in any way.
+            runningOfContainerTCK(container);
         }
+        performanceStatistics.end();
+        printContainerStatistics(performanceStatistics);
     }
 
-    @Test(timeout = 30000)
+    @Test(timeout = 10000)
     public void testMultiThreadPerformance() {
 
 
-        final Container container = registerVolvo.getContainer();
+        multiThreadedTest();
+    }
 
+    private void multiThreadedTest() {
+        final Container container = registerVolvo.getContainer();
         Collection<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < threadCount; i++) {
             threads.add(
                     new Thread() {
                         @Override
@@ -87,6 +97,7 @@ public class AnnotationContinerPerformanceUnitT {
                     }
             );
         }
+        PerformanceStatistics performanceStatistics = new PerformanceStatistics("testMultiThreadPerformance");
         for (Thread thread : threads) {
             thread.start();
         }
@@ -94,19 +105,26 @@ public class AnnotationContinerPerformanceUnitT {
         for (Thread thread : threads) {
             waitForIt(thread);
         }
+        performanceStatistics.end();
+        printContainerStatistics(performanceStatistics);
+    }
 
-        System.out.println(
-                MessageFormat.format("Created objects: {0}",Statistics.getNewInstanceCount())
+    private void printContainerStatistics(PerformanceStatistics performanceStatistics) {
+        System.out.println(performanceStatistics.getName() +
+                " Time in Milliseconds:" + ChronoUnit.MILLIS.between(performanceStatistics.getStart(), performanceStatistics.getEnd())
         );
         System.out.println(
-                MessageFormat.format("Injected field count: {0}",Statistics.getInjectFieldCount())
+                MessageFormat.format("Created objects: {0}", Statistics.getNewInstanceCount())
         );
         System.out.println(
-                MessageFormat.format("Injected method count: {0}",Statistics.getInjectMethodCount())
+                MessageFormat.format("Injected field count: {0}", Statistics.getInjectFieldCount())
         );
         System.out.println(
-                MessageFormat.format("Injected construct count: {0}",Statistics.getInjectConstructorCount())
-        );        
+                MessageFormat.format("Injected method count: {0}", Statistics.getInjectMethodCount())
+        );
+        System.out.println(
+                MessageFormat.format("Injected construct count: {0}", Statistics.getInjectConstructorCount())
+        );
     }
 
     private void waitForIt(Thread thread) {
@@ -118,8 +136,13 @@ public class AnnotationContinerPerformanceUnitT {
         }
     }
 
+    private void runningOfContainerTCK(Container container) {
+        Car car = container.get(Car.class);
+        Tck.testsFor(car, false, true);
+    }
+
     private void runThreadContainerGet(Container container) {
-        for (int i = 0; i < 25000; i++) {
+        for (int i = 0; i < threadIterations; i++) {
             Volvo car = container.get(Volvo.class);
             AnnotationContainerUtil.assertVolvo(car);
         }

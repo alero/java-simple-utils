@@ -37,44 +37,66 @@ import java.util.Date;
 public class InstanceCreationPerformanceUnitT {
 
     @Test(timeout = 10000)
-    public void testPerformance() throws InterruptedException {
-        Constructor constructor = Volvo.class.getConstructors()[0];
-
+    public void testPerformance() throws InterruptedException, NoSuchMethodException {
 
         // warmup
-        runPerformanceTest(constructor, new InstanceCreatorCGLIB(), 10);
+        runPerformanceTest(new InstanceCreatorCGLIB(), 10);
 
         int iterations = 3000000;
 
         System.gc();Thread.sleep(100L);
         System.out.println("TestRun with CGLIB - " +
-                runPerformanceTest(constructor, new InstanceCreatorCGLIB(), iterations)+"ms");
+                runPerformanceTest(new InstanceCreatorCGLIB(), iterations) +
+                "ms with " + iterations + " iterations, meaning " + iterations * 2 + " objects created");
 
         System.gc();Thread.sleep(100L);
         System.out.println("TestRun with java Reflection - " +
-                runPerformanceTest(constructor, new InstanceCreatorDefault(), iterations)+"ms");
+                runPerformanceTest(new InstanceCreatorDefault(), iterations) +
+                "ms with " + iterations + " iterations, meaning " + iterations * 2 + " objects created");
         
         System.gc();Thread.sleep(100L);
         System.out.println("TestRun with pure java - " +
-                runPerformanceTest(null, null, iterations)+"ms");
+                runPerformanceTest(null, iterations) +
+                "ms with " + iterations + " iterations, meaning " + iterations * 2 + " objects created");
 
     }
 
-    private long runPerformanceTest(Constructor constructor, InstanceCreator instanceCreator, int iterations) {
+    private Constructor<?> getVolvoConstructor() throws NoSuchMethodException {
+        return Volvo.class.getConstructor(Tire.class);
+    }
+
+    private Constructor<?> getTireConstructor() throws NoSuchMethodException {
+        return Tire.class.getConstructor();
+    }
+
+    private long runPerformanceTest(InstanceCreator instanceCreator, int iterations) throws NoSuchMethodException {
         long startTime = new Date().getTime();
         Volvo[] volvos = new Volvo[iterations];
+        Constructor constructorVolvo = getVolvoConstructor();
+        Constructor constructorTire = getTireConstructor();
         for (int i=0;i<iterations;i++) {
-            Tire spareTire = new Tire();
-            if(constructor != null){
-                Volvo aVolvo = (Volvo) instanceCreator.createInstance(constructor, spareTire);
-                volvos[i] = aVolvo;
+
+            if (instanceCreator != null) {
+                dynamicContructor(instanceCreator, volvos, constructorVolvo, constructorTire, i);
             }
             else {
-                Volvo aVolvo = new Volvo(spareTire);
-                volvos[i] = aVolvo;
+                classicConstructor(volvos, i);
             }
         }
         long endTime = new Date().getTime();
         return endTime-startTime;
+    }
+
+    private void classicConstructor(Volvo[] volvos, int i) {
+        Tire spareTire = new Tire();
+        Volvo aVolvo = new Volvo(spareTire);
+        volvos[i] = aVolvo;
+    }
+
+    private void dynamicContructor(InstanceCreator instanceCreator, Volvo[] volvos,
+                                   Constructor constructorVolvo, Constructor constructorTire, int i) {
+        Tire spareTire = (Tire) instanceCreator.createInstance(constructorTire);
+        Volvo aVolvo = (Volvo) instanceCreator.createInstance(constructorVolvo, spareTire);
+        volvos[i] = aVolvo;
     }
 }

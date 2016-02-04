@@ -26,6 +26,8 @@ public class InstanceCreatorDefault implements InstanceCreator {
             throw new RuntimeException(e);
         }catch (InvocationTargetException e) {
             throw new RuntimeException(e);
+        }catch (IllegalArgumentException e){
+            throw new RuntimeException(e);
         }
     }
 }

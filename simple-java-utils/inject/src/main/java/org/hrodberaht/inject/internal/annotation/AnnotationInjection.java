@@ -71,8 +71,7 @@ public class AnnotationInjection {
      * @return a created object according to its bound scope {@link javax.inject.Scope}
      */
     public Object createInstance(Class<Object> serviceDefinition, InjectionKey key) {
-        InjectionMetaData injectionMetaData =
-                findInjectionData(serviceDefinition, key);
+        InjectionMetaData injectionMetaData = findInjectionData(serviceDefinition, key);
         return callConstructor(injectionMetaData);
     }
 
@@ -209,14 +208,19 @@ public class AnnotationInjection {
         List<InjectionPoint> injectionPoints = injectionMetaData.getInjectionPoints();
         for (InjectionPoint injectionPoint : injectionPoints) {
             List<InjectionMetaData> dependencies = injectionPoint.getDependencies();
-            Object[] serviceDependencies = new Object[dependencies.size()];
-            int i = 0;
-            for (InjectionMetaData dependence : dependencies) {
-                Object serviceDependence = innerCreateInstance(dependence);
-                serviceDependencies[i] = serviceDependence;
-                i++;
+            if (injectionPoint.getType() == InjectionPoint.InjectionPointType.FIELD) {
+                Object serviceDependence = innerCreateInstance(dependencies.get(0));
+                injectionPoint.injectField(service, serviceDependence);
+            } else {
+                Object[] serviceDependencies = new Object[dependencies.size()];
+                int i = 0;
+                for (InjectionMetaData dependence : dependencies) {
+                    Object serviceDependence = innerCreateInstance(dependence);
+                    serviceDependencies[i] = serviceDependence;
+                    i++;
+                }
+                injectionPoint.inject(service, serviceDependencies);
             }
-            injectionPoint.inject(service, serviceDependencies);
         }
     }
 

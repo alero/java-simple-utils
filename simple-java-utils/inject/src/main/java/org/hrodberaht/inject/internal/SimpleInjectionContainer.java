@@ -19,6 +19,8 @@ import org.hrodberaht.inject.internal.exception.DuplicateRegistrationException;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
 import org.hrodberaht.inject.register.RegistrationModule;
 import org.hrodberaht.inject.register.internal.RegistrationInstanceSimple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 
@@ -33,6 +35,7 @@ import java.lang.annotation.Annotation;
 public class SimpleInjectionContainer extends InjectionContainerBase
         implements InjectionContainer, RegistrationInjectionContainer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleInjectionContainer.class);
 
     public <T> T getService(Class<T> service, SimpleInjection.Scope forcedScope, String qualifier) {
         InjectionKey key = getNamedKey(qualifier, service);
@@ -62,13 +65,14 @@ public class SimpleInjectionContainer extends InjectionContainerBase
         if (registeredNamedServices.containsKey(key)) {
             reRegisterSupport(key, type, throwError);
         }
-
+        LOG.debug("Putting service into registry for key={}", key);
         putServiceIntoRegister(key,
                 new ServiceRegister(service,
                         createInstance(new ServiceRegister(service), key)
                         , scope, normalizeType(type)
                 )
         );
+
     }
 
     @SuppressWarnings(value = "unchecked")

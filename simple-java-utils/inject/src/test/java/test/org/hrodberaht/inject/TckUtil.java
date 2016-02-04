@@ -39,7 +39,6 @@ public class TckUtil {
 
     public static InjectionRegister prepareRegister() {
         InjectionRegisterModule registerJava = new InjectionRegisterModule();
-        registerJava.activateContainerJavaXInject();
 
         RegistrationModuleAnnotation module = new RegistrationModuleAnnotation() {
 

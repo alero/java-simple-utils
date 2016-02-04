@@ -78,8 +78,9 @@ public class CloneContainerRegistrationUnitT implements PerformanceTests {
         InjectionRegisterModule registerJava = AnnotationContainerUtil.prepareLargeVolvoRegister();
         for(int i=0;i<1000;i++){
             InjectionRegisterModule registerJavaClone = registerJava.clone();
-            if(registerJavaClone.equals(null)){
-                System.out.println("Just doing something so the compiler wont skip the code");
+            // Some fake logic so the code executes
+            if ("".equals(registerJavaClone)) {
+                System.out.println("Just doing something so the JRE wont skip the code");
             }
         }
         timer.endAndPrint("testClonePerformance");
@@ -93,7 +94,7 @@ public class CloneContainerRegistrationUnitT implements PerformanceTests {
             InjectionRegisterModule registerJavaClone = registerJava.clone();
             registerJavaClone.overrideRegister(Car.class, Saab.class);
         }
-        timer.endAndPrint("testCloneAndRegisterPerformance");
+        timer.endAndPrint("testCloneAndRegisterPerformance", "Creating 1000 clones large instance module and replacing a service");
     }
 
     @Test(timeout = 500)
@@ -109,7 +110,7 @@ public class CloneContainerRegistrationUnitT implements PerformanceTests {
                 }
             });
         }
-        timer.endAndPrint("testCloneAndRegisterModulePerformance");
+        timer.endAndPrint("testCloneAndRegisterModulePerformance", "Creating 1000 clones large instance module and registering a module");
     }
 
     private class TimerUtil {
@@ -124,6 +125,13 @@ public class CloneContainerRegistrationUnitT implements PerformanceTests {
         public void endAndPrint(String message) {
             endDate = new Date();
             System.out.println(message+" : "+(endDate.getTime()-startDate.getTime())+"ms");
+        }
+
+        public void endAndPrint(String message, String description) {
+            endDate = new Date();
+            System.out.println(description);
+            System.out.println(message + " : " + (endDate.getTime() - startDate.getTime()) + "ms");
+
         }
     }
 }

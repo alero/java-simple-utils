@@ -40,12 +40,12 @@ public class GuiceSuiteJsr330TckUnitT extends TestCase {
 
 
         final Car car = container.getInnerContainer(Car.class);
-        */
+
         final boolean supportsStatic = false;
         final boolean supportsPrivate = true;
-        // return Tck.testsFor(car, supportsStatic, supportsPrivate);
+        return Tck.testsFor(car, supportsStatic, supportsPrivate);
+        //
+*/
         return null;
-
-
     }
 }

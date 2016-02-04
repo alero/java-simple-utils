@@ -53,7 +53,7 @@ public class ScopeThreadUnitT {
         final Volvo aCar = (Volvo) container.get(Car.class);
 
 
-         Thread thread = new Thread(){
+        Thread thread = new Thread() {
             @Override
             public void run() {
                 Volvo aSecondCar = (Volvo) container.get(Car.class);

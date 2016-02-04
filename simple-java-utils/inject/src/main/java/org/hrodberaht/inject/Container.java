@@ -16,7 +16,7 @@ public interface Container {
      *
      * @param service
      * @param <T>
-     * @return
+     * @return an instance of the service class with qualifier
      */
     <T> T get(Class<T> service);
 
@@ -25,8 +25,9 @@ public interface Container {
      * @param service
      * @param qualifier
      * @param <T>
-     * @return
+     * @return an instance of the service class with qualifier
      */
     <T> T get(Class<T> service, String qualifier);
+
     <T> T get(Class<T> service, Class<? extends Annotation> qualifier);
 }

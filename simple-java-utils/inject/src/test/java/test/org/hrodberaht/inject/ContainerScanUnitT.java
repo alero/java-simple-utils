@@ -15,18 +15,14 @@
 package test.org.hrodberaht.inject;
 
 import org.hrodberaht.inject.Container;
-import org.hrodberaht.inject.InjectContainer;
 import org.hrodberaht.inject.InjectionRegisterJava;
 import org.hrodberaht.inject.InjectionRegisterModule;
 import org.hrodberaht.inject.InjectionRegisterScan;
 import org.hrodberaht.inject.internal.exception.InjectRuntimeException;
-import org.hrodberaht.inject.register.RegistrationModuleAnnotation;
 import org.hrodberaht.inject.register.RegistrationModuleAnnotationScanner;
-import org.junit.Ignore;
 import org.junit.Test;
 import test.org.hrodberaht.inject.testservices.annotated.Car;
 import test.org.hrodberaht.inject.testservices.annotated.Volvo;
-import test.org.hrodberaht.inject.testservices.annotated_extra.CarWrapper;
 import test.org.hrodberaht.inject.testservices.annotated_extra.Manufacturer;
 import test.org.hrodberaht.inject.testservices.annotated_extra.SaabManufacturer;
 import test.org.hrodberaht.inject.testservices.simple.AnyService;
@@ -85,8 +81,6 @@ public class ContainerScanUnitT {
     }
 
     @Test
-    @Ignore
-    // This is not actually tested anyhow
     public void testScanningOfSinglePackageImplementations() {
 
         InjectionRegisterScan register = new InjectionRegisterScan();

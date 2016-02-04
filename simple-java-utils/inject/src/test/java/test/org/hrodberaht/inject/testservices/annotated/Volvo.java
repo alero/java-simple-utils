@@ -17,7 +17,6 @@ package test.org.hrodberaht.inject.testservices.annotated;
 import org.hrodberaht.inject.annotation.PostConstruct;
 
 import javax.inject.Inject;
-import java.util.Date;
 
 /**
  * Simple Java Utils
@@ -65,7 +64,8 @@ public class Volvo implements Car{
         this.specialInjectMethod = specialInjectMethod;    
     }
 
-    public Volvo() {        
+    public Volvo() {
+
     }
 
     @PostConstruct
